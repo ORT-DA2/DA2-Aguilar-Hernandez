@@ -21,19 +21,4 @@ public class UserLogic: IUserLogic
     {
         throw new NotImplementedException();
     }
-
-    public User CreateUser(User user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public User UpdateUser(Guid id, User user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void DeleteUser(Guid id)
-    {
-        throw new NotImplementedException();
-    }
 }

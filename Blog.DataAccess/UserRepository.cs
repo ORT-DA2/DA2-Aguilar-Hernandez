@@ -1,6 +1,8 @@
-﻿namespace Blog.DataAccess;
+﻿using Blog.Domain.Entities;
 
-public class UserRepository
+namespace Blog.DataAccess;
+
+public class UserRepository: IUserRepository
 {
-    
+
 }
