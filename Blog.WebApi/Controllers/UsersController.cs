@@ -48,5 +48,11 @@ namespace Blog.WebApi.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        [HttpPost]
+        public IActionResult CreateUser()
+        {
+            return null;
+        }
     }
 }

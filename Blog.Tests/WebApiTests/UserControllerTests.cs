@@ -121,4 +121,27 @@ public class UserControllerTests
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
         
     }
+
+    [TestMethod]
+    public void CreateValidUser()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Role = Role.Blogger,
+            Email = "nicolas@example.com"
+        };
+        
+        var mock = new Mock<IUserLogic>(MockBehavior.Strict);
+
+        var controller = new UsersController(mock.Object);
+        
+        var result = controller.CreateUser();
+        mock.VerifyAll();
+        Assert.AreEqual(user, result);
+    }
 }
