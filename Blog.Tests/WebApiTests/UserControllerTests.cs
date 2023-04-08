@@ -139,9 +139,10 @@ public class UserControllerTests
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
         var controller = new UsersController(mock.Object);
-        
-        var result = controller.CreateUser();
+        var result = controller.CreateUser(user);
+        var okResult = result as OkObjectResult;
+        var dto = okResult.Value as User;
         mock.VerifyAll();
-        Assert.AreEqual(user, result);
+        Assert.AreEqual(user, dto);
     }
 }

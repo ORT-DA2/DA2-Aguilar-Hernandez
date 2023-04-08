@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Blog.BusinessLogic;
 using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.WebApi.Controllers.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,9 +51,9 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUser()
+        public IActionResult CreateUser(User user)
         {
-            return null;
+            return Ok(user);
         }
     }
 }
