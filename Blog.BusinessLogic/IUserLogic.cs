@@ -6,4 +6,5 @@ public interface IUserLogic
 {
     public User GetUserById(Guid id);
     public List<User> GetAllUsers();
+    public User CreateUser(User user);
 }

@@ -125,6 +125,15 @@ public class UserControllerTests
     [TestMethod]
     public void CreateValidUser()
     {
+        CreateUserDTO userDTO = new CreateUserDTO()
+        {
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Email = "nicolas@example.com"
+        };
+        
         User user = new User()
         {
             Id = Guid.NewGuid(),
@@ -135,14 +144,17 @@ public class UserControllerTests
             Role = Role.Blogger,
             Email = "nicolas@example.com"
         };
+
+        UserDetailDTO userDetailDto = new UserDetailDTO(user);
         
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
         var controller = new UsersController(mock.Object);
-        var result = controller.CreateUser(user);
-        var okResult = result as OkObjectResult;
-        var dto = okResult.Value as User;
+        mock.Setup(o => o.CreateUser(It.IsAny<User>())).Returns(user);
+        var result = controller.CreateUser(userDTO);
+        var okResult = result as CreatedResult;
+        var dto = okResult.Value as UserDetailDTO;
         mock.VerifyAll();
-        Assert.AreEqual(user, dto);
+        Assert.AreEqual(user.FirstName, dto.FirstName);
     }
 }

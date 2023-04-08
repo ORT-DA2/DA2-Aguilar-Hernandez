@@ -21,4 +21,9 @@ public class UserLogic: IUserLogic
     {
         throw new NotImplementedException();
     }
+
+    public User CreateUser(User user)
+    {
+        throw new NotImplementedException();
+    }
 }

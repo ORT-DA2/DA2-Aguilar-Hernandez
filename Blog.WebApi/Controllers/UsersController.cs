@@ -51,9 +51,18 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUser(User user)
+        public IActionResult CreateUser([FromBody]CreateUserDTO userDTO)
         {
-            return Ok(user);
+            try
+            {
+                User user = userDTO.ToEntity();
+                User newUser = _userLogic.CreateUser(user);
+                return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
