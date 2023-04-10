@@ -24,6 +24,6 @@ public class UserLogic: IUserLogic
 
     public User CreateUser(User user)
     {
-        throw new NotImplementedException();
+        return _userRepository.CreateUser(user);
     }
 }
