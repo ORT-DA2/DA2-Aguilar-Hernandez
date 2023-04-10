@@ -24,6 +24,9 @@ public class UserLogic: IUserLogic
 
     public User CreateUser(User user)
     {
+        user.ValidateEmptyString();
+        user.ValidateEmail();
+        user.ValidateAlfanumericUsername();
         return _userRepository.CreateUser(user);
     }
 }

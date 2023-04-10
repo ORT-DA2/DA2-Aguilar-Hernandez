@@ -29,45 +29,71 @@ public class UserTests
     [TestMethod]
     public void StringValidationSuccessTest()
     {
-        User user = new User();
-        user.FirstName = "Nicolas";
-        var result = user.ValidateEmptyString(user.FirstName);
-        
-        Assert.IsFalse(result);
+
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "FAguilar",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
+        };
+        user.ValidateEmptyString();
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException),
+        "Empty FirstName")]
     public void StringValidationFailTest()
     {
         User user = new User()
         {
-            FirstName = ""
+            Id = Guid.NewGuid(),
+            FirstName = "",
+            LastName = "Aguilar",
+            Username = "FAguilar",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
         };
-        var result = user.ValidateEmptyString(user.FirstName);
-        
-        Assert.IsTrue(result);
+        user.ValidateEmptyString();
     }
     
     [TestMethod]
     public void AlfanumericValidationSuccessTest()
     {
-        User user = new User();
-        user.Username = "NicolasAHF";
-        var result = user.ValidateAlfanumeric(user.Username);
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "FAguilar",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
+        };
+        user.ValidateAlfanumericUsername();
         
-        Assert.IsTrue(result);
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException),
+        "Username should be alphanumeric")]
     public void AlfanumericValidationFailTest()
     {
         User user = new User()
         {
-            Username = "@Nicolas.AHF"
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "@Nicolas.AHF",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
         };
-        var result = user.ValidateAlfanumeric(user.Username);
-        
-        Assert.IsFalse(result);
+        user.ValidateAlfanumericUsername();
     }
     
     [TestMethod]
@@ -75,22 +101,33 @@ public class UserTests
     {
         User user = new User()
         {
-            Email = "nicolas@example.com"
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "FAguilar",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
         };
-        var result = user.ValidateEmail(user.Email);
-        
-        Assert.IsTrue(result);
+        user.ValidateEmail();
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException),
+        "Invalid Email")]
     public void EmailValidationFailTest()
     {
         User user = new User()
         {
-            Email = "nicolas.com"
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "FAguilar",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "nicolascom"
         };
-        var result = user.ValidateEmail(user.Email);
-        
-        Assert.IsFalse(result);
+        user.ValidateEmail();
+
     }
 }

@@ -33,6 +33,6 @@ public class UserLogicTests
         mock.Setup(o => o.CreateUser(It.IsAny<User>())).Returns(user);
         var result = logic.CreateUser(user);
         mock.VerifyAll();
-        Assert.AreEqual(user.FirstName, result.FirstName);
+        Assert.AreEqual(user, result);
     }
 }

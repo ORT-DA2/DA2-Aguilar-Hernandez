@@ -13,20 +13,35 @@ public class User
     public Role Role { get; set; }
     public string Email { get; set; }
 
-    public bool ValidateEmptyString(string str)
+    public void ValidateEmptyString()
     {
-        return String.IsNullOrEmpty(str);
+        if (String.IsNullOrEmpty(FirstName))
+            throw new ArgumentException("Empty FirstName");
+        if (String.IsNullOrEmpty(LastName))
+            throw new ArgumentException("Empty LastName");
+        if (String.IsNullOrEmpty(Username))
+            throw new ArgumentException("Empty Username");
+        if (String.IsNullOrEmpty(Password))
+            throw new ArgumentException("Empty Password");
+        if (String.IsNullOrEmpty(Email))
+            throw new ArgumentException("Empty Email");
     }
     
-    public bool ValidateAlfanumeric(string str)
+    public void ValidateAlfanumericUsername()
     {
         Regex regex = new Regex(@"^\w+$", RegexOptions.IgnoreCase);
-        return regex.IsMatch(str);
+        if (!regex.IsMatch(Username))
+        {
+            throw new ArgumentException("Username should be alphanumeric");
+        }
     }
     
-    public bool ValidateEmail(string email)
+    public void ValidateEmail()
     {
         Regex regex = new Regex(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$", RegexOptions.IgnoreCase);
-        return regex.IsMatch(email);
+        if (!regex.IsMatch(Email))
+        {
+            throw new ArgumentException("Invalid Email");
+        }
     }
 }
