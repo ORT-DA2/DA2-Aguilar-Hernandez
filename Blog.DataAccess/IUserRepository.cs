@@ -4,4 +4,5 @@ namespace Blog.DataAccess;
 
 public interface IUserRepository
 {
+    public User CreateUser(User user);
 }

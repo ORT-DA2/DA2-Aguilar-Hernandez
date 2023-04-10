@@ -145,8 +145,6 @@ public class UserControllerTests
             Email = "nicolas@example.com"
         };
 
-        UserDetailDTO userDetailDto = new UserDetailDTO(user);
-        
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
         var controller = new UsersController(mock.Object);
