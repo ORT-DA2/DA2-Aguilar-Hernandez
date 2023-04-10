@@ -27,7 +27,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void StringValidationSuccessTest()
+    public void StringEmptyValidationSuccessTest()
     {
 
         User user = new User()
@@ -46,7 +46,7 @@ public class UserTests
     [TestMethod]
     [ExpectedException(typeof(ArgumentException),
         "Empty FirstName")]
-    public void StringValidationFailTest()
+    public void FirstNameEmptyValidationFailTest()
     {
         User user = new User()
         {
@@ -62,7 +62,79 @@ public class UserTests
     }
     
     [TestMethod]
-    public void AlfanumericValidationSuccessTest()
+    [ExpectedException(typeof(ArgumentException),
+        "Empty LastName")]
+    public void LastNameEmptyValidationFailTest()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "",
+            Username = "FAguilar",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
+        };
+        user.ValidateEmptyString();
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException),
+        "Empty Username")]
+    public void UsernameEmptyValidationFailTest()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
+        };
+        user.ValidateEmptyString();
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException),
+        "Empty Password")]
+    public void PasswordEmptyValidationFailTest()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "FAguilar",
+            Password = "",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
+        };
+        user.ValidateEmptyString();
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException),
+        "Empty Email")]
+    public void EmailEmptyValidationFailTest()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "FAguilar",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = ""
+        };
+        user.ValidateEmptyString();
+    }
+    
+    [TestMethod]
+    public void AlfanumericUsernameValidationSuccessTest()
     {
         User user = new User()
         {
@@ -75,6 +147,44 @@ public class UserTests
             Email = "Francisco@example.com"
         };
         user.ValidateAlfanumericUsername();
+        
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException),
+        "Username must be between 12 and 4 characters")]
+    public void UsernameLenghtValidationLessThan4FailTest()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "FAg",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
+        };
+        user.ValidateUsernameLenght();
+        
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException),
+        "Username must be between 12 and 4 characters")]
+    public void UsernameLenghtValidationMoreThan4FailTest()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Francisco",
+            LastName = "Aguilar",
+            Username = "FAguilar123456789",
+            Password = "123456",
+            Role = Role.Admin,
+            Email = "Francisco@example.com"
+        };
+        user.ValidateUsernameLenght();
         
     }
     

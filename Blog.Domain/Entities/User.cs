@@ -32,7 +32,15 @@ public class User
         Regex regex = new Regex(@"^\w+$", RegexOptions.IgnoreCase);
         if (!regex.IsMatch(Username))
         {
-            throw new ArgumentException("Username should be alphanumeric");
+            throw new ArgumentException("Username must be alphanumeric");
+        }
+    }
+
+    public void ValidateUsernameLenght()
+    {
+        if (Username.Length > 12 || Username.Length < 4)
+        {
+            throw new ArgumentException("Username must be between 12 and 4 characters");
         }
     }
     
