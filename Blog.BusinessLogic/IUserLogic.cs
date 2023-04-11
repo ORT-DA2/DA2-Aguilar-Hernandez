@@ -7,4 +7,6 @@ public interface IUserLogic
     public User GetUserById(Guid id);
     public List<User> GetAllUsers();
     public User CreateUser(User user);
+    public User UpdateUser(User user);
+    public void DeleteUser(Guid id);
 }

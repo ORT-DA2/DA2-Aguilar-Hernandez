@@ -155,4 +155,131 @@ public class UserControllerTests
         mock.VerifyAll();
         Assert.AreEqual(user.FirstName, dto.FirstName);
     }
+    
+    [TestMethod]
+    public void CreateInvalidUser()
+    {
+        CreateUserDTO userDTO = new CreateUserDTO()
+        {
+            FirstName = "",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Email = "nicolas@example.com"
+        };
+        
+
+        var mock = new Mock<IUserLogic>(MockBehavior.Strict);
+
+        var controller = new UsersController(mock.Object);
+        mock.Setup(o => o.CreateUser(It.IsAny<User>())).Throws(new ArgumentException());;
+        var result = controller.CreateUser(userDTO);
+        mock.VerifyAll();
+        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+    }
+    
+    [TestMethod]
+    public void UpdateValidUser()
+    {
+        CreateUserDTO userDTO = new CreateUserDTO()
+        {
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Email = "nicolas@example.com"
+        };
+        
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Fusco",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Role = Role.Blogger,
+            Email = "nicolas@example.com"
+        };
+
+        var mock = new Mock<IUserLogic>(MockBehavior.Strict);
+
+        var controller = new UsersController(mock.Object);
+        mock.Setup(o => o.UpdateUser(It.IsAny<User>())).Returns(user);
+        var result = controller.UpdateUser(userDTO);
+        var okResult = result as CreatedResult;
+        var dto = okResult.Value as UserDetailDTO;
+        mock.VerifyAll();
+        Assert.AreNotEqual(userDTO.LastName, dto.LastName);
+    }
+    
+    [TestMethod]
+    public void UpdateInvalidUser()
+    {
+        CreateUserDTO userDTO = new CreateUserDTO()
+        {
+            FirstName = "",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Email = "nicolas@example.com"
+        };
+        
+
+        var mock = new Mock<IUserLogic>(MockBehavior.Strict);
+
+        var controller = new UsersController(mock.Object);
+        mock.Setup(o => o.UpdateUser(It.IsAny<User>())).Throws(new ArgumentException());;
+        var result = controller.UpdateUser(userDTO);
+        mock.VerifyAll();
+        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+    }
+    
+    [TestMethod]
+    public void DeleteValidUser()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Role = Role.Blogger,
+            Email = "nicolas@example.com"
+        };
+
+        var mock = new Mock<IUserLogic>(MockBehavior.Strict);
+
+        var controller = new UsersController(mock.Object);
+        mock.Setup(o => o.DeleteUser(user.Id));
+        var result = controller.DeleteUser(user.Id);
+        var okResult = result as OkObjectResult;
+        mock.VerifyAll();
+        Assert.AreEqual(okResult.Value, $"User with the id {user.Id} was deleted");
+    }
+    
+    [TestMethod]
+    public void DeleteInvalidUser()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Role = Role.Blogger,
+            Email = "nicolas@example.com"
+        };
+
+        var mock = new Mock<IUserLogic>(MockBehavior.Strict);
+
+        var controller = new UsersController(mock.Object);
+        mock.Setup(o => o.DeleteUser(user.Id)).Throws(new NotFoundException("There are no users."));
+        var result = controller.DeleteUser(user.Id);
+        mock.VerifyAll();
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+    
+    
 }

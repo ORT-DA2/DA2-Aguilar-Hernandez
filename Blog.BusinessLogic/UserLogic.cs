@@ -30,4 +30,14 @@ public class UserLogic: IUserLogic
         user.ValidateUsernameLenght();
         return _userRepository.CreateUser(user);
     }
+
+    public User UpdateUser(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteUser(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 }

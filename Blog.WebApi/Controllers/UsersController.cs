@@ -64,5 +64,34 @@ namespace Blog.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut]
+        public IActionResult UpdateUser([FromBody] CreateUserDTO userDTO)
+        {
+            try
+            {
+                User user = userDTO.ToEntity();
+                User newUser = _userLogic.UpdateUser(user);
+                return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser([FromRoute] Guid id)
+        {
+            try
+            {
+                _userLogic.DeleteUser(id);
+                return Ok($"User with the id {id} was deleted");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }
