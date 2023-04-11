@@ -1,4 +1,5 @@
 ﻿using Blog.Domain.Entities;
+using Blog.IDataAccess;
 
 namespace Blog.DataAccess;
 

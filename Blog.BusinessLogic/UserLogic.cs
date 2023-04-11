@@ -1,6 +1,6 @@
-﻿using Blog.BusinessLogic.Exceptions;
-using Blog.DataAccess;
+﻿using Blog.IDataAccess;
 using Blog.Domain.Entities;
+
 
 namespace Blog.BusinessLogic;
 

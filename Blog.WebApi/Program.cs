@@ -1,20 +1,16 @@
-using Blog.BusinessLogic;
-using Blog.DataAccess;
-using Microsoft.EntityFrameworkCore;
+using Blog.RegisterService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var services = new RegisterService();
+services.ServiceRegistrator(builder.Services);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<BlogDbContext>(options => 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IUserLogic, UserLogic>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Blog.BusinessLogic;
 using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
-using Blog.Domain.Enums;
 using Blog.WebApi.Controllers.DTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers

@@ -1,6 +1,6 @@
 ﻿using Blog.Domain.Entities;
 
-namespace Blog.DataAccess;
+namespace Blog.IDataAccess;
 
 public interface IUserRepository
 {

@@ -1,10 +1,7 @@
 ﻿using Blog.BusinessLogic;
-using Blog.DataAccess;
+using Blog.IDataAccess;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
-using Blog.WebApi.Controllers;
-using Blog.WebApi.Controllers.DTOs;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace Blog.Tests.BusinessLogicTests;
