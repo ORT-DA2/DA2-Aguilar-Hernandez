@@ -1,10 +1,13 @@
 using Blog.BusinessLogic;
 using Blog.DataAccess;
+using Blog.RegisterService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var services = new RegisterService();
+services.ServiceRegistrator(builder.Services);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
