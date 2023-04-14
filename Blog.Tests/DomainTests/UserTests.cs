@@ -1,4 +1,5 @@
-﻿using Blog.Domain.Entities;
+﻿using Blog.Domain;
+using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 
 namespace Blog.Tests.DomainTests;
