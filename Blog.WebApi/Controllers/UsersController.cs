@@ -45,11 +45,11 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBody]CreateUserDTO userDTO)
+        public IActionResult CreateUser([FromBody]CreateUserDTO userDto)
         {
             try
             {
-                User user = userDTO.ToEntity();
+                User user = userDto.ToEntity();
                 User newUser = _userLogic.CreateUser(user);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }
@@ -60,11 +60,11 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateUser([FromBody] CreateUserDTO userDTO)
+        public IActionResult UpdateUser([FromBody] CreateUserDTO userDto)
         {
             try
             {
-                User user = userDTO.ToEntity();
+                User user = userDto.ToEntity();
                 User newUser = _userLogic.UpdateUser(user);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }

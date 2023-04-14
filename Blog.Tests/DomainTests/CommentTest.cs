@@ -17,7 +17,7 @@ public class CommentTest
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Email = "nicolashernandez@example.com",
-            Role = Role.Blogger
+            Roles = new List<UserRole>{}
         };
         Article article = new Article()
         {

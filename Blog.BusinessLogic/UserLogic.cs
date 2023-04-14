@@ -6,9 +6,9 @@ namespace Blog.BusinessLogic;
 
 public class UserLogic: IUserLogic
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IRepository<User> _userRepository;
 
-    public UserLogic(IUserRepository userRepository)
+    public UserLogic(IRepository<User> userRepository)
     {
         _userRepository = userRepository;
     }
@@ -28,7 +28,8 @@ public class UserLogic: IUserLogic
         user.ValidateEmail();
         user.ValidateAlfanumericUsername();
         user.ValidateUsernameLenght();
-        return _userRepository.CreateUser(user);
+        _userRepository.Insert(user);
+        return user;
     }
 
     public User UpdateUser(User user)

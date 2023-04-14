@@ -20,7 +20,7 @@ public class CreateUserDTO
             Username = Username,
             Password = Password,
             Email = Email,
-            Role = Role.Blogger
+            Roles = new List<UserRole>{}
         };
     }
 }

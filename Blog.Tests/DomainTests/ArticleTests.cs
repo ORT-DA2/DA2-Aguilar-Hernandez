@@ -15,7 +15,7 @@ public class ArticleTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Email = "nicolashernandez@example.com",
-            Role = Role.Blogger
+            Roles = new List<UserRole>{}
         };
         List<Comment> comments = new List<Comment>();
         string linkImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png";

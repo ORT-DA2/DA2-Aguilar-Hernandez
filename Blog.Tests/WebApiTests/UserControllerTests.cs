@@ -22,7 +22,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
@@ -39,7 +39,7 @@ public class UserControllerTests
         Assert.IsTrue(user.LastName.Equals(dto.LastName));
         Assert.IsTrue(user.Username.Equals(dto.Username));
         Assert.IsTrue(user.Password.Equals(dto.Password));
-        Assert.IsTrue(user.Role.Equals(dto.Role));
+        Assert.IsTrue(user.Roles.Equals(dto.Roles));
         Assert.IsTrue(user.Email.Equals(dto.Email));
     }
     
@@ -53,7 +53,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
@@ -77,7 +77,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
         
@@ -88,7 +88,7 @@ public class UserControllerTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
 
@@ -141,7 +141,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
@@ -197,7 +197,7 @@ public class UserControllerTests
             LastName = "Fusco",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
@@ -244,7 +244,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
@@ -268,7 +268,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 

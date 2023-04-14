@@ -10,7 +10,7 @@ public class UserDetailDTO
     public string LastName { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
-    public Role Role { get; set; }
+    public ICollection<UserRole> Roles { get; set; }
     public string Email { get; set; }
 
     public UserDetailDTO(User user)
@@ -20,7 +20,7 @@ public class UserDetailDTO
         LastName = user.LastName;
         Username = user.Username;
         Password = user.Password;
-        Role = user.Role;
+        Roles = user.Roles;
         Email = user.Email;
     }
 }

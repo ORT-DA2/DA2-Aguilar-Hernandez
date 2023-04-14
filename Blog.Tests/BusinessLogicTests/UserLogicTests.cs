@@ -20,14 +20,23 @@ public class UserLogicTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
+
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
         
-        var mock = new Mock<IUserRepository>(MockBehavior.Strict);
+        user.Roles.Add(role);
+        
+        var mock = new Mock<IRepository<User>>(MockBehavior.Strict);
 
         var logic = new UserLogic(mock.Object);
-        mock.Setup(o => o.CreateUser(It.IsAny<User>())).Returns(user);
+        mock.Setup(o => o.Insert(It.IsAny<User>()));
         var result = logic.CreateUser(user);
         mock.VerifyAll();
         Assert.AreEqual(user, result);
