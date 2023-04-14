@@ -52,9 +52,6 @@ namespace Blog.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Username")
-                        .IsUnique();
-
                     b.ToTable("Users");
                 });
 

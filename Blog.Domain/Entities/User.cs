@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore;
+using Blog.Domain.Enums;
 
 namespace Blog.Domain.Entities;
 
-[Index(nameof(Username), IsUnique = true)]
 public class User
 {
     [Required]

@@ -1,5 +1,4 @@
 ﻿using Blog.DataAccess;
-using Blog.Domain;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Microsoft.EntityFrameworkCore;

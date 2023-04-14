@@ -1,5 +1,6 @@
-﻿using Blog.Domain;
+﻿using System.Data.Common;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -15,21 +16,6 @@ public class BlogDbContext: DbContext
     }
     
     public BlogDbContext() : base() {}
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<UserRole>()
-            .HasKey(ur => new {ur.UserId, ur.Role});
-
-        modelBuilder.Entity<UserRole>()
-            .HasOne(ur => ur.User)
-            .WithMany(u => u.Roles)
-            .HasForeignKey(ur => ur.UserId);
-
-        modelBuilder.Entity<UserRole>()
-            .Property(ur => ur.Role)
-            .HasConversion<string>();
-    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -47,5 +33,18 @@ public class BlogDbContext: DbContext
         }
     }
     
-    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<UserRole>()
+            .HasKey(ur => new {ur.UserId, ur.Role});
+
+        modelBuilder.Entity<UserRole>()
+            .HasOne(ur => ur.User)
+            .WithMany(u => u.Roles)
+            .HasForeignKey(ur => ur.UserId);
+
+        modelBuilder.Entity<UserRole>()
+            .Property(ur => ur.Role)
+            .HasConversion<string>();
+    }
 }
