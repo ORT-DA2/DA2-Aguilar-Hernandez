@@ -5,6 +5,7 @@ using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.WebApi.Controllers;
 using Blog.WebApi.Controllers.DTOs;
+using Blog.WebApi.Controllers.DTOs.UserRole;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -132,8 +133,16 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
+            Roles = new List<CreateUserRoleDTO>{},
             Email = "nicolas@example.com"
         };
+        
+        CreateUserRoleDTO role = new CreateUserRoleDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        userDTO.Roles.Add(role);
         
         User user = new User()
         {
@@ -166,8 +175,16 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
+            Roles = new List<CreateUserRoleDTO>{},
             Email = "nicolas@example.com"
         };
+        
+        CreateUserRoleDTO role = new CreateUserRoleDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        userDTO.Roles.Add(role);
         
 
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
@@ -188,8 +205,16 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
+            Roles = new List<CreateUserRoleDTO>{},
             Email = "nicolas@example.com"
         };
+        
+        CreateUserRoleDTO role = new CreateUserRoleDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        userDTO.Roles.Add(role);
         
         User user = new User()
         {
@@ -222,8 +247,16 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
+            Roles = new List<CreateUserRoleDTO>{},
             Email = "nicolas@example.com"
         };
+        
+        CreateUserRoleDTO role = new CreateUserRoleDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        userDTO.Roles.Add(role);
         
 
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);

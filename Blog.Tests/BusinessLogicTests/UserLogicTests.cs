@@ -38,6 +38,7 @@ public class UserLogicTests
 
         var logic = new UserLogic(mock.Object);
         mock.Setup(o => o.Insert(It.IsAny<User>()));
+        mock.Setup(o => o.Save());
         var result = logic.CreateUser(user);
         mock.VerifyAll();
         Assert.AreEqual(user, result);
