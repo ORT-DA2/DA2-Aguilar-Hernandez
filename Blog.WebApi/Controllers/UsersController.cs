@@ -49,7 +49,12 @@ namespace Blog.WebApi.Controllers
         {
             try
             {
-                User user = userDto.ToEntity();
+                var rolList = new List<UserRole>();
+                foreach (var rol in userDto.Roles)
+                {
+                    rolList.Add(rol.ToEntity());
+                }
+                User user = userDto.ToEntity(rolList);
                 User newUser = _userLogic.CreateUser(user);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }
@@ -64,7 +69,12 @@ namespace Blog.WebApi.Controllers
         {
             try
             {
-                User user = userDto.ToEntity();
+                var rolList = new List<UserRole>();
+                foreach (var rol in userDto.Roles)
+                {
+                    rolList.Add(rol.ToEntity());
+                }
+                User user = userDto.ToEntity(rolList);
                 User newUser = _userLogic.UpdateUser(user);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }

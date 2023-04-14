@@ -29,6 +29,7 @@ public class UserLogic: IUserLogic
         user.ValidateAlfanumericUsername();
         user.ValidateUsernameLenght();
         _userRepository.Insert(user);
+        _userRepository.Save();
         return user;
     }
 
