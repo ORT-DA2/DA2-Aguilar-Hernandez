@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Blog.IDataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.DataAccess;
 
@@ -34,6 +35,7 @@ public class Repository<T> : IRepository<T> where T : class
 
     public void Update(T elem)
     {
+        _context.Entry(elem).State = EntityState.Modified;
         _context.Set<T>().Update(elem);
     }
 

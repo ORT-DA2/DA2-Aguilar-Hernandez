@@ -49,6 +49,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -67,6 +77,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -85,6 +105,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -103,6 +133,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -121,6 +161,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -139,6 +189,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = ""
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -155,6 +215,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateAlfanumericUsername();
         
     }
@@ -174,6 +244,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateUsernameLenght();
         
     }
@@ -193,6 +273,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateUsernameLenght();
         
     }
@@ -212,6 +302,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateAlfanumericUsername();
     }
     
@@ -228,6 +328,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmail();
     }
     
@@ -246,6 +356,16 @@ public class UserTests
             Roles = new List<UserRole>{},
             Email = "nicolascom"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmail();
 
     }
