@@ -34,7 +34,7 @@ public class NotificationTests
         {
             Article = article,
             Owner = user,
-            CommentBody = "Nice",
+            Body = "Nice",
             Reply = ""
         };
         comments.Add(comment);

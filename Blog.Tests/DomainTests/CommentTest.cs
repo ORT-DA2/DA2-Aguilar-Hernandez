@@ -36,13 +36,13 @@ public class CommentTest
         Guid id = comment.Id;
         comment.Owner = user;
         comment.Article = article;
-        comment.CommentBody = "Nice Article";
+        comment.Body = "Nice Article";
         comment.Reply = "Thank you!";
 
         Assert.AreEqual(id, comment.Id);
         Assert.AreEqual(user, comment.Owner);
         Assert.AreEqual(article, comment.Article);
-        Assert.AreEqual("Nice Article", comment.CommentBody);
+        Assert.AreEqual("Nice Article", comment.Body);
         Assert.AreEqual("Thank you!", comment.Reply);
     }
 }
