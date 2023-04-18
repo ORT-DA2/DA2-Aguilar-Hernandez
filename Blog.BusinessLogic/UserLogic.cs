@@ -48,7 +48,7 @@ public class UserLogic: IUserLogic
 
         if (oldUser == null)
         {
-            throw new NotFoundException($"The user was not found");
+            throw new NotFoundException("The user was not found");
         }
         
         oldUser.UpdateAttributes(userUpdated);
@@ -64,7 +64,7 @@ public class UserLogic: IUserLogic
         
         if (user == null)
         {
-            throw new NotFoundException($"The user was not found");
+            throw new NotFoundException("The user was not found");
         }
         
         _repository.Delete(user);
