@@ -1,6 +1,6 @@
-using Blog.BusinessLogic;
 using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
+using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,8 +64,8 @@ namespace Blog.WebApi.Controllers
             }
         }
 
-        [HttpPut]
-        public IActionResult UpdateUser([FromBody] CreateUserDTO userDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDTO userDto)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace Blog.WebApi.Controllers
                     rolList.Add(rol.ToEntity());
                 }
                 User user = userDto.ToEntity(rolList);
-                User newUser = _userLogic.UpdateUser(user);
+                User newUser = _userLogic.UpdateUser(id, user);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }
             catch (ArgumentException ex)

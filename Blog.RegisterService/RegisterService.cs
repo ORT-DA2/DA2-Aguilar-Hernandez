@@ -1,6 +1,7 @@
 ﻿using Blog.BusinessLogic;
 using Blog.DataAccess;
 using Blog.Domain.Entities;
+using Blog.IBusinessLogic;
 using Blog.IDataAccess;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,6 @@ public class RegisterService
     {
         serviceCollection.AddDbContext<BlogDbContext>();
         serviceCollection.AddScoped<IUserLogic, UserLogic>();
-        serviceCollection.AddScoped<IRepository<User>, Repository<User>>();
+        serviceCollection.AddScoped<IRepository<User>, UserRepository>();
     }
 }

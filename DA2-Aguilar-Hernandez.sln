@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.IDataAccess", "Blog.ID
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.RegisterService", "Blog.RegisterService\Blog.RegisterService.csproj", "{372CD268-E590-4348-981B-7B4735691D10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.IBusinessLogic", "Blog.IBusinessLogic\Blog.IBusinessLogic.csproj", "{6EDEFA37-9808-468B-88AB-464B819910E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,5 +51,9 @@ Global
 		{372CD268-E590-4348-981B-7B4735691D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{372CD268-E590-4348-981B-7B4735691D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{372CD268-E590-4348-981B-7B4735691D10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EDEFA37-9808-468B-88AB-464B819910E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EDEFA37-9808-468B-88AB-464B819910E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EDEFA37-9808-468B-88AB-464B819910E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EDEFA37-9808-468B-88AB-464B819910E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

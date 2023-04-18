@@ -13,12 +13,12 @@ public class Repository<T> : IRepository<T> where T : class
         _context = context;
     }
     
-    public IEnumerable<T> GetAll()
+    public virtual IEnumerable<T> GetAll()
     {
         return _context.Set<T>();
     }
 
-    public T? GetById(Expression<Func<T, bool>> expression)
+    public virtual T? GetById(Expression<Func<T, bool>> expression)
     {
         return _context.Set<T>().FirstOrDefault(expression);
     }

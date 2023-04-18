@@ -1,4 +1,5 @@
 ﻿using Blog.BusinessLogic;
+using Blog.DataAccess;
 using Blog.Domain;
 using Blog.IDataAccess;
 using Blog.Domain.Entities;
@@ -40,6 +41,38 @@ public class UserLogicTests
         mock.Setup(o => o.Insert(It.IsAny<User>()));
         mock.Setup(o => o.Save());
         var result = logic.CreateUser(user);
+        mock.VerifyAll();
+        Assert.AreEqual(user, result);
+    }
+    
+    [TestMethod]
+    public void GetAllUsersValidTest()
+    {
+        User user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Roles = new List<UserRole>{},
+            Email = "nicolas@example.com"
+        };
+
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
+        var mock = new Mock<IRepository<User>>(MockBehavior.Strict);
+
+        var logic = new UserLogic(mock.Object);
+        mock.Setup(o => o.GetAll());
+        var result = logic.GetAllUsers();
         mock.VerifyAll();
         Assert.AreEqual(user, result);
     }

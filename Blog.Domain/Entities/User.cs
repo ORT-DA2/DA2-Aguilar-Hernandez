@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +26,7 @@ public class User
     [PasswordPropertyText(true)]
     public string Password { get; set; }
     [Required]
-    public ICollection<UserRole> Roles { get; set; }
+    public virtual ICollection<UserRole> Roles { get; set; }
     [Required]
     [EmailAddress]
     [RegularExpression(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$")]
@@ -77,5 +78,15 @@ public class User
         {
             throw new ArgumentException("Invalid Email");
         }
+    }
+    
+    public void UpdateAttributes(User user)
+    {
+        FirstName = user.FirstName;
+        LastName = user.LastName;
+        Username = user.Username;
+        Password = user.Password;
+        Roles = user.Roles;
+        Email = user.Email;
     }
 }

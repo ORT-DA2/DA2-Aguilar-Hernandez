@@ -25,6 +25,11 @@ public class BlogDbContext: DbContext
             .HasOne(ur => ur.User)
             .WithMany(u => u.Roles)
             .HasForeignKey(ur => ur.UserId);
+        
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Roles)
+            .WithOne(ur => ur.User)
+            .HasForeignKey(ur => ur.UserId);
 
         modelBuilder.Entity<UserRole>()
             .Property(ur => ur.Role)

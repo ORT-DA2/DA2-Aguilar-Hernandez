@@ -3,6 +3,7 @@ using Blog.BusinessLogic.Exceptions;
 using Blog.Domain;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
+using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers;
 using Blog.WebApi.Controllers.DTOs;
 using Blog.WebApi.Controllers.DTOs.UserRole;
@@ -230,8 +231,8 @@ public class UserControllerTests
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
         var controller = new UsersController(mock.Object);
-        mock.Setup(o => o.UpdateUser(It.IsAny<User>())).Returns(user);
-        var result = controller.UpdateUser(userDTO);
+        mock.Setup(o => o.UpdateUser(user.Id, It.IsAny<User>())).Returns(user);
+        var result = controller.UpdateUser(user.Id, userDTO);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as UserDetailDTO;
         mock.VerifyAll();
@@ -241,6 +242,8 @@ public class UserControllerTests
     [TestMethod]
     public void UpdateInvalidUser()
     {
+        var id = new Guid("f2929c98-e6f8-4d48-8d36-9eccb6fe7558");
+        
         CreateUserDTO userDTO = new CreateUserDTO()
         {
             FirstName = "",
@@ -262,8 +265,8 @@ public class UserControllerTests
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
         var controller = new UsersController(mock.Object);
-        mock.Setup(o => o.UpdateUser(It.IsAny<User>())).Throws(new ArgumentException());;
-        var result = controller.UpdateUser(userDTO);
+        mock.Setup(o => o.UpdateUser(id, It.IsAny<User>())).Throws(new ArgumentException());
+        var result = controller.UpdateUser(id, userDTO);
         mock.VerifyAll();
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
