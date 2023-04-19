@@ -3,9 +3,18 @@ using Blog.Domain.Enums;
 
 namespace Blog.WebApi.Controllers.DTOs.UserRole;
 
-public class CreateUserRoleDTO
+public class UserRoleBasicInfoDTO
 {
     public Role Role { get; set; }
+
+    public UserRoleBasicInfoDTO()
+    {
+    }
+
+    public UserRoleBasicInfoDTO(Domain.Entities.UserRole userRole)
+    {
+        Role = userRole.Role;
+    }
     
     public Domain.Entities.UserRole ToEntity()
     {

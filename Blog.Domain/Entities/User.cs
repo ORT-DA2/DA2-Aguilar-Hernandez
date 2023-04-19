@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Blog.Domain.Entities;
 
 [Index(nameof(Username), IsUnique = true)]
+[Index(nameof(Email), IsUnique = true)]
 public class User
 {
     [Required]

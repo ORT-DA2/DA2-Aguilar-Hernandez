@@ -9,7 +9,7 @@ public class CreateUserDTO
     public string LastName { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
-    public ICollection<CreateUserRoleDTO> Roles { get; set; }
+    public ICollection<UserRoleBasicInfoDTO> Roles { get; set; }
     public string Email { get; set; }
     
     public User ToEntity(List<Domain.Entities.UserRole> roles)

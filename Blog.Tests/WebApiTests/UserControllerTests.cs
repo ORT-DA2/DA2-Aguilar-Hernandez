@@ -28,6 +28,13 @@ public class UserControllerTests
             Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
+        
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        user.Roles.Add(role.ToEntity());
 
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
@@ -42,7 +49,7 @@ public class UserControllerTests
         Assert.IsTrue(user.LastName.Equals(dto.LastName));
         Assert.IsTrue(user.Username.Equals(dto.Username));
         Assert.IsTrue(user.Password.Equals(dto.Password));
-        Assert.IsTrue(user.Roles.Equals(dto.Roles));
+        Assert.AreEqual(user.Roles.Count, dto.Roles.Count);
         Assert.IsTrue(user.Email.Equals(dto.Email));
     }
     
@@ -134,11 +141,11 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Roles = new List<CreateUserRoleDTO>{},
+            Roles = new List<UserRoleBasicInfoDTO>{},
             Email = "nicolas@example.com"
         };
         
-        CreateUserRoleDTO role = new CreateUserRoleDTO()
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
         {
             Role = Role.Blogger,
         };
@@ -176,11 +183,11 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Roles = new List<CreateUserRoleDTO>{},
+            Roles = new List<UserRoleBasicInfoDTO>{},
             Email = "nicolas@example.com"
         };
         
-        CreateUserRoleDTO role = new CreateUserRoleDTO()
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
         {
             Role = Role.Blogger,
         };
@@ -206,11 +213,11 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Roles = new List<CreateUserRoleDTO>{},
+            Roles = new List<UserRoleBasicInfoDTO>{},
             Email = "nicolas@example.com"
         };
         
-        CreateUserRoleDTO role = new CreateUserRoleDTO()
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
         {
             Role = Role.Blogger,
         };
@@ -250,11 +257,11 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Roles = new List<CreateUserRoleDTO>{},
+            Roles = new List<UserRoleBasicInfoDTO>{},
             Email = "nicolas@example.com"
         };
         
-        CreateUserRoleDTO role = new CreateUserRoleDTO()
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
         {
             Role = Role.Blogger,
         };

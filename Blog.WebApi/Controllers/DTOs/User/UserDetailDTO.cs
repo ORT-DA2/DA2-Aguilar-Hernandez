@@ -1,5 +1,4 @@
 ﻿using Blog.Domain.Entities;
-using Blog.Domain.Enums;
 using Blog.WebApi.Controllers.DTOs.UserRole;
 
 namespace Blog.WebApi.Controllers.DTOs;
@@ -11,7 +10,7 @@ public class UserDetailDTO
     public string LastName { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
-    public ICollection<Domain.Entities.UserRole>? Roles { get; set; }
+    public ICollection<UserRoleBasicInfoDTO> Roles { get; set; } = new List<UserRoleBasicInfoDTO>();
     public string Email { get; set; }
 
     public UserDetailDTO(User user)
@@ -21,7 +20,15 @@ public class UserDetailDTO
         LastName = user.LastName;
         Username = user.Username;
         Password = user.Password;
-        Roles = user.Roles;
         Email = user.Email;
+        if (user.Roles != null)
+        {
+            foreach (var userRole in user.Roles)
+            {
+                var urBasic = new UserRoleBasicInfoDTO(userRole);
+                Roles.Add(urBasic);
+            }
+        }
+        
     }
 }
