@@ -12,8 +12,13 @@ public class CreateUserDTO
     public ICollection<UserRoleBasicInfoDTO> Roles { get; set; }
     public string Email { get; set; }
     
-    public User ToEntity(List<Domain.Entities.UserRole> roles)
+    public User ToEntity(ICollection<UserRoleBasicInfoDTO> roles)
     {
+        var rolList = new List<Domain.Entities.UserRole>();
+        foreach (var rol in roles)
+        {
+            rolList.Add(rol.ToEntity());
+        }
         
         return new User()
         {
@@ -22,7 +27,7 @@ public class CreateUserDTO
             Username = Username,
             Password = Password,
             Email = Email,
-            Roles = roles
+            Roles = rolList
             
         };
     }
