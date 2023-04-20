@@ -24,7 +24,7 @@ public class AuthControllerTests
 
         Guid token = Guid.NewGuid();
         
-        var mock = new Mock<ISessionService>(MockBehavior.Strict);
+        var mock = new Mock<ISessionLogic>(MockBehavior.Strict);
 
         var controller = new AuthController(mock.Object);
         mock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
@@ -45,7 +45,7 @@ public class AuthControllerTests
             Password = "123456"
         };
 
-        var mock = new Mock<ISessionService>(MockBehavior.Strict);
+        var mock = new Mock<ISessionLogic>(MockBehavior.Strict);
 
         var controller = new AuthController(mock.Object);
         mock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
@@ -61,10 +61,10 @@ public class AuthControllerTests
         
         Guid token = Guid.NewGuid();
 
-        var mock = new Mock<ISessionService>(MockBehavior.Strict);
+        var mock = new Mock<ISessionLogic>(MockBehavior.Strict);
 
         var controller = new AuthController(mock.Object);
-        mock.Setup(o => o.Logout());
+        mock.Setup(o => o.Logout(token));
         var result = controller.Logout(token);
         
         mock.VerifyAll();

@@ -9,9 +9,9 @@ namespace Blog.WebApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private ISessionService _sessionService;
+        private ISessionLogic _sessionService;
         
-        public AuthController(ISessionService sessionService)
+        public AuthController(ISessionLogic sessionService)
         {
             _sessionService = sessionService;
         }
@@ -35,7 +35,7 @@ namespace Blog.WebApi.Controllers
         [Route("logout")]
         public IActionResult Logout([FromHeader] Guid token)
         {
-            _sessionService.Logout();
+            _sessionService.Logout(token);
             return Ok();
         }
         
