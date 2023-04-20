@@ -66,7 +66,7 @@ public class AuthControllerTests
         var controller = new AuthController(mock.Object);
         mock.Setup(o => o.Logout());
         var result = controller.Logout(token);
-        var okResult = result as OkResult;
+        
         mock.VerifyAll();
         
         Assert.IsInstanceOfType(result, typeof(OkResult));
