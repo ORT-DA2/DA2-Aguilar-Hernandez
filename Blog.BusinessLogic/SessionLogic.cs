@@ -27,9 +27,10 @@ public class SessionLogic: ISessionLogic
         }
     }
 
-    public Guid Login(string email, string password)
+    public Guid Login(string username, string password)
     {
-        User user = _userRepository.GetById(u => u.Email == email && u.Password == password);
+        User user = new User();
+        user = _userRepository.GetById(u => u.Username.Equals(username) && u.Password.Equals(password));
         if (user == null)
         {
             throw new InvalidCredentialException("Invalid credentials");
