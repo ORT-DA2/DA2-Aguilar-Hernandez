@@ -1,7 +1,9 @@
 using Blog.BusinessLogic.Exceptions;
+using Blog.BusinessLogic.Filters;
 using Blog.Domain.Entities;
 using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
@@ -16,7 +18,8 @@ namespace Blog.WebApi.Controllers
         {
             _userLogic = userLogic;
         }
-
+        
+        [ServiceFilter(typeof(AuthorizationFilter))]
         [HttpGet("{id}")]
         public IActionResult GetUserById([FromRoute] Guid id)
         {
@@ -31,6 +34,7 @@ namespace Blog.WebApi.Controllers
             }
         }
 
+        [ServiceFilter(typeof(AuthorizationFilter))]
         [HttpGet]
         public IActionResult GetAllUsers()
         {
@@ -59,6 +63,7 @@ namespace Blog.WebApi.Controllers
             }
         }
 
+        [ServiceFilter(typeof(AuthorizationFilter))]
         [HttpPut("{id}")]
         public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDTO userDto)
         {
@@ -73,7 +78,8 @@ namespace Blog.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        
+        [ServiceFilter(typeof(AuthorizationFilter))]
         [HttpDelete("{id}")]
         public IActionResult DeleteUser([FromRoute] Guid id)
         {

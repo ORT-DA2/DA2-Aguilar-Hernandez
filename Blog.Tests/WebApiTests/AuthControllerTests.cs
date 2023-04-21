@@ -30,10 +30,11 @@ public class AuthControllerTests
         mock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
         var result = controller.Login(session);
         var okResult = result as OkObjectResult;
-        var tokenResult = okResult.Value;
+        var tokenResult = okResult.Value.ToString();
         mock.VerifyAll();
+        var expected = new { token = token };
         
-        Assert.AreEqual(token, tokenResult);
+        Assert.AreEqual(expected.ToString(), tokenResult);
     }
     
     [TestMethod]
@@ -50,7 +51,6 @@ public class AuthControllerTests
         var controller = new AuthController(mock.Object);
         mock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
         var result = controller.Login(session);
-        var unauthorizedObjectResultResult = result as UnauthorizedObjectResult;
         mock.VerifyAll();
         Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
     }
