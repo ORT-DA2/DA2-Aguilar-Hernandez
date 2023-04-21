@@ -1,4 +1,5 @@
 using Blog.BusinessLogic;
+using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
 using Blog.WebApi.Controllers;
 using Blog.Models.In;
@@ -46,7 +47,7 @@ public class CommentControllerTest
     }
 
     [TestMethod]
-    public void DeleteCommentById()
+    public void DeleteValidCommentById()
     {
         Comment comment = new Comment();
 
@@ -60,11 +61,23 @@ public class CommentControllerTest
         mock.VerifyAll();
         Assert.AreEqual(okResult.Value, $"Comment with the id {comment.Id} was deleted");
     }
-    
+
+    [TestMethod]
+    public void DeleteInvalidCommentById()
+    {
+        Comment comment = CreateComment();
+        var mock = new Mock<ICommentService>(MockBehavior.Strict);
+        var controller = new CommentController(mock.Object);
+        mock.Setup(c => c.DeleteCommentById(comment.Id)).Throws(new NotFoundException("There are no comments."));
+        var result = controller.DeleteCommentById(comment.Id);
+        mock.VerifyAll();
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
     private Comment CreateComment()
     {
         return new Comment()
         {
+            Id = Guid.NewGuid(),
             Owner = Mock.Of<User>(),
             Article = Mock.Of<Article>(),
             Body = "Buen post Maquinola",
