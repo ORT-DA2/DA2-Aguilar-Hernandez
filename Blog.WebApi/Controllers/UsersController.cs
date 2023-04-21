@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Blog.BusinessLogic;
 using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
-using Blog.Domain.Enums;
+using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers.DTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
@@ -51,11 +45,11 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBody]CreateUserDTO userDTO)
+        public IActionResult CreateUser([FromBody]CreateUserDTO userDto)
         {
             try
             {
-                User user = userDTO.ToEntity();
+                User user = userDto.ToEntity(userDto.Roles);
                 User newUser = _userLogic.CreateUser(user);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }
@@ -65,13 +59,13 @@ namespace Blog.WebApi.Controllers
             }
         }
 
-        [HttpPut]
-        public IActionResult UpdateUser([FromBody] CreateUserDTO userDTO)
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDTO userDto)
         {
             try
             {
-                User user = userDTO.ToEntity();
-                User newUser = _userLogic.UpdateUser(user);
+                User user = userDto.ToEntity(userDto.Roles);
+                User newUser = _userLogic.UpdateUser(id, user);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }
             catch (ArgumentException ex)

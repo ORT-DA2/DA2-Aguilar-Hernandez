@@ -1,4 +1,5 @@
-﻿using Blog.Domain.Entities;
+﻿using Blog.Domain;
+using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 
 namespace Blog.Tests.DomainTests;
@@ -17,7 +18,7 @@ public class NotificationTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Email = "nicolashernandez@example.com",
-            Role = Role.Blogger
+            Roles = new List<UserRole>{}
         };
         Article article = new Article()
         {

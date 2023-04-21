@@ -1,17 +1,22 @@
-﻿using Blog.Domain.Entities;
+﻿using System.Linq.Expressions;
+using Blog.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.DataAccess;
 
-public class UserRepository: IUserRepository
+public class UserRepository: Repository<User>
 {
-    private BlogDbContext _blogDbContext;
-
-    public UserRepository(BlogDbContext blogDbContext)
+    public UserRepository(BlogDbContext context) : base(context)
     {
-        _blogDbContext = blogDbContext;
     }
-    public User CreateUser(User user)
+
+    public override IEnumerable<User> GetAll()
     {
-        return user;
+        return _context.Set<User>().Include(u => u.Roles);
+    }
+    
+    public override User? GetById(Expression<Func<User, bool>> expression)
+    {
+        return _context.Set<User>().Include(u => u.Roles).FirstOrDefault(expression);
     }
 }

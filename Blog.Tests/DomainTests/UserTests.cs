@@ -1,4 +1,5 @@
-﻿using Blog.Domain.Entities;
+﻿using Blog.Domain;
+using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 
 namespace Blog.Tests.DomainTests;
@@ -16,14 +17,23 @@ public class UserTests
         user.LastName = "Hernandez";
         user.Username = "NicolasAHF";
         user.Email = "nicolashernandez@example.com";
-        user.Role = Role.Blogger;
+        user.Roles = new List<UserRole>{};
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
 
         Assert.AreEqual(id, user.Id);
         Assert.AreEqual("Nicolas", user.FirstName);
         Assert.AreEqual("Hernandez", user.LastName);
         Assert.AreEqual("NicolasAHF", user.Username);
         Assert.AreEqual("nicolashernandez@example.com", user.Email);
-        Assert.AreEqual(Role.Blogger, user.Role);
+        Assert.AreEqual(new List<UserRole>{role}.Count, user.Roles.Count);
     }
 
     [TestMethod]
@@ -37,9 +47,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -55,9 +75,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -73,9 +103,19 @@ public class UserTests
             LastName = "",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -91,9 +131,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -109,9 +159,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -127,9 +187,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = ""
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmptyString();
     }
     
@@ -143,9 +213,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateAlfanumericUsername();
         
     }
@@ -162,9 +242,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAg",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateUsernameLenght();
         
     }
@@ -181,9 +271,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAguilar123456789",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateUsernameLenght();
         
     }
@@ -200,9 +300,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "@Nicolas.AHF",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateAlfanumericUsername();
     }
     
@@ -216,9 +326,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmail();
     }
     
@@ -234,9 +354,19 @@ public class UserTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "nicolascom"
         };
+        
+        UserRole role = new UserRole()
+        {
+            Role = Role.Blogger,
+            UserId = user.Id,
+            User = user
+        };
+        
+        user.Roles.Add(role);
+        
         user.ValidateEmail();
 
     }

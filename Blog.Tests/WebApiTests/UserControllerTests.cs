@@ -1,9 +1,12 @@
 ﻿using Blog.BusinessLogic;
 using Blog.BusinessLogic.Exceptions;
+using Blog.Domain;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
+using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers;
 using Blog.WebApi.Controllers.DTOs;
+using Blog.WebApi.Controllers.DTOs.UserRole;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -22,9 +25,16 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
+        
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        user.Roles.Add(role.ToEntity());
 
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
@@ -39,7 +49,7 @@ public class UserControllerTests
         Assert.IsTrue(user.LastName.Equals(dto.LastName));
         Assert.IsTrue(user.Username.Equals(dto.Username));
         Assert.IsTrue(user.Password.Equals(dto.Password));
-        Assert.IsTrue(user.Role.Equals(dto.Role));
+        Assert.AreEqual(user.Roles.Count, dto.Roles.Count);
         Assert.IsTrue(user.Email.Equals(dto.Email));
     }
     
@@ -53,7 +63,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
@@ -77,7 +87,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
         
@@ -88,7 +98,7 @@ public class UserControllerTests
             LastName = "Aguilar",
             Username = "FAguilar",
             Password = "123456",
-            Role = Role.Admin,
+            Roles = new List<UserRole>{},
             Email = "Francisco@example.com"
         };
 
@@ -131,8 +141,16 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
+            Roles = new List<UserRoleBasicInfoDTO>{},
             Email = "nicolas@example.com"
         };
+        
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        userDTO.Roles.Add(role);
         
         User user = new User()
         {
@@ -141,7 +159,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
@@ -165,8 +183,16 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
+            Roles = new List<UserRoleBasicInfoDTO>{},
             Email = "nicolas@example.com"
         };
+        
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        userDTO.Roles.Add(role);
         
 
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
@@ -187,8 +213,16 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
+            Roles = new List<UserRoleBasicInfoDTO>{},
             Email = "nicolas@example.com"
         };
+        
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        userDTO.Roles.Add(role);
         
         User user = new User()
         {
@@ -197,15 +231,15 @@ public class UserControllerTests
             LastName = "Fusco",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
         var controller = new UsersController(mock.Object);
-        mock.Setup(o => o.UpdateUser(It.IsAny<User>())).Returns(user);
-        var result = controller.UpdateUser(userDTO);
+        mock.Setup(o => o.UpdateUser(user.Id, It.IsAny<User>())).Returns(user);
+        var result = controller.UpdateUser(user.Id, userDTO);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as UserDetailDTO;
         mock.VerifyAll();
@@ -215,21 +249,31 @@ public class UserControllerTests
     [TestMethod]
     public void UpdateInvalidUser()
     {
+        var id = new Guid("f2929c98-e6f8-4d48-8d36-9eccb6fe7558");
+        
         CreateUserDTO userDTO = new CreateUserDTO()
         {
             FirstName = "",
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
+            Roles = new List<UserRoleBasicInfoDTO>{},
             Email = "nicolas@example.com"
         };
+        
+        UserRoleBasicInfoDTO role = new UserRoleBasicInfoDTO()
+        {
+            Role = Role.Blogger,
+        };
+        
+        userDTO.Roles.Add(role);
         
 
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
 
         var controller = new UsersController(mock.Object);
-        mock.Setup(o => o.UpdateUser(It.IsAny<User>())).Throws(new ArgumentException());;
-        var result = controller.UpdateUser(userDTO);
+        mock.Setup(o => o.UpdateUser(id, It.IsAny<User>())).Throws(new ArgumentException());
+        var result = controller.UpdateUser(id, userDTO);
         mock.VerifyAll();
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
@@ -244,7 +288,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
@@ -268,7 +312,7 @@ public class UserControllerTests
             LastName = "Hernandez",
             Username = "NicolasAHF",
             Password = "123456",
-            Role = Role.Blogger,
+            Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
 
