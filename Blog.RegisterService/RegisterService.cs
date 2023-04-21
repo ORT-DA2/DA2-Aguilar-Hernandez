@@ -16,5 +16,6 @@ public class RegisterService
         serviceCollection.AddScoped<IRepository<User>, UserRepository>();
         serviceCollection.AddScoped<ISessionLogic, SessionLogic>();
         serviceCollection.AddScoped<IRepository<Session>, SessionRepository>();
+
     }
 }
