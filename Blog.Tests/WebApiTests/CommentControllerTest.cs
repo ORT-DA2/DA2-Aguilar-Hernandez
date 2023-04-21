@@ -14,20 +14,14 @@ public class CommentControllerTest
     [TestMethod]
     public void AddingNewComment()
     {
+        Comment comment = CreateComment();
+        
         CommentInModel commentIn = new CommentInModel()
         {
-            Owner = Mock.Of<User>(),
-            Article = Mock.Of<Article>(),
-            Body = "Buen post Maquinola",
-            Reply = "Gracias capo"
-        };
-
-        Comment comment = new Comment()
-        {
-            Owner = Mock.Of<User>(),
-            Article = Mock.Of<Article>(),
-            Body = "Buen post Maquinola",
-            Reply = "Gracias capo"
+            Owner = comment.Owner,
+            Article = comment.Article,
+            Body = comment.Body,
+            Reply = comment.Reply
         };
 
         CommentOutModel commentExpected = new CommentOutModel(comment);
@@ -50,5 +44,31 @@ public class CommentControllerTest
         Assert.AreEqual(commentExpected.Body, userResult.Body);
         Assert.AreEqual(commentExpected.Reply,userResult.Reply);
     }
+
+    [TestMethod]
+    public void DeleteCommentById()
+    {
+        Comment comment = new Comment();
+
+        var mock = new Mock<ICommentService>(MockBehavior.Strict);
+
+        var controller = new CommentController(mock.Object);
+        mock.Setup(c => c.DeleteCommentById(comment.Id));
+        var result = controller.DeleteCommentById(comment.Id);
+
+        var okResult = result as OkObjectResult;
+        mock.VerifyAll();
+        Assert.AreEqual(okResult.Value, $"Comment with the id {comment.Id} was deleted");
+    }
     
+    private Comment CreateComment()
+    {
+        return new Comment()
+        {
+            Owner = Mock.Of<User>(),
+            Article = Mock.Of<Article>(),
+            Body = "Buen post Maquinola",
+            Reply = "Gracias capo"
+        };
+    }
 }
