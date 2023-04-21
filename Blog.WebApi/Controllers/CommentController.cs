@@ -21,10 +21,9 @@ namespace Blog.WebApi.Controllers
         [HttpPost]
         public IActionResult PostNewComment([FromBody] CommentInModel commentInModel)
         {
-            var comment = commentInModel.ToEntity();
-            var result = _commentService.AddNewComment(comment);
-
-            var commentOut = new CommentOutModel(result);
+            Comment comment = commentInModel.ToEntity();
+            Comment result = _commentService.AddNewComment(comment);
+            CommentOutModel commentOut = new CommentOutModel(result);
             return new OkObjectResult(commentOut);
         }
         
