@@ -1,4 +1,5 @@
-﻿using Blog.Domain.Entities;
+﻿using Blog.BusinessLogic.Exceptions;
+using Blog.Domain.Entities;
 using Blog.IDataAccess;
 
 namespace Blog.BusinessLogic;
@@ -22,6 +23,14 @@ public class CommentService : ICommentService
 
     public void DeleteCommentById(Guid id)
     {
-        throw new NotImplementedException();
+        Comment comment = _repository.GetById(c => c.Id == id);
+        
+        if (comment == null)
+        {
+            throw new NotFoundException("The comment was not found");
+        }
+        
+        _repository.Delete(comment);
+        _repository.Save();
     }
 }
