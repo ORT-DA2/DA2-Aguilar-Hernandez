@@ -4,6 +4,6 @@ namespace Blog.BusinessLogic;
 
 public interface ICommentService
 {
-    Comment gitAddNewComment(Comment comment);
+    Comment AddNewComment(Comment comment);
     void DeleteCommentById(Guid id);
 }
