@@ -12,6 +12,19 @@ namespace Blog.Tests.WebApiTests;
 [TestClass]
 public class AuthControllerTests
 {
+    private Mock<ISessionLogic> _sessionMock;
+    
+    [TestInitialize]
+    public void Setup()
+    {
+        _sessionMock = new Mock<ISessionLogic>(MockBehavior.Strict);
+    }
+
+    [TestCleanup]
+    public void Cleanup()
+    {
+        _sessionMock.VerifyAll();
+    }
 
     [TestMethod]
     public void SuccessfulLoginTest()
@@ -24,14 +37,12 @@ public class AuthControllerTests
 
         Guid token = Guid.NewGuid();
         
-        var mock = new Mock<ISessionLogic>(MockBehavior.Strict);
 
-        var controller = new AuthController(mock.Object);
-        mock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
+        var controller = new AuthController(_sessionMock.Object);
+        _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
         var result = controller.Login(session);
         var okResult = result as OkObjectResult;
         var tokenResult = okResult.Value.ToString();
-        mock.VerifyAll();
         var expected = new { token = token };
         
         Assert.AreEqual(expected.ToString(), tokenResult);
@@ -46,12 +57,9 @@ public class AuthControllerTests
             Password = "123456"
         };
 
-        var mock = new Mock<ISessionLogic>(MockBehavior.Strict);
-
-        var controller = new AuthController(mock.Object);
-        mock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
+        var controller = new AuthController(_sessionMock.Object);
+        _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
         var result = controller.Login(session);
-        mock.VerifyAll();
         Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
     }
     
@@ -61,13 +69,11 @@ public class AuthControllerTests
         
         Guid token = Guid.NewGuid();
 
-        var mock = new Mock<ISessionLogic>(MockBehavior.Strict);
-
-        var controller = new AuthController(mock.Object);
-        mock.Setup(o => o.Logout(token));
+        var controller = new AuthController(_sessionMock.Object);
+        _sessionMock.Setup(o => o.Logout(token));
         var result = controller.Logout(token);
         
-        mock.VerifyAll();
+        _sessionMock.VerifyAll();
         
         Assert.IsInstanceOfType(result, typeof(OkResult));
     }

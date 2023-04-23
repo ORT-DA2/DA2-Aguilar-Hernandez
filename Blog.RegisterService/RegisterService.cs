@@ -13,6 +13,7 @@ public class RegisterService
     public void ServiceRegistrator(IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<AuthorizationFilter>();
+        serviceCollection.AddScoped<AuthenticationRoleFilter>();
         serviceCollection.AddDbContext<BlogDbContext>();
         serviceCollection.AddScoped<IUserLogic, UserLogic>();
         serviceCollection.AddScoped<IRepository<User>, UserRepository>();

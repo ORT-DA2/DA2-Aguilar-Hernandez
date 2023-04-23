@@ -1,6 +1,8 @@
 using Blog.BusinessLogic.Exceptions;
 using Blog.BusinessLogic.Filters;
+using Blog.DataAccess.Migrations;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +15,7 @@ namespace Blog.WebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserLogic _userLogic;
+        private static readonly List<Role> _roles = new List<Role>() { Role.Admin };
 
         public UsersController(IUserLogic userLogic)
         {
@@ -20,6 +23,7 @@ namespace Blog.WebApi.Controllers
         }
         
         [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
         [HttpGet("{id}")]
         public IActionResult GetUserById([FromRoute] Guid id)
         {
@@ -80,6 +84,7 @@ namespace Blog.WebApi.Controllers
         }
         
         [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
         [HttpDelete("{id}")]
         public IActionResult DeleteUser([FromRoute] Guid id)
         {
