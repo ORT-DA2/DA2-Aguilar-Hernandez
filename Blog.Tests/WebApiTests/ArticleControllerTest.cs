@@ -2,6 +2,7 @@
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
+using Blog.Models.Out.Article;
 using Blog.Models.Out.User;
 using Blog.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -70,5 +71,17 @@ public class ArticleControllerTest
         _articlenMock.Setup(o => o.GetArticleById(_articleTest.Id)).Returns(_articleTest);
         var result = controller.GetArticleById(_articleTest.Id);
         var okResult = result as OkObjectResult;
+        var value = okResult.Value as ArticleDetailDTO;
+        
+        Assert.IsTrue(_articleTest.Id.Equals(value.Id));
+        Assert.IsTrue(_articleTest.Title.Equals(value.Title));
+        Assert.IsTrue(_articleTest.Content.Equals(value.Content));
+        Assert.IsTrue(_articleTest.Owner.Equals(value.Owner));
+        Assert.IsTrue(_articleTest.Comments.Equals(value.Comments));
+        Assert.IsTrue(_articleTest.DatePublished.Equals(value.DatePublished));
+        Assert.IsTrue(_articleTest.DateLastModified.Equals(value.DateLastModified));
+        Assert.IsTrue(_articleTest.Image.Equals(value.Image));
+        Assert.IsTrue(_articleTest.IsPublic.Equals(value.IsPublic));
+        Assert.IsTrue(_articleTest.Template.Equals(value.Template));
     }
 }

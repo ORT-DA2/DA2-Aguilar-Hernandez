@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Blog.BusinessLogic.Exceptions;
 using Blog.BusinessLogic.Filters;
 using Blog.Domain.Entities;
 using Blog.IBusinessLogic;
-using Microsoft.AspNetCore.Http;
+using Blog.Models.Out.Article;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
@@ -29,7 +25,7 @@ namespace Blog.WebApi.Controllers
             try
             {
                 Article article = _articleLogic.GetArticleById(id);
-                return Ok(article);
+                return Ok(new ArticleDetailDTO(article));
             }
             catch (NotFoundException ex)
             {
