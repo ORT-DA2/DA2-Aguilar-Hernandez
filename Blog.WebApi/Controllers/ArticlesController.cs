@@ -29,8 +29,13 @@ namespace Blog.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound("There are no articles with the id");
             }
+        }
+
+        public OkObjectResult GetAllUsers()
+        {
+            throw new NotImplementedException();
         }
     }
 }

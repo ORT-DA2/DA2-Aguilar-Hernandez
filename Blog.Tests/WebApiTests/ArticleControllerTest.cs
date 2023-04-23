@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
@@ -15,6 +16,7 @@ public class ArticleControllerTest
 {
     private Mock<IArticleLogic> _articlenMock;
     private Article _articleTest;
+    private Article _articleTest2;
     private User _user;
 
     [TestInitialize]
@@ -56,6 +58,21 @@ public class ArticleControllerTest
             Template = Template.RectangleTop
             
         };
+        
+        _articleTest2 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = ".NET 6 Webpage",
+            Content = "New features about .NET are being developed",
+            Owner = _user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = imageData,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
     }
 
     [TestCleanup]
@@ -83,5 +100,32 @@ public class ArticleControllerTest
         Assert.IsTrue(_articleTest.Image.Equals(value.Image));
         Assert.IsTrue(_articleTest.IsPublic.Equals(value.IsPublic));
         Assert.IsTrue(_articleTest.Template.Equals(value.Template));
+    }
+    
+    [TestMethod]
+    public void GetByIdInvalidValidArticleTest()
+    {
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetArticleById(_articleTest.Id)).Throws(new NotFoundException("There are no articles with the id"));
+        var result = controller.GetArticleById(_articleTest.Id);
+
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+
+    [TestMethod]
+    public void GetAllArticlesValidTest()
+    {
+        List<Article> articles = new List<Article>()
+        {
+            _articleTest,
+            _articleTest2
+        };
+        
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetAllArticles()).Returns(articles);
+        var result = controller.GetAllUsers();
+        var okResult = result as OkObjectResult;
+        var dto = okResult.Value as List<User>;
+        Assert.AreEqual(articles, dto);
     }
 }
