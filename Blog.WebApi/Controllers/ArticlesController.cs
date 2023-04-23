@@ -33,9 +33,10 @@ namespace Blog.WebApi.Controllers
             }
         }
 
-        public OkObjectResult GetAllUsers()
+        [HttpGet("{id}")]
+        public IActionResult GetAllUsers()
         {
-            throw new NotImplementedException();
+            return Ok(_articleLogic.GetAllArticles());
         }
     }
 }

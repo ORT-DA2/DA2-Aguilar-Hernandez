@@ -125,7 +125,7 @@ public class ArticleControllerTest
         _articlenMock.Setup(o => o.GetAllArticles()).Returns(articles);
         var result = controller.GetAllUsers();
         var okResult = result as OkObjectResult;
-        var dto = okResult.Value as List<User>;
+        var dto = okResult.Value as List<Article>;
         Assert.AreEqual(articles, dto);
     }
 }
