@@ -60,12 +60,12 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDTO userDto)
+        public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDTO userDto, [FromHeader] Guid Authorization)
         {
             try
             {
                 User user = userDto.ToEntity(userDto.Roles);
-                User newUser = _userLogic.UpdateUser(id, user);
+                User newUser = _userLogic.UpdateUser(id, user, Authorization);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }
             catch (ArgumentException ex)

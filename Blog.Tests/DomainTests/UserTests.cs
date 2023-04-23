@@ -37,7 +37,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void StringEmptyValidationSuccessTest()
+    public void FirstnameEmptyValidationSuccessTest()
     {
 
         User user = new User()
@@ -60,7 +60,7 @@ public class UserTests
         
         user.Roles.Add(role);
         
-        user.ValidateEmptyString();
+        user.FirstNameValidation();
     }
     
     [TestMethod]
@@ -88,7 +88,7 @@ public class UserTests
         
         user.Roles.Add(role);
         
-        user.ValidateEmptyString();
+        user.FirstNameValidation();
     }
     
     [TestMethod]
@@ -116,7 +116,7 @@ public class UserTests
         
         user.Roles.Add(role);
         
-        user.ValidateEmptyString();
+        user.LastNameValidation();
     }
     
     [TestMethod]
@@ -144,7 +144,7 @@ public class UserTests
         
         user.Roles.Add(role);
         
-        user.ValidateEmptyString();
+        user.UsernameValidation();
     }
     
     [TestMethod]
@@ -172,7 +172,7 @@ public class UserTests
         
         user.Roles.Add(role);
         
-        user.ValidateEmptyString();
+        user.PasswordValidation();
     }
     
     [TestMethod]
@@ -200,7 +200,7 @@ public class UserTests
         
         user.Roles.Add(role);
         
-        user.ValidateEmptyString();
+        user.EmailValidation();
     }
     
     [TestMethod]

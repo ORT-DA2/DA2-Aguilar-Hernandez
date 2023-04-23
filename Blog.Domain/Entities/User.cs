@@ -32,17 +32,34 @@ public class User
     [EmailAddress]
     [RegularExpression(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$")]
     public string Email { get; set; }
+    
 
-    public void ValidateEmptyString()
+    public void FirstNameValidation()
     {
         if (String.IsNullOrEmpty(FirstName))
             throw new ArgumentException("Empty FirstName");
+    }
+    
+    public void LastNameValidation()
+    {
         if (String.IsNullOrEmpty(LastName))
             throw new ArgumentException("Empty LastName");
+    }
+    
+    public void UsernameValidation()
+    {
         if (String.IsNullOrEmpty(Username))
             throw new ArgumentException("Empty Username");
+    }
+    
+    public void PasswordValidation()
+    {
         if (String.IsNullOrEmpty(Password))
             throw new ArgumentException("Empty Password");
+    }
+    
+    public void EmailValidation()
+    {
         if (String.IsNullOrEmpty(Email))
             throw new ArgumentException("Empty Email");
     }
