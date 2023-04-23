@@ -1,0 +1,20 @@
+﻿using Blog.Domain.Entities;
+
+namespace Blog.Models.Out;
+
+public class CommentOutModel
+{
+    public Guid Id { get; set; }
+    public User Owner { get; set; }
+    public Article Article { get; set; }
+    public string Body { get; set; }
+    public string? Reply { get; set; }
+    public CommentOutModel(Comment comment)
+    {
+        Id = comment.Id;
+        Owner = comment.Owner;
+        Article = comment.Article;
+        Body = comment.Body;
+        Reply = comment.Reply;
+    }
+}
