@@ -15,7 +15,6 @@ namespace Blog.WebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserLogic _userLogic;
-        private static readonly List<Role> _roles = new List<Role>() { Role.Admin };
 
         public UsersController(IUserLogic userLogic)
         {

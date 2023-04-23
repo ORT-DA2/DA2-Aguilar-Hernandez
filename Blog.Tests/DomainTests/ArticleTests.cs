@@ -1,6 +1,5 @@
-﻿using Blog.Domain;
+﻿using System.Net;
 using Blog.Domain.Entities;
-using Blog.Domain.Enums;
 
 namespace Blog.Tests.DomainTests;
 
@@ -19,8 +18,14 @@ public class ArticleTests
             Roles = new List<UserRole>{}
         };
         List<Comment> comments = new List<Comment>();
-        string linkImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png";
-
+        string imageLink =
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png";
+        byte[]? imageData;
+        using (WebClient webClient = new WebClient())
+        {
+            imageData = webClient.DownloadData(imageLink);
+        }
+        
         Article article = new Article();
         article.Id = new Guid();
         Guid id = article.Id;
@@ -28,7 +33,7 @@ public class ArticleTests
         article.Content = "Angular is a frontend framework";
         article.Owner = user;
         article.IsPublic = true;
-        article.Image = linkImage;
+        article.Image = imageData;
         article.DatePublished = time;
         article.DateLastModified = time;
         article.Comments = comments;
@@ -39,7 +44,7 @@ public class ArticleTests
         Assert.AreEqual("Angular is a frontend framework", article.Content);
         Assert.AreEqual(user, article.Owner);
         Assert.AreEqual(true, article.IsPublic);
-        Assert.AreEqual(linkImage, article.Image);
+        Assert.AreEqual(imageData, article.Image);
         Assert.AreEqual(time, article.DatePublished);
         Assert.AreEqual(time, article.DateLastModified);
         Assert.AreEqual(comments, article.Comments);
