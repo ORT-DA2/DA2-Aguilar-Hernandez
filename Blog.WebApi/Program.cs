@@ -1,4 +1,9 @@
+
+using Blog.BusinessLogic;
+using Blog.DataAccess;
 using Blog.RegisterService;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
