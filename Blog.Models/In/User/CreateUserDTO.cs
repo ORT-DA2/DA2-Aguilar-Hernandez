@@ -1,7 +1,6 @@
-﻿using Blog.Domain.Entities;
-using Blog.WebApi.Controllers.DTOs.UserRole;
+﻿using Blog.Models.In.UserRole;
 
-namespace Blog.WebApi.Controllers.DTOs;
+namespace Blog.Models.In.User;
 
 public class CreateUserDTO
 {
@@ -12,7 +11,7 @@ public class CreateUserDTO
     public ICollection<UserRoleBasicInfoDTO> Roles { get; set; }
     public string Email { get; set; }
     
-    public User ToEntity(ICollection<UserRoleBasicInfoDTO> roles)
+    public Domain.Entities.User ToEntity(ICollection<UserRoleBasicInfoDTO> roles)
     {
         var rolList = new List<Domain.Entities.UserRole>();
         foreach (var rol in roles)
@@ -20,7 +19,7 @@ public class CreateUserDTO
             rolList.Add(rol.ToEntity());
         }
         
-        return new User()
+        return new Domain.Entities.User()
         {
             FirstName = FirstName,
             LastName = LastName,

@@ -1,6 +1,6 @@
 using System.Security.Authentication;
 using Blog.IBusinessLogic;
-using Blog.WebApi.Controllers.DTOs.Auth;
+using Blog.Models.In.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers

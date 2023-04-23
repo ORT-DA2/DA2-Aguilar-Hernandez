@@ -1,4 +1,4 @@
-﻿namespace Blog.WebApi.Controllers.DTOs.Auth;
+﻿namespace Blog.Models.In.Auth;
 
 public class LoginDTO
 {

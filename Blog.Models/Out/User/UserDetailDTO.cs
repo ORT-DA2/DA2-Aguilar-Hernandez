@@ -1,7 +1,6 @@
-﻿using Blog.Domain.Entities;
-using Blog.WebApi.Controllers.DTOs.UserRole;
+﻿using Blog.Models.In.UserRole;
 
-namespace Blog.WebApi.Controllers.DTOs;
+namespace Blog.Models.Out.User;
 
 public class UserDetailDTO
 {
@@ -13,7 +12,7 @@ public class UserDetailDTO
     public ICollection<UserRoleBasicInfoDTO> Roles { get; set; } = new List<UserRoleBasicInfoDTO>();
     public string Email { get; set; }
 
-    public UserDetailDTO(User user)
+    public UserDetailDTO(Domain.Entities.User user)
     {
         Id = user.Id;
         FirstName = user.FirstName;

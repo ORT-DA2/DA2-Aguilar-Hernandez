@@ -1,9 +1,8 @@
 ﻿using System.Security.Authentication;
 using Blog.Domain.Entities;
 using Blog.IBusinessLogic;
+using Blog.Models.In.Auth;
 using Blog.WebApi.Controllers;
-using Blog.WebApi.Controllers.DTOs;
-using Blog.WebApi.Controllers.DTOs.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 

@@ -4,9 +4,10 @@ using Blog.Domain;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
+using Blog.Models.In.User;
+using Blog.Models.In.UserRole;
+using Blog.Models.Out.User;
 using Blog.WebApi.Controllers;
-using Blog.WebApi.Controllers.DTOs;
-using Blog.WebApi.Controllers.DTOs.UserRole;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
