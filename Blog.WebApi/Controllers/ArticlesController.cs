@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blog.BusinessLogic.Exceptions;
 using Blog.BusinessLogic.Filters;
+using Blog.Domain.Entities;
 using Blog.IBusinessLogic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +26,15 @@ namespace Blog.WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetArticleById([FromRoute] Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Article article = _articleLogic.GetArticleById(id);
+                return Ok(article);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }
