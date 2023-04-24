@@ -137,4 +137,15 @@ public class ArticleControllerTest
         var result = controller.GetAllUsers();
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
+    
+    [TestMethod]
+    public void CreateValidArticle()
+    {
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
+        var result = controller.CreateUser(_articleTest);
+        var okResult = result as OkObjectResult;
+        var dto = okResult.Value as Article;
+        Assert.AreEqual(_articleTest.Title, dto.Title);
+    }
 }

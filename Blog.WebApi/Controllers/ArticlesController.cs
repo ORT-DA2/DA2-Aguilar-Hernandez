@@ -46,5 +46,11 @@ namespace Blog.WebApi.Controllers
             }
             
         }
+        
+        [HttpPost]
+        public IActionResult CreateUser([FromBody]Article article)
+        {
+            return Ok();
+        }
     }
 }
