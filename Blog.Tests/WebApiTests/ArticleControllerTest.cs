@@ -103,7 +103,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
-    public void GetByIdInvalidValidArticleTest()
+    public void GetByIdInvalidArticleTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetArticleById(_articleTest.Id)).Throws(new NotFoundException("There are no articles with the id"));
@@ -127,5 +127,17 @@ public class ArticleControllerTest
         var okResult = result as OkObjectResult;
         var dto = okResult.Value as List<Article>;
         Assert.AreEqual(articles, dto);
+    }
+    
+    [TestMethod]
+    public void GetAllArticlesInvalidTest()
+    {
+
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetAllArticles()).Throws(new NotFoundException("There are no articles."));
+        var result = controller.GetAllUsers();
+        var okResult = result as OkObjectResult;
+        var dto = okResult.Value as List<Article>;
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
 }
