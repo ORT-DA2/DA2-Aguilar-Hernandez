@@ -5,7 +5,7 @@ namespace Blog.Models.In;
 public class CommentInModel
 {
     public Domain.Entities.User Owner { get; set; }
-    public Article Article { get; set; }
+    public Domain.Entities.Article Article { get; set; }
     public string Body { get; set; }
     public string? Reply { get; set; }
 

@@ -2,6 +2,7 @@ using Blog.BusinessLogic.Exceptions;
 using Blog.BusinessLogic.Filters;
 using Blog.Domain.Entities;
 using Blog.IBusinessLogic;
+using Blog.Models.In.Article;
 using Blog.Models.Out.Article;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,12 +49,13 @@ namespace Blog.WebApi.Controllers
         }
         
         [HttpPost]
-        public IActionResult CreateUser([FromBody]Article article)
+        public IActionResult CreateUser([FromBody]CreateArticleDTO articleDto)
         {
             try
             {
+                Article article = articleDto.ToEntity();
                 Article newArticle = _articleLogic.CreateArticle(article);
-                return Created($"api/articles/{article.Id}",newArticle);
+                return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
             }
             catch (ArgumentException ex)
             {

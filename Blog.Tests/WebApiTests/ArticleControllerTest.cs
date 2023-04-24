@@ -3,6 +3,7 @@ using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
+using Blog.Models.In.Article;
 using Blog.Models.Out.Article;
 using Blog.Models.Out.User;
 using Blog.WebApi.Controllers;
@@ -17,6 +18,7 @@ public class ArticleControllerTest
     private Mock<IArticleLogic> _articlenMock;
     private Article _articleTest;
     private Article _articleTest2;
+    private CreateArticleDTO _articleTestDTO;
     private User _user;
 
     [TestInitialize]
@@ -35,7 +37,7 @@ public class ArticleControllerTest
             Roles = new List<UserRole>()
 
         };
-        
+
         string imageLink =
             "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png";
         byte[]? imageData;
@@ -43,6 +45,19 @@ public class ArticleControllerTest
         {
             imageData = webClient.DownloadData(imageLink);
         }
+        
+        _articleTestDTO = new CreateArticleDTO()
+        {
+            Title = "Angular Webpage",
+            Content = "New features about angular are being developed",
+            Owner = _user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = imageData,
+            IsPublic = true,
+            Template = Template.RectangleTop
+        };
         
         _articleTest = new Article()
         {
@@ -143,10 +158,10 @@ public class ArticleControllerTest
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
-        var result = controller.CreateUser(_articleTest);
+        var result = controller.CreateUser(_articleTestDTO);
         var okResult = result as CreatedResult;
-        var dto = okResult.Value as Article;
-        Assert.AreEqual(_articleTest, dto);
+        var dto = okResult.Value as ArticleDetailDTO;
+        Assert.AreEqual(_articleTest.Title, dto.Title);
     }
     
     [TestMethod]
@@ -154,7 +169,7 @@ public class ArticleControllerTest
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Throws(new ArgumentException());
-        var result = controller.CreateUser(_articleTest);
+        var result = controller.CreateUser(_articleTestDTO);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
 }
