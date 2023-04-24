@@ -153,10 +153,8 @@ public class ArticleControllerTest
     public void CreateInvalidArticle()
     {
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns((Article)null);
+        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Throws(new ArgumentException());
         var result = controller.CreateUser(_articleTest);
-        var okResult = result as CreatedResult;
-        var dto = okResult.Value as Article;
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
 }

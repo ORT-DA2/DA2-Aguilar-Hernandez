@@ -50,8 +50,16 @@ namespace Blog.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateUser([FromBody]Article article)
         {
-            Article newArticle = _articleLogic.CreateArticle(article);
-            return Created($"api/articles/{article.Id}",newArticle);
+            try
+            {
+                Article newArticle = _articleLogic.CreateArticle(article);
+                return Created($"api/articles/{article.Id}",newArticle);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
     }
 }
