@@ -33,7 +33,7 @@ namespace Blog.WebApi.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public IActionResult GetAllUsers()
         {
             try
