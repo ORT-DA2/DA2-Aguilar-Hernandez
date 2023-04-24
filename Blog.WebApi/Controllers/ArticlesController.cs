@@ -50,7 +50,8 @@ namespace Blog.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateUser([FromBody]Article article)
         {
-            return Ok();
+            Article newArticle = _articleLogic.CreateArticle(article);
+            return Created($"api/articles/{article.Id}",newArticle);
         }
     }
 }

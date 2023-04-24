@@ -144,8 +144,8 @@ public class ArticleControllerTest
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
         var result = controller.CreateUser(_articleTest);
-        var okResult = result as OkObjectResult;
+        var okResult = result as CreatedResult;
         var dto = okResult.Value as Article;
-        Assert.AreEqual(_articleTest.Title, dto.Title);
+        Assert.AreEqual(_articleTest, dto);
     }
 }
