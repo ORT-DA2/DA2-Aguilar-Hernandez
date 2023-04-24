@@ -36,7 +36,15 @@ namespace Blog.WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetAllUsers()
         {
-            return Ok(_articleLogic.GetAllArticles());
+            try
+            {
+                return Ok(_articleLogic.GetAllArticles());
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound("There are no articles.");
+            }
+            
         }
     }
 }
