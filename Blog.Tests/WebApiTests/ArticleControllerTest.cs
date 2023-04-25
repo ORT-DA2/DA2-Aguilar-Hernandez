@@ -198,7 +198,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
-    public void CreateValidArticle()
+    public void CreateValidArticleTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
@@ -209,7 +209,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
-    public void CreateInvalidArticle()
+    public void CreateInvalidArticleTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Throws(new ArgumentException());
@@ -218,7 +218,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
-    public void UpdateValidArticle()
+    public void UpdateValidArticleTest()
     {
         var token = Guid.NewGuid();
         
@@ -228,5 +228,16 @@ public class ArticleControllerTest
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
         Assert.AreEqual(_articleTest.Title, dto.Title);
+    }
+    
+    [TestMethod]
+    public void UpdateArticleFailTest()
+    {
+        var token = Guid.NewGuid();
+        
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.UpdateArticle(_articleTest.Id, It.IsAny<Article>(), token)).Throws(new ArgumentException());
+        var result = controller.UpdateArticle(_articleTest.Id ,_articleTestDTO, token);
+        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
 }

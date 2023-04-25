@@ -80,9 +80,16 @@ namespace Blog.WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateArticle([FromRoute] Guid id,CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
         {
-            Article article = articleDto.ToEntity();
-            Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
-            return Created($"api/articles/{newArticle.Id}",new ArticleDetailDTO(newArticle));
+            try
+            {
+                Article article = articleDto.ToEntity();
+                Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
+                return Created($"api/articles/{newArticle.Id}",new ArticleDetailDTO(newArticle));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
