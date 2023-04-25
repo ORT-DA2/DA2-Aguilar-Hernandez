@@ -1,7 +1,7 @@
 ﻿using Blog.BusinessLogic;
-using Blog.BusinessLogic.Filters;
 using Blog.DataAccess;
 using Blog.Domain.Entities;
+using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
 using Microsoft.Extensions.DependencyInjection;

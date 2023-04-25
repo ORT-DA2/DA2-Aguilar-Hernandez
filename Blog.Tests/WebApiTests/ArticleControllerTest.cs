@@ -20,6 +20,8 @@ public class ArticleControllerTest
     private Article _articleTest2;
     private CreateArticleDTO _articleTestDTO;
     private User _user;
+    private List<Article> _articles;
+    private Article _articleTest3;
 
     [TestInitialize]
     public void Setup()
@@ -88,6 +90,28 @@ public class ArticleControllerTest
             Template = Template.RectangleTop
             
         };
+        
+        _articleTest3 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Uruguay",
+            Content = "Uruguay is a country in south america",
+            Owner = _user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = imageData,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+
+        _articles = new List<Article>()
+        {
+            _articleTest,
+            _articleTest2,
+            _articleTest3
+        };
     }
 
     [TestCleanup]
@@ -116,7 +140,7 @@ public class ArticleControllerTest
         Assert.IsTrue(_articleTest.IsPublic.Equals(value.IsPublic));
         Assert.IsTrue(_articleTest.Template.Equals(value.Template));
     }
-    
+
     [TestMethod]
     public void GetByIdInvalidArticleTest()
     {
@@ -125,6 +149,26 @@ public class ArticleControllerTest
         var result = controller.GetArticleById(_articleTest.Id);
 
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+
+    [TestMethod]
+    public void GetArticleByTextValidTest()
+    {
+        string textRecibed = "New";
+
+        List<Article> _articlesFilteres = new List<Article>()
+        {
+            _articleTest,
+            _articleTest2
+        };
+        
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetArticleByText(textRecibed)).Returns(_articlesFilteres);
+        var result = controller.GetArticleByText(textRecibed);
+        var okResult = result as OkObjectResult;
+        var value = okResult.Value as List<Article>;
+        
+        Assert.AreEqual(_articlesFilteres, value);
     }
 
     [TestMethod]
@@ -155,6 +199,8 @@ public class ArticleControllerTest
     
     [TestMethod]
     public void CreateValidArticle()
+    
+    
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);

@@ -1,6 +1,6 @@
 using Blog.BusinessLogic.Exceptions;
-using Blog.BusinessLogic.Filters;
 using Blog.Domain.Entities;
+using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In.Article;
 using Blog.Models.Out.Article;
@@ -62,6 +62,11 @@ namespace Blog.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
             
+        }
+
+        public IActionResult GetArticleByText(string text)
+        {
+            throw new NotImplementedException();
         }
     }
 }

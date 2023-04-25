@@ -1,5 +1,5 @@
 using System.Security.Authentication;
-using Blog.BusinessLogic.Filters;
+using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In.Auth;
 using Microsoft.AspNetCore.Mvc;

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 
-namespace Blog.BusinessLogic.Filters;
+namespace Blog.Filters;
 
 public class AuthorizationFilter: Attribute, IAuthorizationFilter
 {
