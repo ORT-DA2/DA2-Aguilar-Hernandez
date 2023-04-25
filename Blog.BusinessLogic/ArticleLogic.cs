@@ -14,7 +14,7 @@ public class ArticleLogic: IArticleLogic
 
     public Article GetArticleById(Guid articleId)
     {
-        throw new NotImplementedException();
+        return _repository.GetById(a => a.Id == articleId);
     }
 
     public IEnumerable<Article> GetAllArticles()
