@@ -1,6 +1,5 @@
 using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
-using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In.Article;
 using Blog.Models.Out.Article;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/articles")]
     [ApiController]
     public class ArticlesController : ControllerBase
     {
@@ -18,8 +17,7 @@ namespace Blog.WebApi.Controllers
         {
             _articleLogic = articleLogic;
         }
-
-        [ServiceFilter(typeof(AuthorizationFilter))]
+        
         [HttpGet("{id}")]
         public IActionResult GetArticleById([FromRoute] Guid id)
         {
@@ -48,6 +46,19 @@ namespace Blog.WebApi.Controllers
             
         }
         
+        [HttpGet("search")]
+        public IActionResult GetArticleByText([FromQuery] string text)
+        {
+            try
+            {
+                return Ok(_articleLogic.GetArticleByText(text));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound("There are no articles with that text.");
+            }
+        }
+        
         [HttpPost]
         public IActionResult CreateArticle([FromBody]CreateArticleDTO articleDto)
         {
@@ -64,19 +75,6 @@ namespace Blog.WebApi.Controllers
             
         }
 
-        [HttpGet]
-        public IActionResult GetArticleByText([FromQuery] string search)
-        {
-            try
-            {
-                return Ok(_articleLogic.GetArticleByText(search));
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound("There are no articles with that text.");
-            }
-        }
-
         [HttpPut("{id}")]
         public IActionResult UpdateArticle([FromRoute] Guid id,CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
         {
@@ -90,6 +88,12 @@ namespace Blog.WebApi.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteArticle([FromRoute] Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

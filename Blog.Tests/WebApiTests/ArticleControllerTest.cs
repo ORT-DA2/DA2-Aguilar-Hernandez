@@ -240,4 +240,14 @@ public class ArticleControllerTest
         var result = controller.UpdateArticle(_articleTest.Id ,_articleTestDTO, token);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
+
+    [TestMethod]
+    public void DeleteArticleSuccessTest()
+    {
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.DeleteArticle(_articleTest.Id));
+        var result = controller.DeleteArticle(_articleTest.Id);
+        var okResult = result as OkObjectResult;
+        Assert.AreEqual(okResult.Value, $"Article with the id {_articleTest.Id} was deleted");
+    }
 }
