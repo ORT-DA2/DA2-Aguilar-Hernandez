@@ -78,9 +78,11 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateArticle(CreateArticleDTO articleDto)
+        public IActionResult UpdateArticle([FromRoute] Guid id,CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
         {
-            throw new NotImplementedException();
+            Article article = articleDto.ToEntity();
+            Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
+            return Created($"api/articles/{newArticle.Id}",new ArticleDetailDTO(newArticle));
         }
     }
 }

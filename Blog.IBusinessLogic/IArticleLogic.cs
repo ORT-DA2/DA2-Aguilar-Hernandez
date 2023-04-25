@@ -8,4 +8,5 @@ public interface IArticleLogic
     public IEnumerable<Article> GetAllArticles();
     public Article CreateArticle(Article article);
     public IEnumerable<Article> GetArticleByText(string text);
+    public Article UpdateArticle(Guid id, Article article, Guid authorization);
 }

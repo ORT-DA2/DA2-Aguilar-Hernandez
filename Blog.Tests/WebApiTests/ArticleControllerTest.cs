@@ -60,21 +60,8 @@ public class ArticleControllerTest
             IsPublic = true,
             Template = Template.RectangleTop
         };
-        
-        _articleTest = new Article()
-        {
-            Id = Guid.NewGuid(),
-            Title = "Angular Webpage",
-            Content = "New features about angular are being developed",
-            Owner = _user,
-            Comments = new List<Comment>(){},
-            DateLastModified = DateTime.Now,
-            DatePublished = DateTime.Now,
-            Image = imageData,
-            IsPublic = true,
-            Template = Template.RectangleTop
-            
-        };
+
+        _articleTest = _articleTestDTO.ToEntity();
         
         _articleTest2 = new Article()
         {
@@ -212,8 +199,6 @@ public class ArticleControllerTest
     
     [TestMethod]
     public void CreateValidArticle()
-    
-    
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
@@ -235,9 +220,11 @@ public class ArticleControllerTest
     [TestMethod]
     public void UpdateValidArticle()
     {
+        var token = Guid.NewGuid();
+        
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
-        var result = controller.UpdateArticle(_articleTestDTO);
+        _articlenMock.Setup(o => o.UpdateArticle(_articleTest.Id, It.IsAny<Article>(), token)).Returns(_articleTest);
+        var result = controller.UpdateArticle(_articleTest.Id ,_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
         Assert.AreEqual(_articleTest.Title, dto.Title);
