@@ -66,7 +66,14 @@ namespace Blog.WebApi.Controllers
 
         public IActionResult GetArticleByText(string text)
         {
-            return Ok(_articleLogic.GetArticleByText(text));
+            try
+            {
+                return Ok(_articleLogic.GetArticleByText(text));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound("There are no articles with that text.");
+            }
         }
     }
 }
