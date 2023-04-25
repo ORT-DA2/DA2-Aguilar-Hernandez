@@ -19,7 +19,7 @@ public class ArticleLogic: IArticleLogic
 
     public IEnumerable<Article> GetAllArticles()
     {
-        throw new NotImplementedException();
+        return _repository.GetAll();
     }
 
     public Article CreateArticle(Article article)

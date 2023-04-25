@@ -62,9 +62,12 @@ public class ArticleLogicTests
             Template = Template.RectangleTop
             
         };
-        
-        _articles.Add(_articleTest);
-        
+
+        _articles = new List<Article>()
+        {
+            _articleTest
+        };
+
     }
 
     [TestCleanup]
