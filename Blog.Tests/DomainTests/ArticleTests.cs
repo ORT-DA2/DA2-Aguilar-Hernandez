@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using Blog.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using Moq;
 
 namespace Blog.Tests.DomainTests;
 
@@ -18,13 +20,13 @@ public class ArticleTests
             Roles = new List<UserRole>{}
         };
         List<Comment> comments = new List<Comment>();
-        string imageLink =
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png";
-        byte[]? imageData;
-        using (WebClient webClient = new WebClient())
-        {
-            imageData = webClient.DownloadData(imageLink);
-        }
+        var formFile = new Mock<IFormFile>();
+        formFile.Setup(f => f.Length).Returns(1234);
+        formFile.Setup(f => f.FileName).Returns("test.jpg");
+        formFile.Setup(f => f.ContentType).Returns("image/jpeg");
+        
+        using var ms = new MemoryStream();
+        var image = ms.ToArray();
         
         Article article = new Article();
         article.Id = new Guid();
@@ -33,7 +35,7 @@ public class ArticleTests
         article.Content = "Angular is a frontend framework";
         article.Owner = user;
         article.IsPublic = true;
-        article.Image = imageData;
+        article.Image = image;
         article.DatePublished = time;
         article.DateLastModified = time;
         article.Comments = comments;
@@ -44,7 +46,7 @@ public class ArticleTests
         Assert.AreEqual("Angular is a frontend framework", article.Content);
         Assert.AreEqual(user, article.Owner);
         Assert.AreEqual(true, article.IsPublic);
-        Assert.AreEqual(imageData, article.Image);
+        Assert.AreEqual(image, article.Image);
         Assert.AreEqual(time, article.DatePublished);
         Assert.AreEqual(time, article.DateLastModified);
         Assert.AreEqual(comments, article.Comments);

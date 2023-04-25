@@ -3,6 +3,8 @@ using System.Net;
 using Blog.Domain;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
+using Microsoft.AspNetCore.Http;
+using Moq;
 
 namespace Blog.Tests.DomainTests;
 
@@ -14,13 +16,13 @@ public class CommentTest
     {
         DateTime time = new DateTime(DateTime.Now.Hour);
         List<Comment> comments = new List<Comment>();
-        string imageLink =
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png";
-        byte[]? imageData;
-        using (WebClient webClient = new WebClient())
-        {
-            imageData = webClient.DownloadData(imageLink);
-        }
+        var formFile = new Mock<IFormFile>();
+        formFile.Setup(f => f.Length).Returns(1234);
+        formFile.Setup(f => f.FileName).Returns("test.jpg");
+        formFile.Setup(f => f.ContentType).Returns("image/jpeg");
+        
+        using var ms = new MemoryStream();
+        var image = ms.ToArray();
         User user = new User(){
             FirstName = "Nicolas",
             LastName = "Hernandez",
@@ -34,7 +36,7 @@ public class CommentTest
             Title = "Learn Angular",
             Content = "Angular is a frontend framework",
             IsPublic = true,
-            Image = imageData,
+            Image = image,
             DatePublished = time,
             DateLastModified = time,
             Comments = comments

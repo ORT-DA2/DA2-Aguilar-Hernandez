@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Blog.Domain.Enums;
+﻿using Blog.Domain.Enums;
 
 namespace Blog.Domain.Entities;
 

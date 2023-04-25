@@ -1,6 +1,6 @@
 ﻿using Blog.Domain.Entities;
 using Blog.Domain.Enums;
-using Blog.Models.In.UserRole;
+using System.IO;
 
 namespace Blog.Models.In.Article;
 
@@ -13,11 +13,19 @@ public class CreateArticleDTO
     public DateTime DatePublished { get; set; }
     public DateTime DateLastModified { get; set; }
     public List<Comment>? Comments { get; set; }
-    public byte[]? Image { get; set; }
+    public string Image { get; set; }
     public Template Template { get; set; }
     
-    public Domain.Entities.Article ToEntity()
+    public Domain.Entities.Article ToEntity(string image)
     {
+        byte[] imageBytes = null;
+
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            imageBytes = ms.ToArray();
+        }
+        
 
         return new Domain.Entities.Article()
         {
@@ -28,7 +36,7 @@ public class CreateArticleDTO
             DatePublished = DatePublished,
             DateLastModified = DateLastModified,
             Comments = Comments,
-            Image = Image,
+            Image = imageBytes,
             Template = Template
             
         };

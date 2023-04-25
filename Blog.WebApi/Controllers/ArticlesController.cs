@@ -17,7 +17,7 @@ namespace Blog.WebApi.Controllers
         {
             _articleLogic = articleLogic;
         }
-        
+
         [HttpGet("{id}")]
         public IActionResult GetArticleById([FromRoute] Guid id)
         {
@@ -43,9 +43,9 @@ namespace Blog.WebApi.Controllers
             {
                 return NotFound("There are no articles.");
             }
-            
+
         }
-        
+
         [HttpGet("search")]
         public IActionResult GetArticleByText([FromQuery] string text)
         {
@@ -58,13 +58,13 @@ namespace Blog.WebApi.Controllers
                 return NotFound("There are no articles with that text.");
             }
         }
-        
+
         [HttpPost]
-        public IActionResult CreateArticle([FromBody]CreateArticleDTO articleDto)
+        public IActionResult CreateArticle([FromForm] CreateArticleDTO articleDto)
         {
             try
             {
-                Article article = articleDto.ToEntity();
+                Article article = articleDto.ToEntity(articleDto.Image);
                 Article newArticle = _articleLogic.CreateArticle(article);
                 return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
             }
@@ -72,17 +72,18 @@ namespace Blog.WebApi.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            
+
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateArticle([FromRoute] Guid id,CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
+        public IActionResult UpdateArticle([FromRoute] Guid id, [FromForm] CreateArticleDTO articleDto,
+            [FromHeader] Guid Authorization)
         {
             try
             {
-                Article article = articleDto.ToEntity();
+                Article article = articleDto.ToEntity(articleDto.Image);
                 Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
-                return Created($"api/articles/{newArticle.Id}",new ArticleDetailDTO(newArticle));
+                return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
             }
             catch (ArgumentException ex)
             {
@@ -93,7 +94,16 @@ namespace Blog.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteArticle([FromRoute] Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _articleLogic.DeleteArticle(id);
+                return Ok($"Article with the id {id} was deleted");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+
+            }
         }
     }
 }

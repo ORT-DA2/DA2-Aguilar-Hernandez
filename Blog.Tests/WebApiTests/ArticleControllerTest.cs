@@ -7,6 +7,7 @@ using Blog.Models.In.Article;
 using Blog.Models.Out.Article;
 using Blog.Models.Out.User;
 using Blog.WebApi.Controllers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -40,13 +41,13 @@ public class ArticleControllerTest
 
         };
 
-        string imageLink =
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png";
-        byte[]? imageData;
-        using (WebClient webClient = new WebClient())
-        {
-            imageData = webClient.DownloadData(imageLink);
-        }
+        var formFile = new Mock<IFormFile>();
+        formFile.Setup(f => f.Length).Returns(1234);
+        formFile.Setup(f => f.FileName).Returns("test.jpg");
+        formFile.Setup(f => f.ContentType).Returns("image/jpeg");
+        
+        using var ms = new MemoryStream();
+        var image = ms.ToArray();
         
         _articleTestDTO = new CreateArticleDTO()
         {
@@ -56,12 +57,12 @@ public class ArticleControllerTest
             Comments = new List<Comment>(){},
             DateLastModified = DateTime.Now,
             DatePublished = DateTime.Now,
-            Image = imageData,
+            Image = formFile.ToString(),
             IsPublic = true,
             Template = Template.RectangleTop
         };
 
-        _articleTest = _articleTestDTO.ToEntity();
+        _articleTest = _articleTestDTO.ToEntity(_articleTestDTO.Image);
         
         _articleTest2 = new Article()
         {
@@ -72,7 +73,7 @@ public class ArticleControllerTest
             Comments = new List<Comment>(){},
             DateLastModified = DateTime.Now,
             DatePublished = DateTime.Now,
-            Image = imageData,
+            Image = image,
             IsPublic = true,
             Template = Template.RectangleTop
             
@@ -87,7 +88,7 @@ public class ArticleControllerTest
             Comments = new List<Comment>(){},
             DateLastModified = DateTime.Now,
             DatePublished = DateTime.Now,
-            Image = imageData,
+            Image = image,
             IsPublic = true,
             Template = Template.RectangleTop
             
@@ -249,5 +250,14 @@ public class ArticleControllerTest
         var result = controller.DeleteArticle(_articleTest.Id);
         var okResult = result as OkObjectResult;
         Assert.AreEqual(okResult.Value, $"Article with the id {_articleTest.Id} was deleted");
+    }
+    
+    [TestMethod]
+    public void DeleteArticleFailTest()
+    {
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.DeleteArticle(_articleTest.Id)).Throws(new NotFoundException("There are no articles."));
+        var result = controller.DeleteArticle(_articleTest.Id);
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
 }
