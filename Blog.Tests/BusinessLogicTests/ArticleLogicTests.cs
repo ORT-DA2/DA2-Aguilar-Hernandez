@@ -1,4 +1,5 @@
-﻿using Blog.BusinessLogic;
+﻿using System.Linq.Expressions;
+using Blog.BusinessLogic;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
@@ -87,12 +88,21 @@ public class ArticleLogicTests
     }
     
     [TestMethod]
-    public void GetAllUsersValidTest()
+    public void GetAllArticlesValidTest()
     {
         var logic = new ArticleLogic(_articleRepoMock.Object);
         _articleRepoMock.Setup(o => o.GetAll()).Returns(_articles);
         var result = logic.GetAllArticles();
         Assert.AreEqual(_articles.Count(), result.Count());
+    }
+    
+    [TestMethod]
+    public void GetUserByIdValidTest()
+    {
+        var logic = new ArticleLogic(_articleRepoMock.Object);
+        _articleRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
+        var result = logic.GetArticleById(_articleTest.Id);
+        Assert.AreEqual(_articleTest, result);
     }
     
 }
