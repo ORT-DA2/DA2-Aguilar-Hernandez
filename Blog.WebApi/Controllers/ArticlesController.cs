@@ -35,7 +35,7 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllUsers()
+        public IActionResult GetAllArticles()
         {
             try
             {
@@ -49,7 +49,7 @@ namespace Blog.WebApi.Controllers
         }
         
         [HttpPost]
-        public IActionResult CreateUser([FromBody]CreateArticleDTO articleDto)
+        public IActionResult CreateArticle([FromBody]CreateArticleDTO articleDto)
         {
             try
             {
@@ -64,16 +64,23 @@ namespace Blog.WebApi.Controllers
             
         }
 
-        public IActionResult GetArticleByText(string text)
+        [HttpGet]
+        public IActionResult GetArticleByText([FromQuery] string search)
         {
             try
             {
-                return Ok(_articleLogic.GetArticleByText(text));
+                return Ok(_articleLogic.GetArticleByText(search));
             }
             catch (NotFoundException ex)
             {
                 return NotFound("There are no articles with that text.");
             }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateArticle(CreateArticleDTO articleDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

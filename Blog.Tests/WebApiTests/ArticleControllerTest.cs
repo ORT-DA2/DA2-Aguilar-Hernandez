@@ -195,7 +195,7 @@ public class ArticleControllerTest
         
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetAllArticles()).Returns(articles);
-        var result = controller.GetAllUsers();
+        var result = controller.GetAllArticles();
         var okResult = result as OkObjectResult;
         var dto = okResult.Value as List<Article>;
         Assert.AreEqual(articles, dto);
@@ -206,7 +206,7 @@ public class ArticleControllerTest
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetAllArticles()).Throws(new NotFoundException("There are no articles."));
-        var result = controller.GetAllUsers();
+        var result = controller.GetAllArticles();
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
     
@@ -217,7 +217,7 @@ public class ArticleControllerTest
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
-        var result = controller.CreateUser(_articleTestDTO);
+        var result = controller.CreateArticle(_articleTestDTO);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
         Assert.AreEqual(_articleTest.Title, dto.Title);
@@ -228,7 +228,18 @@ public class ArticleControllerTest
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Throws(new ArgumentException());
-        var result = controller.CreateUser(_articleTestDTO);
+        var result = controller.CreateArticle(_articleTestDTO);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+    }
+    
+    [TestMethod]
+    public void UpdateValidArticle()
+    {
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
+        var result = controller.UpdateArticle(_articleTestDTO);
+        var okResult = result as CreatedResult;
+        var dto = okResult.Value as ArticleDetailDTO;
+        Assert.AreEqual(_articleTest.Title, dto.Title);
     }
 }
