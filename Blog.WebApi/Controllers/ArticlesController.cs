@@ -66,7 +66,7 @@ namespace Blog.WebApi.Controllers
 
         public IActionResult GetArticleByText(string text)
         {
-            throw new NotImplementedException();
+            return Ok(_articleLogic.GetArticleByText(text));
         }
     }
 }
