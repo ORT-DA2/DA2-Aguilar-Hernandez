@@ -170,6 +170,19 @@ public class ArticleControllerTest
         
         Assert.AreEqual(_articlesFilteres, value);
     }
+    
+    [TestMethod]
+    public void GetArticleByTextFailTest()
+    {
+        string textRecibed = "Hello";
+        
+        
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetArticleByText(textRecibed)).Throws(new NotFoundException("There are no articles with that text."));;
+        var result = controller.GetArticleByText(textRecibed);
+        
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
 
     [TestMethod]
     public void GetAllArticlesValidTest()
