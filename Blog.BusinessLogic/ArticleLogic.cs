@@ -24,7 +24,9 @@ public class ArticleLogic: IArticleLogic
 
     public Article CreateArticle(Article article)
     {
-        throw new NotImplementedException();
+        _repository.Insert(article);
+        _repository.Save();
+        return article;
     }
 
     public IEnumerable<Article> GetArticleByText(string text)
