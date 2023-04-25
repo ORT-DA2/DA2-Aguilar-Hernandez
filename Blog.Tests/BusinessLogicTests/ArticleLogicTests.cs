@@ -13,6 +13,7 @@ public class ArticleLogicTests
 {
     private Mock<IRepository<Article>> _articleRepoMock;
     private Article _articleTest;
+    private List<Article> _articles;
 
     [TestInitialize]
     public void Setup()
@@ -47,7 +48,7 @@ public class ArticleLogicTests
         using var ms = new MemoryStream();
         var image = ms.ToArray();
         
-        var _articleTest = new Article()
+        _articleTest = new Article()
         {
             Id = Guid.NewGuid(),
             Title = ".NET 6 Webpage",
@@ -61,6 +62,9 @@ public class ArticleLogicTests
             Template = Template.RectangleTop
             
         };
+        
+        _articles.Add(_articleTest);
+        
     }
 
     [TestCleanup]
@@ -77,6 +81,15 @@ public class ArticleLogicTests
         _articleRepoMock.Setup(o => o.Save());
         var result = logic.CreateArticle(_articleTest);
         Assert.AreEqual(_articleTest, result);
+    }
+    
+    [TestMethod]
+    public void GetAllUsersValidTest()
+    {
+        var logic = new ArticleLogic(_articleRepoMock.Object);
+        _articleRepoMock.Setup(o => o.GetAll()).Returns(_articles);
+        var result = logic.GetAllArticles();
+        Assert.AreEqual(_articles.Count(), result.Count());
     }
     
 }
