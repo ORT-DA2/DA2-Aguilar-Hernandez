@@ -105,5 +105,18 @@ namespace Blog.WebApi.Controllers
 
             }
         }
+
+        [HttpGet("LastTenArticles")]
+        public IActionResult GetLastTen()
+        {
+            try
+            {
+                return Ok(_articleLogic.GetLastTen());
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound("There are no articles.");
+            }
+        }
     }
 }

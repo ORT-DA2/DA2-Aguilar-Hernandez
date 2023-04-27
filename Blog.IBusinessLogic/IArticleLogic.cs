@@ -10,4 +10,5 @@ public interface IArticleLogic
     public IEnumerable<Article> GetArticleByText(string text);
     public Article UpdateArticle(Guid id, Article article, Guid authorization);
     public void DeleteArticle(Guid articleId);
+    public IEnumerable<Article> GetLastTen();
 }
