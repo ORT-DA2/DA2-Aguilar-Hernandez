@@ -109,7 +109,7 @@ namespace Blog.WebApi.Controllers
         [HttpGet("LastTenArticles")]
         public IActionResult GetLastTen()
         {
-            throw new NotImplementedException();
+            return Ok(_articleLogic.GetLastTen());
         }
     }
 }
