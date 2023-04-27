@@ -105,5 +105,11 @@ namespace Blog.WebApi.Controllers
 
             }
         }
+
+        [HttpGet("LastTenArticles")]
+        public IActionResult GetLastTen()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
