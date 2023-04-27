@@ -403,10 +403,19 @@ public class ArticleControllerTest
         var articles = _articles;
         articles.Remove(_articleTest11);
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.GetLastTen()).Returns(articles);;
+        _articlenMock.Setup(o => o.GetLastTen()).Returns(articles);
         var result = controller.GetLastTen();
         var okResult = result as OkObjectResult;
         var dto = okResult.Value as List<Article>;
         Assert.AreEqual(articles, dto);
+    }
+    
+    [TestMethod]
+    public void GetLastTenInvalidTest()
+    {
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetLastTen()).Throws(new NotFoundException("There are no articles."));
+        var result = controller.GetLastTen();
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
 }
