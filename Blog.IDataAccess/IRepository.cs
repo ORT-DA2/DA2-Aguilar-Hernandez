@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Blog.Domain.Entities;
 
 namespace Blog.IDataAccess;
 

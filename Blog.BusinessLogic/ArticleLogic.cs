@@ -21,6 +21,11 @@ public class ArticleLogic: IArticleLogic
     {
         return _repository.GetAll();
     }
+    
+    public IEnumerable<Article> GetLastTen()
+    {
+        throw new NotImplementedException();
+    }
 
     public Article CreateArticle(Article article)
     {
@@ -43,4 +48,5 @@ public class ArticleLogic: IArticleLogic
     {
         throw new NotImplementedException();
     }
+    
 }

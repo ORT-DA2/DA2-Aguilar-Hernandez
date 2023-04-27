@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Blog.BusinessLogic;
+using Blog.DataAccess;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
@@ -12,14 +13,14 @@ namespace Blog.Tests.BusinessLogicTests;
 [TestClass]
 public class ArticleLogicTests
 {
-    private Mock<IRepository<Article>> _articleRepoMock;
+    private Mock<ArticleRepository> _articleRepoMock;
     private Article _articleTest;
     private List<Article> _articles;
 
     [TestInitialize]
     public void Setup()
     {
-        _articleRepoMock = new Mock<IRepository<Article>>(MockBehavior.Strict);
+        _articleRepoMock = new Mock<ArticleRepository>(MockBehavior.Strict);
         
         var user = new User()
         {
@@ -97,11 +98,25 @@ public class ArticleLogicTests
     }
     
     [TestMethod]
-    public void GetUserByIdValidTest()
+    public void GetArticleByIdValidTest()
     {
         var logic = new ArticleLogic(_articleRepoMock.Object);
         _articleRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
         var result = logic.GetArticleById(_articleTest.Id);
+        Assert.AreEqual(_articleTest, result);
+    }
+
+    [TestMethod]
+    public void GetArticleByTextValidTest()
+    {
+        var text = "abo";
+        var articles = new List<Article>()
+        {
+            _articleTest
+        };
+        var logic = new ArticleLogic(_articleRepoMock.Object);
+        _articleRepoMock.Setup(o => o.GetByText(text)).Returns(articles);
+        var result = logic.GetArticleByText(text);
         Assert.AreEqual(_articleTest, result);
     }
     
