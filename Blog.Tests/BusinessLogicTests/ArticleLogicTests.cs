@@ -13,14 +13,14 @@ namespace Blog.Tests.BusinessLogicTests;
 [TestClass]
 public class ArticleLogicTests
 {
-    private Mock<ArticleRepository> _articleRepoMock;
+    private Mock<IRepository<Article>> _articleRepoMock;
     private Article _articleTest;
     private List<Article> _articles;
 
     [TestInitialize]
     public void Setup()
     {
-        _articleRepoMock = new Mock<ArticleRepository>(MockBehavior.Strict);
+        _articleRepoMock = new Mock<IRepository<Article>>(MockBehavior.Strict);
         
         var user = new User()
         {
@@ -117,7 +117,7 @@ public class ArticleLogicTests
         var logic = new ArticleLogic(_articleRepoMock.Object);
         _articleRepoMock.Setup(o => o.GetByText(text)).Returns(articles);
         var result = logic.GetArticleByText(text);
-        Assert.AreEqual(_articleTest, result);
+        Assert.AreEqual(articles, result);
     }
     
 }

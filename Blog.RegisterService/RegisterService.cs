@@ -20,6 +20,8 @@ public class RegisterService
         serviceCollection.AddScoped<ISessionLogic, SessionLogic>();
         serviceCollection.AddScoped<IRepository<Session>, SessionRepository>();
         serviceCollection.AddScoped<ICommentLogic, CommentLogic>();
+        serviceCollection.AddScoped<IArticleLogic, ArticleLogic>();
+        serviceCollection.AddScoped<IRepository<Article>, ArticleRepository>();
 
     }
 }

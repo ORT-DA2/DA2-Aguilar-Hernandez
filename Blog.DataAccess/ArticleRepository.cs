@@ -8,7 +8,7 @@ public class ArticleRepository: Repository<Article>
     {
     }
     
-    public  IEnumerable<Article> GetByText(string text)
+    public override  IEnumerable<Article> GetByText(string text)
     {
         throw new NotImplementedException();
     }

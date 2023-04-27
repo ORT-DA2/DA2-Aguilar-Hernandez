@@ -11,4 +11,6 @@ public interface IRepository<T> where T : class
     void Delete(T elem);
     void Update(T elem);
     void Save();
+
+    IEnumerable<T> GetByText(string text);
 }

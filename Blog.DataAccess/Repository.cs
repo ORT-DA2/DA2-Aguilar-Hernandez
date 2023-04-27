@@ -42,4 +42,9 @@ public class Repository<T> : IRepository<T> where T : class
     {
         _context.SaveChanges();
     }
+
+    public virtual IEnumerable<T> GetByText(string text)
+    {
+        return _context.Set<T>();
+    }
 }

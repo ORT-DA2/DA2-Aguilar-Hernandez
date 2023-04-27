@@ -1,4 +1,5 @@
-﻿using Blog.Domain.Entities;
+﻿using Blog.DataAccess;
+using Blog.Domain.Entities;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
 
@@ -36,7 +37,7 @@ public class ArticleLogic: IArticleLogic
 
     public IEnumerable<Article> GetArticleByText(string text)
     {
-        throw new NotImplementedException();
+        return _repository.GetByText(text);
     }
 
     public Article UpdateArticle(Guid id, Article article, Guid authorization)
