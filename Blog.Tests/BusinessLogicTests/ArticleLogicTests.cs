@@ -320,6 +320,7 @@ public class ArticleLogicTests
         };
         
         var logic = new ArticleLogic(_articleRepoMock.Object);
+        _articleRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
         //_sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         _articleRepoMock.Setup(o => o.Update(It.IsAny<Article>()));
         _articleRepoMock.Setup(o => o.Save());

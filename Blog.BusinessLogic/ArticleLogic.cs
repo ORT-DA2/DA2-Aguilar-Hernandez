@@ -1,4 +1,6 @@
 ﻿using Blog.Domain.Entities;
+using Blog.Domain.Enums;
+using Blog.Filters.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
 
@@ -41,7 +43,26 @@ public class ArticleLogic: IArticleLogic
 
     public Article UpdateArticle(Guid id, Article article, Guid authorization)
     {
-        throw new NotImplementedException();
+        var oldArticle = _repository.GetById(a => a.Id == id);
+
+        if (oldArticle == null)
+        {
+            throw new NotFoundException("The article was not found");
+        }
+
+        /*if (_sessionLogic.GetLoggedUser(auth).Roles.All(ur => ur.Role != Role.Admin ))
+        {
+            if (_sessionLogic.GetLoggedUser(auth).Id != id)
+            {
+                throw new ArgumentException("You can´t update other user");
+            }
+        }*/
+
+        oldArticle.UpdateAttributes(article);
+        _repository.Update(oldArticle);
+        _repository.Save();
+
+        return oldArticle;
     }
 
     public void DeleteArticle(Guid articleId)
