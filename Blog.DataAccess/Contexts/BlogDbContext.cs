@@ -10,10 +10,9 @@ public class BlogDbContext: DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<UserRole> Roles { get; set; }
     public DbSet<Session> Sessions { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 
-    public BlogDbContext(DbContextOptions options): base(options)
-    {
-    }
+    public BlogDbContext(DbContextOptions options): base(options){}
     
     public BlogDbContext() : base() {}
     
@@ -35,6 +34,14 @@ public class BlogDbContext: DbContext
         modelBuilder.Entity<UserRole>()
             .Property(ur => ur.Role)
             .HasConversion<string>();
+
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Article)
+            .WithMany(a => a.Comments);
+        
+        // modelBuilder.Entity<Comment>()
+        //     .HasOne(c => c.Owner)
+        //     .WithMany(u => u.);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -47,8 +54,8 @@ public class BlogDbContext: DbContext
                 .SetBasePath(directory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-
-            var connectionString = configuration.GetConnectionString("BlogDb");
+        
+            var connectionString = configuration.GetConnectionString("BlogDB");
             optionsBuilder.UseSqlServer(connectionString);
         }
     }
