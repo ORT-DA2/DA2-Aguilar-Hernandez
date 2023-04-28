@@ -69,7 +69,10 @@ public class ArticleLogic: IArticleLogic
 
     public void DeleteArticle(Guid articleId)
     {
-        throw new NotImplementedException();
+        var article = _repository.GetById(a => a.Id == articleId);
+        
+        _repository.Delete(article);
+        _repository.Save();
     }
     
 }
