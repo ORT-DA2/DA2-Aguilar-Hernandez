@@ -1,7 +1,7 @@
-using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.Filters;
+using Blog.Filters.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.Models.In.User;
 using Blog.Models.Out.User;

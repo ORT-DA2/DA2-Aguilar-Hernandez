@@ -13,4 +13,5 @@ public interface IRepository<T> where T : class
     void Save();
 
     IEnumerable<T> GetByText(string text);
+    IEnumerable<T> GetLastTen();
 }

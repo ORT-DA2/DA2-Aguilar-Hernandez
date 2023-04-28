@@ -1,7 +1,7 @@
-﻿using Blog.BusinessLogic.Error;
-using Blog.Domain.Entities;
+﻿using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
+using Blog.Models.Error;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;

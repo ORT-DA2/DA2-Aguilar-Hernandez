@@ -16,6 +16,16 @@ public class ArticleLogicTests
     private Mock<IRepository<Article>> _articleRepoMock;
     private Article _articleTest;
     private List<Article> _articles;
+    private Article _articleTest2;
+    private Article _articleTest3;
+    private Article _articleTest4;
+    private Article _articleTest5;
+    private Article _articleTest6;
+    private Article _articleTest7;
+    private Article _articleTest8;
+    private Article _articleTest9;
+    private Article _articleTest10;
+    private Article _articleTest11;
 
     [TestInitialize]
     public void Setup()
@@ -64,10 +74,170 @@ public class ArticleLogicTests
             Template = Template.RectangleTop
             
         };
+        
+        _articleTest2 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = ".NET 6 Webpage",
+            Content = "New features about .NET are being developed",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest3 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test3",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest4 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test4",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest5 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test5",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest6 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test6",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest7 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test7",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest8 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test8",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest9 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test9",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest10 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test10",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        _articleTest11 = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test11",
+            Content = "Uruguay is a country in south america",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = image,
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
 
         _articles = new List<Article>()
         {
-            _articleTest
+            _articleTest,
+            _articleTest2,
+            _articleTest3,
+            _articleTest4,
+            _articleTest5,
+            _articleTest6,
+            _articleTest7,
+            _articleTest8,
+            _articleTest9,
+            _articleTest10,
+            _articleTest11
         };
 
     }
@@ -118,6 +288,18 @@ public class ArticleLogicTests
         _articleRepoMock.Setup(o => o.GetByText(text)).Returns(articles);
         var result = logic.GetArticleByText(text);
         Assert.AreEqual(articles, result);
+    }
+    
+    [TestMethod]
+    public void GetLastTenValidTest()
+    {
+        var articles = _articles;
+        articles.Remove(_articleTest11);
+        
+        var logic = new ArticleLogic(_articleRepoMock.Object);
+        _articleRepoMock.Setup(o => o.GetLastTen()).Returns(articles);
+        var result = logic.GetLastTen();
+        Assert.AreEqual(_articleTest, result);
     }
     
 }

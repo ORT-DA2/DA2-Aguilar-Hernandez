@@ -47,4 +47,9 @@ public class Repository<T> : IRepository<T> where T : class
     {
         return _context.Set<T>();
     }
+
+    public IEnumerable<T> GetLastTen()
+    {
+        throw new NotImplementedException();
+    }
 }
