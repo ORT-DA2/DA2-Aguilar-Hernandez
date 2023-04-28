@@ -352,9 +352,10 @@ public class ArticleLogicTests
         
         var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object);
         _articleRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
+        _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         _articleRepoMock.Setup(o => o.Delete(It.IsAny<Article>()));
         _articleRepoMock.Setup(o => o.Save());
-        logic.DeleteArticle(_articleTest.Id);
+        logic.DeleteArticle(_articleTest.Id, session.AuthToken);
     }
     
 }

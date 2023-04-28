@@ -381,9 +381,11 @@ public class ArticleControllerTest
     [TestMethod]
     public void DeleteArticleSuccessTest()
     {
+        var token = Guid.NewGuid();
+        
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.DeleteArticle(_articleTest.Id));
-        var result = controller.DeleteArticle(_articleTest.Id);
+        _articlenMock.Setup(o => o.DeleteArticle(_articleTest.Id, token));
+        var result = controller.DeleteArticle(_articleTest.Id, token);
         var okResult = result as OkObjectResult;
         Assert.AreEqual(okResult.Value, $"Article with the id {_articleTest.Id} was deleted");
     }
@@ -391,9 +393,11 @@ public class ArticleControllerTest
     [TestMethod]
     public void DeleteArticleFailTest()
     {
+        var token = Guid.NewGuid();
+        
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.DeleteArticle(_articleTest.Id)).Throws(new NotFoundException("There are no articles."));
-        var result = controller.DeleteArticle(_articleTest.Id);
+        _articlenMock.Setup(o => o.DeleteArticle(_articleTest.Id, token)).Throws(new NotFoundException("There are no articles."));
+        var result = controller.DeleteArticle(_articleTest.Id, token);
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
 

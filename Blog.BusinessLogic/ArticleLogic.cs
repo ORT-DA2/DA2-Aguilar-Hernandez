@@ -56,7 +56,7 @@ public class ArticleLogic: IArticleLogic
         {
             if (_sessionLogic.GetLoggedUser(authorization).Id != article.Owner.Id)
             {
-                throw new ArgumentException("You can´t update an other owner article");
+                throw new ArgumentException("You can´t update an article of other owner");
             }
         }
 
@@ -67,9 +67,22 @@ public class ArticleLogic: IArticleLogic
         return oldArticle;
     }
 
-    public void DeleteArticle(Guid articleId)
+    public void DeleteArticle(Guid articleId, Guid authorization)
     {
         var article = _repository.GetById(a => a.Id == articleId);
+        
+        if (article == null)
+        {
+            throw new NotFoundException("The article was not found");
+        }
+
+        if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Admin ))
+        {
+            if (_sessionLogic.GetLoggedUser(authorization).Id != article.Owner.Id)
+            {
+                throw new ArgumentException("You can´t delete an article of other owner");
+            }
+        }
         
         _repository.Delete(article);
         _repository.Save();

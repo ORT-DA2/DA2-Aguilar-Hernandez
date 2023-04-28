@@ -92,11 +92,11 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteArticle([FromRoute] Guid id)
+        public IActionResult DeleteArticle([FromRoute] Guid id, [FromHeader] Guid Authorization)
         {
             try
             {
-                _articleLogic.DeleteArticle(id);
+                _articleLogic.DeleteArticle(id, Authorization);
                 return Ok($"Article with the id {id} was deleted");
             }
             catch (NotFoundException ex)
