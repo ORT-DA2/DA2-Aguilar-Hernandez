@@ -299,7 +299,7 @@ public class ArticleLogicTests
         var logic = new ArticleLogic(_articleRepoMock.Object);
         _articleRepoMock.Setup(o => o.GetLastTen()).Returns(articles);
         var result = logic.GetLastTen();
-        Assert.AreEqual(_articleTest, result);
+        Assert.AreEqual(articles, result);
     }
     
 }

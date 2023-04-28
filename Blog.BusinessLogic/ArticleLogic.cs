@@ -24,7 +24,7 @@ public class ArticleLogic: IArticleLogic
     
     public IEnumerable<Article> GetLastTen()
     {
-        throw new NotImplementedException();
+        return _repository.GetLastTen();
     }
 
     public Article CreateArticle(Article article)
