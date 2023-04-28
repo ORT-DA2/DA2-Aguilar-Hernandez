@@ -9,9 +9,11 @@ namespace Blog.BusinessLogic;
 public class ArticleLogic: IArticleLogic
 {
     private readonly IRepository<Article> _repository;
-    public ArticleLogic(IRepository<Article> articleRepository)
+    private readonly ISessionLogic _sessionLogic;
+    public ArticleLogic(IRepository<Article> articleRepository, ISessionLogic sessionLogic)
     {
         _repository = articleRepository;
+        _sessionLogic = sessionLogic;
     }
 
     public Article GetArticleById(Guid articleId)
@@ -50,13 +52,13 @@ public class ArticleLogic: IArticleLogic
             throw new NotFoundException("The article was not found");
         }
 
-        /*if (_sessionLogic.GetLoggedUser(auth).Roles.All(ur => ur.Role != Role.Admin ))
+        if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Admin ))
         {
-            if (_sessionLogic.GetLoggedUser(auth).Id != id)
+            if (_sessionLogic.GetLoggedUser(authorization).Id != article.Owner.Id)
             {
-                throw new ArgumentException("You can´t update other user");
+                throw new ArgumentException("You can´t update an other owner article");
             }
-        }*/
+        }
 
         oldArticle.UpdateAttributes(article);
         _repository.Update(oldArticle);
