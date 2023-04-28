@@ -14,6 +14,7 @@ namespace Blog.Tests.BusinessLogicTests;
 public class ArticleLogicTests
 {
     private Mock<IRepository<Article>> _articleRepoMock;
+    private Mock<ISessionLogic> _sessionLogicMock;
     private Article _articleTest;
     private List<Article> _articles;
     private Article _articleTest2;
@@ -31,6 +32,7 @@ public class ArticleLogicTests
     public void Setup()
     {
         _articleRepoMock = new Mock<IRepository<Article>>(MockBehavior.Strict);
+        _sessionLogicMock = new Mock<ISessionLogic>(MockBehavior.Strict);
         
         var user = new User()
         {
@@ -300,6 +302,38 @@ public class ArticleLogicTests
         _articleRepoMock.Setup(o => o.GetLastTen()).Returns(articles);
         var result = logic.GetLastTen();
         Assert.AreEqual(articles, result);
+    }
+
+    [TestMethod]
+    public void UpdateArticleValidTest()
+    {
+        var articleUpdated = _articleTest;
+        articleUpdated.Title = "New title of articleTest";
+        
+        var userLogged = _articleTest.Owner;
+
+        var session = new Session()
+        {
+            Id = Guid.NewGuid(),
+            User = userLogged,
+            AuthToken = Guid.NewGuid()
+        };
+        
+        var logic = new ArticleLogic(_articleRepoMock.Object);
+        //_sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
+        _articleRepoMock.Setup(o => o.Update(It.IsAny<Article>()));
+        _articleRepoMock.Setup(o => o.Save());
+        var result = logic.UpdateArticle(_articleTest.Id, articleUpdated, session.AuthToken);
+        Assert.AreEqual(articleUpdated.Comments, result.Comments);
+        Assert.AreEqual(articleUpdated.Content, result.Content);
+        Assert.AreEqual(articleUpdated.Image, result.Image);
+        Assert.AreEqual(articleUpdated.Owner, result.Owner);
+        Assert.AreEqual(articleUpdated.Id, result.Id);
+        Assert.AreEqual(articleUpdated.Template, result.Template);
+        Assert.AreEqual(articleUpdated.Title, result.Title);
+        Assert.AreEqual(articleUpdated.DatePublished, result.DatePublished);
+        Assert.AreEqual(articleUpdated.IsPublic, result.IsPublic);
+        Assert.AreEqual(articleUpdated.DateLastModified, result.DateLastModified);
     }
     
 }
