@@ -1,7 +1,7 @@
 ﻿using System.Security.Authentication;
 using Blog.Domain.Entities;
 using Blog.IBusinessLogic;
-using Blog.Models.In.Auth;
+using Blog.Models.In;
 using Blog.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -28,7 +28,7 @@ public class AuthControllerTests
     [TestMethod]
     public void SuccessfulLoginTest()
     {
-        LoginDTO session = new LoginDTO()
+        LoginDto session = new LoginDto()
         {
             Username = "NicolasAHF",
             Password = "123456"
@@ -50,7 +50,7 @@ public class AuthControllerTests
     [TestMethod]
     public void LoginFailTest()
     {
-        LoginDTO session = new LoginDTO()
+        LoginDto session = new LoginDto()
         {
             Username = "NicolasAHF",
             Password = "123456"

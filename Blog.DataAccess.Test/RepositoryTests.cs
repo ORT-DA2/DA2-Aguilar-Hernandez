@@ -1,10 +1,8 @@
-﻿using Blog.DataAccess;
-using Blog.Domain;
-using Blog.Domain.Entities;
+﻿using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Tests.DataAccessTests;
+namespace Blog.DataAccess.Test;
 
 [TestClass]
 public class RepositoryTests
@@ -246,5 +244,11 @@ public class RepositoryTests
         var elementSaved = _blogContext.Users.FirstOrDefault(u => u.Id == elementExpected.Id);
         
         Assert.IsNull(elementSaved);
+    }
+
+    [TestMethod]
+    public void GetByText()
+    {
+        
     }
 }

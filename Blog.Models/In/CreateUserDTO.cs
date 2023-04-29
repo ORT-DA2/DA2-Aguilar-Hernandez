@@ -1,6 +1,4 @@
-﻿using Blog.Models.In.UserRole;
-
-namespace Blog.Models.In.User;
+﻿namespace Blog.Models.In;
 
 public class CreateUserDTO
 {

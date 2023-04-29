@@ -1,13 +1,11 @@
 ﻿using System.Linq.Expressions;
-using Blog.BusinessLogic;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
-using Microsoft.AspNetCore.Http;
 using Moq;
 
-namespace Blog.Tests.BusinessLogicTests;
+namespace Blog.BusinessLogic.Test;
 
 [TestClass]
 public class ArticleLogicTests

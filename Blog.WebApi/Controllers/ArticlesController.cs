@@ -1,8 +1,8 @@
 using Blog.Domain.Entities;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
-using Blog.Models.In.Article;
-using Blog.Models.Out.Article;
+using Blog.Models.In;
+using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers

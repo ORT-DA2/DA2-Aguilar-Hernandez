@@ -1,7 +1,7 @@
 using System.Security.Authentication;
 using Blog.Filters;
 using Blog.IBusinessLogic;
-using Blog.Models.In.Auth;
+using Blog.Models.In;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
@@ -19,7 +19,7 @@ namespace Blog.WebApi.Controllers
         
         [HttpPost]
         [Route("login")]
-        public IActionResult Login([FromBody] LoginDTO login)
+        public IActionResult Login([FromBody] LoginDto login)
         {
             try
             {

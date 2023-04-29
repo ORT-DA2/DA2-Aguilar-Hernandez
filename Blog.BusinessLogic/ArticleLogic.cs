@@ -57,7 +57,7 @@ public class ArticleLogic: IArticleLogic
 
         var userLogged = _sessionLogic.GetLoggedUser(authorization);
 
-        if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Admin ))
+        if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Blogger ))
         {
             if (_sessionLogic.GetLoggedUser(authorization).Id != oldArticle.Owner.Id)
             {
@@ -83,7 +83,7 @@ public class ArticleLogic: IArticleLogic
             throw new NotFoundException("The article was not found");
         }
 
-        if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Admin ))
+        if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Blogger ))
         {
             if (_sessionLogic.GetLoggedUser(authorization).Id != article.Owner.Id)
             {

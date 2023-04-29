@@ -26,6 +26,6 @@ public class ArticleRepository: Repository<Article>
     
     public override IEnumerable<Article> GetLastTen()
     {
-        return _context.Set<Article>().Include(u => u.Owner).ThenInclude(ur => ur.Roles).Include(c => c.Comments).OrderByDescending(a => a.DatePublished).Take(10);
+        return _context.Set<Article>().Include(u => u.Owner).ThenInclude(ur => ur.Roles).Include(c => c.Comments).OrderByDescending(a => a.DatePublished).Take(10).Where(a => a.IsPublic == true);
     }
 }

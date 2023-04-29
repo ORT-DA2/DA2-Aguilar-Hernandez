@@ -3,9 +3,8 @@ using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
-using Blog.Models.In.Article;
-using Blog.Models.Out.Article;
-using Blog.Models.Out.User;
+using Blog.Models.In;
+using Blog.Models.Out;
 using Blog.WebApi.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -330,11 +329,11 @@ public class ArticleControllerTest
         var token = Guid.NewGuid();
         
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Returns(_articleTest);
+        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Returns(_articleTest2);
         var result = controller.CreateArticle(_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
-        Assert.AreEqual(_articleTest.Title, dto.Title);
+        Assert.AreEqual(_articleTest2.Title, dto.Title);
     }
     
     [TestMethod]
@@ -352,11 +351,12 @@ public class ArticleControllerTest
     public void UpdateValidArticleTest()
     {
         var token = Guid.NewGuid();
+        var article = _articleTest2;
         var articlenMock = new Mock<IArticleLogic>(MockBehavior.Loose);
         
         var controller = new ArticlesController(articlenMock.Object);
-        articlenMock.Setup(o => o.UpdateArticle(_articleTest.Id, It.IsAny<Article>(), token)).Returns(_articleTest2);
-        var result = controller.UpdateArticle(_articleTest2.Id ,_articleTestDTO, token);
+        articlenMock.Setup(o => o.UpdateArticle(_articleTest2.Id, It.IsAny<Article>(), token)).Returns(article);
+        var result = controller.UpdateArticle(article.Id ,_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
         Assert.AreEqual(_articleTest2.Title, dto.Title);

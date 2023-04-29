@@ -1,6 +1,6 @@
 ﻿using Blog.Domain.Enums;
 
-namespace Blog.Models.In.UserRole;
+namespace Blog.Models.In;
 
 public class UserRoleBasicInfoDTO
 {

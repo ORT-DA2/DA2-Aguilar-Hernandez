@@ -1,7 +1,7 @@
 ﻿using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 
-namespace Blog.Models.Out.Article;
+namespace Blog.Models.Out;
 
 public class ArticleDetailDTO
 {

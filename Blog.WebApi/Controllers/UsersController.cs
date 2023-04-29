@@ -3,8 +3,8 @@ using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.Filters;
 using Blog.IBusinessLogic;
-using Blog.Models.In.User;
-using Blog.Models.Out.User;
+using Blog.Models.In;
+using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
@@ -20,8 +20,8 @@ namespace Blog.WebApi.Controllers
             _userLogic = userLogic;
         }
         
-        //[ServiceFilter(typeof(AuthorizationFilter))]
-        //[AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
         [HttpGet("{id}")]
         public IActionResult GetUserById([FromRoute] Guid id)
         {
@@ -36,7 +36,7 @@ namespace Blog.WebApi.Controllers
             }
         }
 
-        //[ServiceFilter(typeof(AuthorizationFilter))]
+        [ServiceFilter(typeof(AuthorizationFilter))]
         [HttpGet]
         public IActionResult GetAllUsers()
         {
@@ -65,7 +65,7 @@ namespace Blog.WebApi.Controllers
             }
         }
 
-        //[ServiceFilter(typeof(AuthorizationFilter))]
+        [ServiceFilter(typeof(AuthorizationFilter))]
         [HttpPut("{id}")]
         public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDTO userDto, [FromHeader] Guid Authorization)
         {
@@ -81,8 +81,9 @@ namespace Blog.WebApi.Controllers
             }
         }
         
-        //[ServiceFilter(typeof(AuthorizationFilter))]
-        //[AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
+        
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
         [HttpDelete("{id}")]
         public IActionResult DeleteUser([FromRoute] Guid id)
         {
