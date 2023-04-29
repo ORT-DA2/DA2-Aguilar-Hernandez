@@ -24,7 +24,7 @@ namespace Blog.WebApi.Controllers
             Comment comment = commentInModel.ToEntity();
             Comment result = _commentService.AddNewComment(comment);
             CommentOutModel commentOut = new CommentOutModel(result);
-            return Ok();
+            return Ok(commentOut);
         }
         
         [HttpDelete("{id}")]
