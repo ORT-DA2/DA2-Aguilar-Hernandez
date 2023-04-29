@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Blog.BusinessLogic;
-using Blog.BusinessLogic.Exceptions;
 using Blog.DataAccess;
 using Blog.IDataAccess;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Moq;
 

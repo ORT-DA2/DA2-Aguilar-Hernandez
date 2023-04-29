@@ -13,39 +13,50 @@ public class User
 {
     [Required]
     public Guid Id { get; set; }
-    [Required]
     public string FirstName { get; set; }
-    [Required]
     public string LastName { get; set; }
-    [Required]
     [MaxLength(12)]
     [MinLength(4)]
     [RegularExpression(@"^\w+$")]
     public string Username { get; set; }
-    [Required]
     [MaxLength(16)]
     [MinLength(5)]
     [PasswordPropertyText(true)]
     public string Password { get; set; }
-    [Required]
     public virtual ICollection<UserRole> Roles { get; set; }
-    [Required]
     [EmailAddress]
     [RegularExpression(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$")]
     public string Email { get; set; }
 
-    public ICollection<Comment> Comments { get; set; }
+    public List<Comment>? Comments { get; set; }
     
-    public void ValidateEmptyString()
+    
+    public void FirstNameValidation()
     {
         if (String.IsNullOrEmpty(FirstName))
             throw new ArgumentException("Empty FirstName");
+    }
+    
+    public void LastNameValidation()
+    {
         if (String.IsNullOrEmpty(LastName))
             throw new ArgumentException("Empty LastName");
+    }
+    
+    public void UsernameValidation()
+    {
         if (String.IsNullOrEmpty(Username))
             throw new ArgumentException("Empty Username");
+    }
+    
+    public void PasswordValidation()
+    {
         if (String.IsNullOrEmpty(Password))
             throw new ArgumentException("Empty Password");
+    }
+    
+    public void EmailValidation()
+    {
         if (String.IsNullOrEmpty(Email))
             throw new ArgumentException("Empty Email");
     }
@@ -92,6 +103,7 @@ public class User
         Password = user.Password;
         Roles = user.Roles;
         Email = user.Email;
+        Comments = user.Comments;
     }
 
     public bool IsInRole(Role role)

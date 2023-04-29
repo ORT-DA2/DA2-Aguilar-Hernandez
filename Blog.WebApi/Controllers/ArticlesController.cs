@@ -1,5 +1,5 @@
-using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.Models.In.Article;
 using Blog.Models.Out.Article;
@@ -60,12 +60,12 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateArticle([FromForm] CreateArticleDTO articleDto)
+        public IActionResult CreateArticle([FromForm] CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
         {
             try
             {
-                Article article = articleDto.ToEntity(articleDto.Image);
-                Article newArticle = _articleLogic.CreateArticle(article);
+                Article article = articleDto.ToEntity();
+                Article newArticle = _articleLogic.CreateArticle(article, Authorization);
                 return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
             }
             catch (ArgumentException ex)
@@ -81,7 +81,7 @@ namespace Blog.WebApi.Controllers
         {
             try
             {
-                Article article = articleDto.ToEntity(articleDto.Image);
+                Article article = articleDto.ToEntity();
                 Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
                 return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
             }
@@ -92,17 +92,30 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteArticle([FromRoute] Guid id)
+        public IActionResult DeleteArticle([FromRoute] Guid id, [FromHeader] Guid Authorization)
         {
             try
             {
-                _articleLogic.DeleteArticle(id);
+                _articleLogic.DeleteArticle(id, Authorization);
                 return Ok($"Article with the id {id} was deleted");
             }
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
 
+            }
+        }
+
+        [HttpGet("LastTenArticles")]
+        public IActionResult GetLastTen()
+        {
+            try
+            {
+                return Ok(_articleLogic.GetLastTen());
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound("There are no articles.");
             }
         }
     }

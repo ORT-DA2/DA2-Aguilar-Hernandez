@@ -47,7 +47,10 @@ namespace Blog.DataAccess.Migrations
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
-
+                    
+                    b.Property<int>("Template")
+                        .HasColumnType("int");
+                    
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

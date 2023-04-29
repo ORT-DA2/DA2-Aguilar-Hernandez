@@ -1,4 +1,4 @@
-﻿namespace Blog.BusinessLogic.Error;
+﻿namespace Blog.Models.Error;
 
 public class ErrorDto
 {
