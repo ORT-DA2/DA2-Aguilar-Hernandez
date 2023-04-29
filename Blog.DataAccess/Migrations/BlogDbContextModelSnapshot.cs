@@ -56,7 +56,7 @@ namespace Blog.DataAccess.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Article");
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("Blog.Domain.Entities.Comment", b =>
@@ -178,9 +178,9 @@ namespace Blog.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Blog.Domain.Entities.User", "Owner")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Article");
@@ -217,6 +217,8 @@ namespace Blog.DataAccess.Migrations
 
             modelBuilder.Entity("Blog.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618

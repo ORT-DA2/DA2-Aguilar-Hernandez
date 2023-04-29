@@ -33,6 +33,8 @@ public class User
     [RegularExpression(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$")]
     public string Email { get; set; }
 
+    public ICollection<Comment> Comments { get; set; }
+    
     public void ValidateEmptyString()
     {
         if (String.IsNullOrEmpty(FirstName))
