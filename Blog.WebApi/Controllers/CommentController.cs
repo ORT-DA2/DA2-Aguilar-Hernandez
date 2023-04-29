@@ -1,7 +1,7 @@
-﻿using Blog.BusinessLogic;
-using Blog.BusinessLogic.Exceptions;
+﻿using Blog.BusinessLogic.Exceptions;
 using Blog.Models.In;
 using Blog.Domain.Entities;
+using Blog.IBusinessLogic;
 using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,8 +11,8 @@ namespace Blog.WebApi.Controllers
     [Route("api/comments")]
     public class CommentController : ControllerBase
     {
-        private readonly ICommentService _commentService;
-        public CommentController(ICommentService commentService)
+        private readonly ICommentLogic _commentService;
+        public CommentController(ICommentLogic commentService)
         {
             _commentService = commentService;
         }
@@ -24,7 +24,7 @@ namespace Blog.WebApi.Controllers
             Comment comment = commentInModel.ToEntity();
             Comment result = _commentService.AddNewComment(comment);
             CommentOutModel commentOut = new CommentOutModel(result);
-            return new OkObjectResult(commentOut);
+            return Ok();
         }
         
         [HttpDelete("{id}")]

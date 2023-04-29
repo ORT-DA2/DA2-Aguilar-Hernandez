@@ -1,6 +1,9 @@
-﻿using Blog.Domain;
+﻿using System.Net;
+using Blog.Domain;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
+using Microsoft.AspNetCore.Http;
+using Moq;
 
 namespace Blog.Tests.DomainTests;
 
@@ -12,7 +15,15 @@ public class NotificationTests
     {
         DateTime time = new DateTime(DateTime.Now.Hour);
         List<Comment> comments = new List<Comment>();
-        string linkImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png";
+        
+        var formFile = new Mock<IFormFile>();
+        formFile.Setup(f => f.Length).Returns(1234);
+        formFile.Setup(f => f.FileName).Returns("test.jpg");
+        formFile.Setup(f => f.ContentType).Returns("image/jpeg");
+        
+        using var ms = new MemoryStream();
+        var image = ms.ToArray();
+        
         User user = new User(){
             FirstName = "Nicolas",
             LastName = "Hernandez",
@@ -26,7 +37,7 @@ public class NotificationTests
             Title = "Learn Angular",
             Content = "Angular is a frontend framework",
             IsPublic = true,
-            Image = linkImage,
+            Image = image,
             DatePublished = time,
             DateLastModified = time,
             Comments = comments

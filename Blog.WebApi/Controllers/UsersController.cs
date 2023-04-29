@@ -1,12 +1,15 @@
 using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
+using Blog.Filters;
 using Blog.IBusinessLogic;
-using Blog.WebApi.Controllers.DTOs;
+using Blog.Models.In.User;
+using Blog.Models.Out.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -16,7 +19,9 @@ namespace Blog.WebApi.Controllers
         {
             _userLogic = userLogic;
         }
-
+        
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
         [HttpGet("{id}")]
         public IActionResult GetUserById([FromRoute] Guid id)
         {
@@ -31,6 +36,7 @@ namespace Blog.WebApi.Controllers
             }
         }
 
+        [ServiceFilter(typeof(AuthorizationFilter))]
         [HttpGet]
         public IActionResult GetAllUsers()
         {
@@ -59,13 +65,14 @@ namespace Blog.WebApi.Controllers
             }
         }
 
+        [ServiceFilter(typeof(AuthorizationFilter))]
         [HttpPut("{id}")]
-        public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDTO userDto)
+        public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDTO userDto, [FromHeader] Guid Authorization)
         {
             try
             {
                 User user = userDto.ToEntity(userDto.Roles);
-                User newUser = _userLogic.UpdateUser(id, user);
+                User newUser = _userLogic.UpdateUser(id, user, Authorization);
                 return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
             }
             catch (ArgumentException ex)
@@ -73,7 +80,9 @@ namespace Blog.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
         [HttpDelete("{id}")]
         public IActionResult DeleteUser([FromRoute] Guid id)
         {

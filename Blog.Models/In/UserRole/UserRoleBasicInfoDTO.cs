@@ -1,7 +1,6 @@
-﻿using Blog.Domain.Entities;
-using Blog.Domain.Enums;
+﻿using Blog.Domain.Enums;
 
-namespace Blog.WebApi.Controllers.DTOs.UserRole;
+namespace Blog.Models.In.UserRole;
 
 public class UserRoleBasicInfoDTO
 {

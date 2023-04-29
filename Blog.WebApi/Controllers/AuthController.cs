@@ -1,11 +1,12 @@
 using System.Security.Authentication;
+using Blog.Filters;
 using Blog.IBusinessLogic;
-using Blog.WebApi.Controllers.DTOs.Auth;
+using Blog.Models.In.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -23,7 +24,7 @@ namespace Blog.WebApi.Controllers
             try
             {
                 var token = _sessionService.Login(login.Username, login.Password);
-                return Ok(token);
+                return Ok(new{token = token});
             }
             catch (InvalidCredentialException ex)
             {
@@ -33,6 +34,7 @@ namespace Blog.WebApi.Controllers
         
         [HttpDelete]
         [Route("logout")]
+        [ServiceFilter(typeof(AuthorizationFilter))]
         public IActionResult Logout([FromHeader] Guid token)
         {
             _sessionService.Logout(token);

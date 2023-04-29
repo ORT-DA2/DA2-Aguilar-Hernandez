@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
+using Blog.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Domain.Entities;
@@ -91,5 +92,10 @@ public class User
         Password = user.Password;
         Roles = user.Roles;
         Email = user.Email;
+    }
+
+    public bool IsInRole(Role role)
+    {
+       return Roles.Any(ur => ur.Role == role);
     }
 }

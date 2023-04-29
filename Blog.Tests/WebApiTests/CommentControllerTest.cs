@@ -1,6 +1,7 @@
 using Blog.BusinessLogic;
 using Blog.BusinessLogic.Exceptions;
 using Blog.Domain.Entities;
+using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers;
 using Blog.Models.In;
 using Blog.Models.Out;
@@ -27,7 +28,7 @@ public class CommentControllerTest
 
         CommentOutModel commentExpected = new CommentOutModel(comment);
         
-        var commentService = new Mock<ICommentService>(MockBehavior.Strict);
+        var commentService = new Mock<ICommentLogic>(MockBehavior.Strict);
 
         CommentController commentController = new CommentController(commentService.Object);
 
@@ -51,7 +52,7 @@ public class CommentControllerTest
     {
         Comment comment = new Comment();
 
-        var mock = new Mock<ICommentService>(MockBehavior.Strict);
+        var mock = new Mock<ICommentLogic>(MockBehavior.Strict);
 
         var controller = new CommentController(mock.Object);
         mock.Setup(c => c.DeleteCommentById(comment.Id));
@@ -66,7 +67,7 @@ public class CommentControllerTest
     public void DeleteInvalidCommentById()
     {
         Comment comment = CreateComment();
-        var mock = new Mock<ICommentService>(MockBehavior.Strict);
+        var mock = new Mock<ICommentLogic>(MockBehavior.Strict);
         var controller = new CommentController(mock.Object);
         mock.Setup(c => c.DeleteCommentById(comment.Id)).Throws(new NotFoundException("There are no comments."));
         var result = controller.DeleteCommentById(comment.Id);

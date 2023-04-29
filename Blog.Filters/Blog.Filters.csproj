@@ -7,14 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Blog.DataAccess\Blog.DataAccess.csproj" />
-      <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
+      <ProjectReference Include="..\Blog.BusinessLogic\Blog.BusinessLogic.csproj" />
       <ProjectReference Include="..\Blog.IBusinessLogic\Blog.IBusinessLogic.csproj" />
-      <ProjectReference Include="..\Blog.IDataAccess\Blog.IDataAccess.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     </ItemGroup>
 
 </Project>

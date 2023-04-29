@@ -6,4 +6,5 @@ public class Notification
     public User Owner { get; set; }
     public Article Article { get; set; }
     public Comment Comment { get; set; }
+    public bool isRead { get; set; }
 }
