@@ -18,6 +18,7 @@ public class UserTests
         user.Username = "NicolasAHF";
         user.Email = "nicolashernandez@example.com";
         user.Roles = new List<UserRole>{};
+        user.Comments = new List<Comment>();
         
         UserRole role = new UserRole()
         {
@@ -27,13 +28,21 @@ public class UserTests
         };
         
         user.Roles.Add(role);
-
+        Comment comment = new Comment()
+        {
+            Body = "Buen post",
+            Article = new Article(),
+            Owner = new User()
+        };
+        user.Comments.Add(comment);
+        
         Assert.AreEqual(id, user.Id);
         Assert.AreEqual("Nicolas", user.FirstName);
         Assert.AreEqual("Hernandez", user.LastName);
         Assert.AreEqual("NicolasAHF", user.Username);
         Assert.AreEqual("nicolashernandez@example.com", user.Email);
         Assert.AreEqual(new List<UserRole>{role}.Count, user.Roles.Count);
+        Assert.AreEqual(new  List<Comment>{comment}.Count, user.Comments.Count);
     }
 
     [TestMethod]
