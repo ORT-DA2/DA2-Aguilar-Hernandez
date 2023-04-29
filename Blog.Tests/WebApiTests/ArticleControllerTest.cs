@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
-using Blog.Filters.Exceptions;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.Models.In.Article;
 using Blog.Models.Out.Article;
@@ -49,28 +49,19 @@ public class ArticleControllerTest
 
         };
 
-        var formFile = new Mock<IFormFile>();
-        formFile.Setup(f => f.Length).Returns(1234);
-        formFile.Setup(f => f.FileName).Returns("test.jpg");
-        formFile.Setup(f => f.ContentType).Returns("image/jpeg");
-        
-        using var ms = new MemoryStream();
-        var image = ms.ToArray();
+        var image = "test.jpg";
         
         _articleTestDTO = new CreateArticleDTO()
         {
             Title = "Angular Webpage",
             Content = "New features about angular are being developed",
-            Owner = _user,
             Comments = new List<Comment>(){},
-            DateLastModified = DateTime.Now,
-            DatePublished = DateTime.Now,
-            Image = formFile.ToString(),
+            Image = image,
             IsPublic = true,
             Template = Template.RectangleTop
         };
 
-        _articleTest = _articleTestDTO.ToEntity(_articleTestDTO.Image);
+        _articleTest = _articleTestDTO.ToEntity();
         
         _articleTest2 = new Article()
         {
@@ -248,21 +239,20 @@ public class ArticleControllerTest
     public void GetByIdValidArticleTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.GetArticleById(_articleTest.Id)).Returns(_articleTest);
-        var result = controller.GetArticleById(_articleTest.Id);
+        _articlenMock.Setup(o => o.GetArticleById(_articleTest2.Id)).Returns(_articleTest2);
+        var result = controller.GetArticleById(_articleTest2.Id);
         var okResult = result as OkObjectResult;
         var value = okResult.Value as ArticleDetailDTO;
         
-        Assert.IsTrue(_articleTest.Id.Equals(value.Id));
-        Assert.IsTrue(_articleTest.Title.Equals(value.Title));
-        Assert.IsTrue(_articleTest.Content.Equals(value.Content));
-        Assert.IsTrue(_articleTest.Owner.Equals(value.Owner));
-        Assert.IsTrue(_articleTest.Comments.Equals(value.Comments));
-        Assert.IsTrue(_articleTest.DatePublished.Equals(value.DatePublished));
-        Assert.IsTrue(_articleTest.DateLastModified.Equals(value.DateLastModified));
-        Assert.IsTrue(_articleTest.Image.Equals(value.Image));
-        Assert.IsTrue(_articleTest.IsPublic.Equals(value.IsPublic));
-        Assert.IsTrue(_articleTest.Template.Equals(value.Template));
+        Assert.IsTrue(_articleTest2.Id.Equals(value.Id));
+        Assert.IsTrue(_articleTest2.Title.Equals(value.Title));
+        Assert.IsTrue(_articleTest2.Content.Equals(value.Content));
+        Assert.IsTrue(_articleTest2.Comments.Equals(value.Comments));
+        Assert.IsTrue(_articleTest2.DatePublished.Equals(value.DatePublished));
+        Assert.IsTrue(_articleTest2.DateLastModified.Equals(value.DateLastModified));
+        Assert.IsTrue(_articleTest2.Image.Equals(value.Image));
+        Assert.IsTrue(_articleTest2.IsPublic.Equals(value.IsPublic));
+        Assert.IsTrue(_articleTest2.Template.Equals(value.Template));
     }
 
     [TestMethod]
@@ -337,9 +327,11 @@ public class ArticleControllerTest
     [TestMethod]
     public void CreateValidArticleTest()
     {
+        var token = Guid.NewGuid();
+        
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Returns(_articleTest);
-        var result = controller.CreateArticle(_articleTestDTO);
+        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Returns(_articleTest);
+        var result = controller.CreateArticle(_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
         Assert.AreEqual(_articleTest.Title, dto.Title);
@@ -348,9 +340,11 @@ public class ArticleControllerTest
     [TestMethod]
     public void CreateInvalidArticleTest()
     {
+        var token = Guid.NewGuid();
+        
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>())).Throws(new ArgumentException());
-        var result = controller.CreateArticle(_articleTestDTO);
+        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Throws(new ArgumentException());
+        var result = controller.CreateArticle(_articleTestDTO, token);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
     
@@ -358,13 +352,14 @@ public class ArticleControllerTest
     public void UpdateValidArticleTest()
     {
         var token = Guid.NewGuid();
+        var articlenMock = new Mock<IArticleLogic>(MockBehavior.Loose);
         
-        var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.UpdateArticle(_articleTest.Id, It.IsAny<Article>(), token)).Returns(_articleTest);
-        var result = controller.UpdateArticle(_articleTest.Id ,_articleTestDTO, token);
+        var controller = new ArticlesController(articlenMock.Object);
+        articlenMock.Setup(o => o.UpdateArticle(_articleTest.Id, It.IsAny<Article>(), token)).Returns(_articleTest2);
+        var result = controller.UpdateArticle(_articleTest2.Id ,_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
-        Assert.AreEqual(_articleTest.Title, dto.Title);
+        Assert.AreEqual(_articleTest2.Title, dto.Title);
     }
     
     [TestMethod]

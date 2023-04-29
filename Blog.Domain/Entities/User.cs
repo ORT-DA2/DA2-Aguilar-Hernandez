@@ -13,26 +13,22 @@ public class User
 {
     [Required]
     public Guid Id { get; set; }
-    [Required]
     public string FirstName { get; set; }
-    [Required]
     public string LastName { get; set; }
-    [Required]
     [MaxLength(12)]
     [MinLength(4)]
     [RegularExpression(@"^\w+$")]
     public string Username { get; set; }
-    [Required]
     [MaxLength(16)]
     [MinLength(5)]
     [PasswordPropertyText(true)]
     public string Password { get; set; }
-    [Required]
     public virtual ICollection<UserRole> Roles { get; set; }
-    [Required]
     [EmailAddress]
     [RegularExpression(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$")]
     public string Email { get; set; }
+    
+    public List<Comment>? Comments { get; set; }
     
 
     public void FirstNameValidation()
@@ -107,6 +103,7 @@ public class User
         Password = user.Password;
         Roles = user.Roles;
         Email = user.Email;
+        Comments = user.Comments;
     }
 
     public bool IsInRole(Role role)

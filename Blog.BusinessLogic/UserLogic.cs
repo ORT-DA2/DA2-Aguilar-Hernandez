@@ -1,7 +1,7 @@
 ﻿using Blog.IDataAccess;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
-using Blog.Filters.Exceptions;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 
 

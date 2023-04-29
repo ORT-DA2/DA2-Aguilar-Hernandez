@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using Blog.BusinessLogic;
-using Blog.DataAccess;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
@@ -54,13 +53,7 @@ public class ArticleLogicTests
         
         user.Roles.Add(role);
         
-        var formFile = new Mock<IFormFile>();
-        formFile.Setup(f => f.Length).Returns(1234);
-        formFile.Setup(f => f.FileName).Returns("test.jpg");
-        formFile.Setup(f => f.ContentType).Returns("image/jpeg");
-        
-        using var ms = new MemoryStream();
-        var image = ms.ToArray();
+        var image = "test.jpg";
         
         _articleTest = new Article()
         {
@@ -254,10 +247,20 @@ public class ArticleLogicTests
     [TestMethod]
     public void CreateArticleSuccessTest()
     {
+        var userLogged = _articleTest.Owner;
+
+        var session = new Session()
+        {
+            Id = Guid.NewGuid(),
+            User = userLogged,
+            AuthToken = Guid.NewGuid()
+        };
+        
         var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object);
         _articleRepoMock.Setup(o => o.Insert(It.IsAny<Article>()));
         _articleRepoMock.Setup(o => o.Save());
-        var result = logic.CreateArticle(_articleTest);
+        _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
+        var result = logic.CreateArticle(_articleTest, session.AuthToken);
         Assert.AreEqual(_articleTest, result);
     }
     

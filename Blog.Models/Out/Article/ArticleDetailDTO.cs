@@ -9,11 +9,11 @@ public class ArticleDetailDTO
     public string Title { get; set; }
     public string Content { get; set; }
     public bool IsPublic { get; set; }
-    public Domain.Entities.User Owner { get; set; }
+    public string Owner { get; set; }
     public DateTime DatePublished { get; set; }
     public DateTime DateLastModified { get; set; }
     public List<Comment>? Comments { get; set; }
-    public byte[]? Image { get; set; }
+    public string Image { get; set; }
     public Template Template { get; set; }
 
     public ArticleDetailDTO(Domain.Entities.Article article)
@@ -22,7 +22,7 @@ public class ArticleDetailDTO
         Title = article.Title;
         Content = article.Content;
         IsPublic = article.IsPublic;
-        Owner = article.Owner;
+        Owner = article.Owner.Username;
         DatePublished = article.DatePublished;
         DateLastModified = article.DateLastModified;
         Comments = article.Comments;

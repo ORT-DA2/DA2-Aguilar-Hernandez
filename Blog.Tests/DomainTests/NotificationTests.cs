@@ -16,13 +16,7 @@ public class NotificationTests
         DateTime time = new DateTime(DateTime.Now.Hour);
         List<Comment> comments = new List<Comment>();
         
-        var formFile = new Mock<IFormFile>();
-        formFile.Setup(f => f.Length).Returns(1234);
-        formFile.Setup(f => f.FileName).Returns("test.jpg");
-        formFile.Setup(f => f.ContentType).Returns("image/jpeg");
-        
-        using var ms = new MemoryStream();
-        var image = ms.ToArray();
+        var image = "test.jpg";
         
         User user = new User(){
             FirstName = "Nicolas",

@@ -1,6 +1,6 @@
 ﻿using Blog.Domain.Entities;
 using Blog.Domain.Enums;
-using Blog.Filters.Exceptions;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
 
@@ -31,8 +31,11 @@ public class ArticleLogic: IArticleLogic
         return _repository.GetLastTen();
     }
 
-    public Article CreateArticle(Article article)
+    public Article CreateArticle(Article article, Guid authorization)
     {
+        article.DatePublished = DateTime.Now;
+        article.DateLastModified = DateTime.Now;
+        article.Owner = _sessionLogic.GetLoggedUser(authorization);
         _repository.Insert(article);
         _repository.Save();
         return article;
@@ -52,14 +55,18 @@ public class ArticleLogic: IArticleLogic
             throw new NotFoundException("The article was not found");
         }
 
+        var userLogged = _sessionLogic.GetLoggedUser(authorization);
+
         if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Admin ))
         {
-            if (_sessionLogic.GetLoggedUser(authorization).Id != article.Owner.Id)
+            if (_sessionLogic.GetLoggedUser(authorization).Id != oldArticle.Owner.Id)
             {
                 throw new ArgumentException("You can´t update an article of other owner");
             }
         }
-
+        article.DateLastModified = DateTime.Now;
+        article.DatePublished = oldArticle.DatePublished;
+        article.Owner = oldArticle.Owner;
         oldArticle.UpdateAttributes(article);
         _repository.Update(oldArticle);
         _repository.Save();

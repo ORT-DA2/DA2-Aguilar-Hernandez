@@ -1,6 +1,6 @@
 using Blog.BusinessLogic;
 using Blog.Domain.Entities;
-using Blog.Filters.Exceptions;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers;
 using Blog.Models.In;

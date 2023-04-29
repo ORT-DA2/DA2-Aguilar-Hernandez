@@ -10,6 +10,8 @@ public class BlogDbContext: DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<UserRole> Roles { get; set; }
     public DbSet<Session> Sessions { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Article> Articles { get; set; }
 
     public BlogDbContext(DbContextOptions options): base(options)
     {
@@ -35,6 +37,11 @@ public class BlogDbContext: DbContext
         modelBuilder.Entity<UserRole>()
             .Property(ur => ur.Role)
             .HasConversion<string>();
+
+        modelBuilder.Entity<Comment>()
+            .HasOne(u => u.Owner)
+            .WithMany(c => c.Comments)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

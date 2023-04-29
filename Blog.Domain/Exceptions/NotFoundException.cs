@@ -1,4 +1,4 @@
-﻿namespace Blog.Filters.Exceptions;
+﻿namespace Blog.Domain.Exceptions;
 
 public class NotFoundException : Exception
 {

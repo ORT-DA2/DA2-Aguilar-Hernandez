@@ -1,5 +1,5 @@
 using Blog.Domain.Entities;
-using Blog.Filters.Exceptions;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.Models.In.Article;
 using Blog.Models.Out.Article;
@@ -60,12 +60,12 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateArticle([FromForm] CreateArticleDTO articleDto)
+        public IActionResult CreateArticle([FromForm] CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
         {
             try
             {
-                Article article = articleDto.ToEntity(articleDto.Image);
-                Article newArticle = _articleLogic.CreateArticle(article);
+                Article article = articleDto.ToEntity();
+                Article newArticle = _articleLogic.CreateArticle(article, Authorization);
                 return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
             }
             catch (ArgumentException ex)
@@ -81,7 +81,7 @@ namespace Blog.WebApi.Controllers
         {
             try
             {
-                Article article = articleDto.ToEntity(articleDto.Image);
+                Article article = articleDto.ToEntity();
                 Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
                 return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
             }

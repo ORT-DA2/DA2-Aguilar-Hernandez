@@ -12,7 +12,7 @@ public class Article
     public DateTime DatePublished { get; set; }
     public DateTime DateLastModified { get; set; }
     public List<Comment>? Comments { get; set; }
-    public byte[]? Image { get; set; }
+    public string Image { get; set; }
     public Template Template { get; set; }
     
     public void UpdateAttributes(Article article)

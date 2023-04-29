@@ -1,6 +1,6 @@
 ﻿using Blog.Models.In;
 using Blog.Domain.Entities;
-using Blog.Filters.Exceptions;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;

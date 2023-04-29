@@ -48,8 +48,8 @@ public class Repository<T> : IRepository<T> where T : class
         return _context.Set<T>();
     }
 
-    public IEnumerable<T> GetLastTen()
+    public virtual IEnumerable<T> GetLastTen()
     {
-        throw new NotImplementedException();
+        return _context.Set<T>();
     }
 }
