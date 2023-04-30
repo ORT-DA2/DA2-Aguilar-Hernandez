@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Blog.Domain.Entities;
+using Blog.IBusinessLogic;
 using Blog.IDataAccess;
 using Moq;
 
@@ -13,7 +14,11 @@ public class Comm
     {
         Comment comment = CreateComment();
         var mock = new Mock<IRepository<Comment>>(MockBehavior.Strict);
-        var logic = new CommentService(mock.Object);
+        var mockSession = new Mock<ISessionLogic>(MockBehavior.Strict);
+        var mockArticle = new Mock<IRepository<Article>>(MockBehavior.Strict);
+        var logic = new CommentLogic(mock.Object,mockArticle.Object, mockSession.Object);
+        mockArticle.Setup(c => c.GetById(It.IsAny<Expression<Func<Article, bool>>>()));
+        mockSession.Setup(c => c.GetLoggedUser(It.IsAny<Comment>()));
         mock.Setup(c => c.Insert(It.IsAny<Comment>()));
         mock.Setup(c => c.Save());
         var result = logic.AddNewComment(comment);
@@ -25,7 +30,7 @@ public class Comm
     {
         Comment comment = CreateComment();
         var mock = new Mock<IRepository<Comment>>();
-        var logic = new CommentService(mock.Object);
+        var logic = new CommentLogic(mock.Object);
         mock.Setup(o => o.GetById(It.IsAny<Expression<Func<Comment, bool>>>())).Returns(comment);
         mock.Setup(o => o.Save());
         logic.DeleteCommentById(comment.Id);

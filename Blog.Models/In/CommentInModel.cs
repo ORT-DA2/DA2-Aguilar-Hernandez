@@ -4,7 +4,6 @@ namespace Blog.Models.In;
 
 public class CommentInModel
 {
-    public Guid Owner { get; set; }
     public Guid Article { get; set; }
     public string Body { get; set; }
     public string? Reply { get; set; }

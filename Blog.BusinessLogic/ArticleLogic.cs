@@ -10,7 +10,7 @@ namespace Blog.BusinessLogic;
 public class ArticleLogic: IArticleLogic
 {
     private readonly IRepository<Article> _repository;
-    private readonly ISessionLogic _sessionLogic;
+    private static ISessionLogic _sessionLogic;
     public ArticleLogic(IRepository<Article> articleRepository, ISessionLogic sessionLogic)
     {
         _repository = articleRepository;
@@ -81,15 +81,8 @@ public class ArticleLogic: IArticleLogic
         var oldArticle = _repository.GetById(a => a.Id == id);
 
         ValidateNull(oldArticle);
+        ValidateUserOwner(oldArticle.Owner.Id, authorization);
         
-
-        if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Blogger ))
-        {
-            if (_sessionLogic.GetLoggedUser(authorization).Id != oldArticle.Owner.Id)
-            {
-                throw new ArgumentException("You can´t update an article of other owner");
-            }
-        }
         article.DateLastModified = DateTime.Now;
         article.DatePublished = oldArticle.DatePublished;
         article.Owner = oldArticle.Owner;
@@ -105,14 +98,7 @@ public class ArticleLogic: IArticleLogic
         var article = _repository.GetById(a => a.Id == articleId);
 
         ValidateNull(article);
-
-        if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Blogger ))
-        {
-            if (_sessionLogic.GetLoggedUser(authorization).Id != article.Owner.Id)
-            {
-                throw new ArgumentException("You can´t delete an article of other owner");
-            }
-        }
+        ValidateUserOwner(article.Owner.Id, authorization);
         
         _repository.Delete(article);
         _repository.Save();
@@ -131,6 +117,14 @@ public class ArticleLogic: IArticleLogic
         if (articles == null || !articles.Any())
         {
             throw new NotFoundException("The are no articles");
+        }
+    }
+
+    private static void ValidateUserOwner(Guid ownerId, Guid authorization)
+    {
+        if (_sessionLogic.GetLoggedUser(authorization).Id != ownerId)
+        {
+            throw new ArgumentException("You can´t delete an article of other owner");
         }
     }
     

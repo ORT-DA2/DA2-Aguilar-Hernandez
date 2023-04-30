@@ -35,6 +35,7 @@ public class SessionLogic: ISessionLogic
         {
             throw new InvalidCredentialException("Invalid credentials");
         }
+        
 
         Session session = new Session() { User = user };
         _sessionRepository.Insert(session);

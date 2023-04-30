@@ -18,6 +18,10 @@ public class ExceptionFilter:Attribute, IExceptionFilter
         {
             typeof(InvalidCredentialException)
         };
+        List<Type> errors400 = new List<Type>()
+        {
+            typeof(ArgumentException)
+        };
         ErrorDto response = new ErrorDto()
         {
             ErrorMessage = context.Exception.Message
@@ -29,6 +33,9 @@ public class ExceptionFilter:Attribute, IExceptionFilter
         }else if (errors404.Contains(errorType))
         {
             response.Code = 404;
+        }else if (errors400.Contains(errorType))
+        {
+            response.Code = 400;
         }
         else
         {

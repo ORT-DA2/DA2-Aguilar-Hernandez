@@ -1,5 +1,5 @@
 using Blog.Domain.Entities;
-using Blog.Domain.Exceptions;
+using Blog.Domain.Enums;
 using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
@@ -21,6 +21,8 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpGet("id/{id}")]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetArticleById([FromRoute] Guid id)
         {
             Article article = _articleLogic.GetArticleById(id);
@@ -28,12 +30,16 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetAllArticles()
         { 
             return Ok(_articleLogic.GetAllArticles());
         }
         
         [HttpGet("public")]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetAllPublicArticles()
         {
             return Ok(_articleLogic.GetAllPublicArticles());
@@ -41,6 +47,8 @@ namespace Blog.WebApi.Controllers
         }
         
         [HttpGet("{username}")]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetAllPrivateArticles([FromRoute] string username, [FromHeader] Guid authorization)
         {
             return Ok(_articleLogic.GetAllPrivateArticles(username, authorization));
@@ -48,56 +56,42 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpGet("search")]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetArticleByText([FromQuery] string text)
         {
             return Ok(_articleLogic.GetArticleByText(text));
         }
 
         [HttpPost]
-        public IActionResult CreateArticle([FromForm] CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
+        public IActionResult CreateArticle([FromBody] CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
         {
-            try
-            {
-                Article article = articleDto.ToEntity();
-                Article newArticle = _articleLogic.CreateArticle(article, Authorization);
-                return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            Article article = articleDto.ToEntity();
+            Article newArticle = _articleLogic.CreateArticle(article, Authorization);
+            return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
 
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateArticle([FromRoute] Guid id, [FromForm] CreateArticleDTO articleDto,
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
+        public IActionResult UpdateArticle([FromRoute] Guid id, [FromBody] CreateArticleDTO articleDto,
             [FromHeader] Guid Authorization)
         {
-            try
-            {
-                Article article = articleDto.ToEntity();
-                Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
-                return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            Article article = articleDto.ToEntity();
+            Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
+            return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult DeleteArticle([FromRoute] Guid id, [FromHeader] Guid Authorization)
         {
-            try
-            {
-                _articleLogic.DeleteArticle(id, Authorization);
-                return Ok($"Article with the id {id} was deleted");
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-
-            }
+            _articleLogic.DeleteArticle(id, Authorization);
+            return Ok($"Article with the id {id} was deleted");
         }
 
         [HttpGet("LastTenArticles")]

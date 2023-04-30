@@ -54,7 +54,6 @@ public class ArticleControllerTest
         {
             Title = "Angular Webpage",
             Content = "New features about angular are being developed",
-            Comments = new List<Comment>(){},
             Image = image,
             IsPublic = true,
             Template = Template.RectangleTop

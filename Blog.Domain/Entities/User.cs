@@ -70,15 +70,15 @@ public class User
         }
     }
 
-    public void ValidateUsernameLenght()
+    public void ValidatePasswordLenght()
     {
-        if (Username.Length > 16 || Username.Length < 5)
+        if (Password.Length > 16 || Password.Length < 5)
         {
             throw new ArgumentException("Password must be between 16 and 5 characters");
         }
     }
     
-    public void ValidatePasswordLenght()
+    public void ValidateUsernameLenght()
     {
         if (Username.Length > 12 || Username.Length < 4)
         {

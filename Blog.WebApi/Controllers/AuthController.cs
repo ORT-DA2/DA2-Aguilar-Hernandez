@@ -1,4 +1,3 @@
-using System.Security.Authentication;
 using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
@@ -8,6 +7,7 @@ namespace Blog.WebApi.Controllers
 {
     [Route("api/auth")]
     [ApiController]
+    [ExceptionFilter]
     public class AuthController : ControllerBase
     {
         private ISessionLogic _sessionService;
@@ -21,15 +21,8 @@ namespace Blog.WebApi.Controllers
         [Route("login")]
         public IActionResult Login([FromBody] LoginDto login)
         {
-            try
-            {
-                var token = _sessionService.Login(login.Username, login.Password);
-                return Ok(new{token = token});
-            }
-            catch (InvalidCredentialException ex)
-            {
-                return Unauthorized(ex.Message);
-            }
+            var token = _sessionService.Login(login.Username, login.Password);
+            return Ok(new{token = token});
         }
         
         [HttpDelete]

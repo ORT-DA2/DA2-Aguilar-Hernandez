@@ -28,11 +28,15 @@ public class UserLogic: IUserLogic
 
     public IEnumerable<User> GetAllUsers()
     {
-        return _repository.GetAll();
+        var users = _repository.GetAll();
+        ValidateListNull(users);
+        
+        return users;
     }
 
     public User CreateUser(User user)
     {
+        ValidateNull(user);
         GeneralValidation(user);
         _repository.Insert(user);
         _repository.Save();
@@ -90,6 +94,14 @@ public class UserLogic: IUserLogic
         if (user == null)
         {
             throw new NotFoundException("The user was not found");
+        }
+    }
+    
+    private static void ValidateListNull(IEnumerable<User> users)
+    {
+        if (users == null || !users.Any())
+        {
+            throw new NotFoundException("The are no users");
         }
     }
 }

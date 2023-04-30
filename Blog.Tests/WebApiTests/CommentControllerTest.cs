@@ -16,6 +16,9 @@ public class CommentControllerTest
     [TestMethod]
     public void AddingNewComment()
     {
+        var token = Guid.NewGuid();
+        var articleId = Guid.NewGuid();
+        
         Comment comment = CreateComment();
         
         CommentInModel commentIn = new CommentInModel()
@@ -30,16 +33,15 @@ public class CommentControllerTest
 
         CommentController commentController = new CommentController(commentService.Object);
 
-        commentService.Setup(c => c.AddNewComment(It.IsAny<Comment>())).Returns(comment);
+        commentService.Setup(c => c.AddNewComment(It.IsAny<Comment>(),articleId, token)).Returns(comment);
 
-        var result = commentController.PostNewComment(commentIn);
+        var result = commentController.PostNewComment(commentIn, token);
         
         commentService.VerifyAll();
         var resultObject = result as OkObjectResult;
         var userResult = resultObject.Value as CommentOutModel;
         
         Assert.AreEqual(commentExpected.Id,userResult.Id);
-        Assert.AreEqual(commentExpected.Owner, userResult.Owner);
         Assert.AreEqual(commentExpected.Article, userResult.Article);
         Assert.AreEqual(commentExpected.Body, userResult.Body);
         Assert.AreEqual(commentExpected.Reply,userResult.Reply);
