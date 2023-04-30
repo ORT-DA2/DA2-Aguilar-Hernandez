@@ -117,7 +117,7 @@ public class ArticleControllerTest
             DateLastModified = DateTime.Now,
             DatePublished = DateTime.Now,
             Image = image,
-            IsPublic = true,
+            IsPublic = false,
             Template = Template.RectangleTop
             
         };
@@ -147,7 +147,7 @@ public class ArticleControllerTest
             DateLastModified = DateTime.Now,
             DatePublished = DateTime.Now,
             Image = image,
-            IsPublic = true,
+            IsPublic = false,
             Template = Template.RectangleTop
             
         };
@@ -416,5 +416,39 @@ public class ArticleControllerTest
         _articlenMock.Setup(o => o.GetLastTen()).Throws(new NotFoundException("There are no articles."));
         var result = controller.GetLastTen();
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+    
+    [TestMethod]
+    public void GetPublicArticleSuccessTest()
+    {
+        var articles = _articles;
+        articles.Remove(_articleTest5);
+        articles.Remove(_articleTest7);
+        
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetAllPublicArticles()).Returns(articles);
+        var result = controller.GetAllPublicArticles();
+        var okResult = result as OkObjectResult;
+        var dto = okResult.Value as List<Article>;
+        Assert.AreEqual(articles, dto);
+    }
+    
+    [TestMethod]
+    public void GetPrivateArticleSuccessTest()
+    {
+        var articles = new List<Article>()
+        {
+            _articleTest5,
+            _articleTest7
+        };
+        
+        var token = Guid.NewGuid();
+
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetAllPrivateArticles(_user.Username, token)).Returns(articles);
+        var result = controller.GetAllPrivateArticles(_user.Username, token);
+        var okResult = result as OkObjectResult;
+        var dto = okResult.Value as List<Article>;
+        Assert.AreEqual(articles, dto);
     }
 }

@@ -1,5 +1,6 @@
 using Blog.Domain.Entities;
 using Blog.Domain.Exceptions;
+using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
 using Blog.Models.Out;
@@ -9,6 +10,7 @@ namespace Blog.WebApi.Controllers
 {
     [Route("api/articles")]
     [ApiController]
+    [ExceptionFilter]
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleLogic _articleLogic;
@@ -18,45 +20,37 @@ namespace Blog.WebApi.Controllers
             _articleLogic = articleLogic;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public IActionResult GetArticleById([FromRoute] Guid id)
         {
-            try
-            {
-                Article article = _articleLogic.GetArticleById(id);
-                return Ok(new ArticleDetailDTO(article));
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound("There are no articles with the id");
-            }
+            Article article = _articleLogic.GetArticleById(id);
+            return Ok(new ArticleDetailDTO(article));
         }
 
         [HttpGet]
         public IActionResult GetAllArticles()
+        { 
+            return Ok(_articleLogic.GetAllArticles());
+        }
+        
+        [HttpGet("public")]
+        public IActionResult GetAllPublicArticles()
         {
-            try
-            {
-                return Ok(_articleLogic.GetAllArticles());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound("There are no articles.");
-            }
+            return Ok(_articleLogic.GetAllPublicArticles());
+
+        }
+        
+        [HttpGet("{username}")]
+        public IActionResult GetAllPrivateArticles([FromRoute] string username, [FromHeader] Guid authorization)
+        {
+            return Ok(_articleLogic.GetAllPrivateArticles(username, authorization));
 
         }
 
         [HttpGet("search")]
         public IActionResult GetArticleByText([FromQuery] string text)
         {
-            try
-            {
-                return Ok(_articleLogic.GetArticleByText(text));
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound("There are no articles with that text.");
-            }
+            return Ok(_articleLogic.GetArticleByText(text));
         }
 
         [HttpPost]
@@ -109,14 +103,7 @@ namespace Blog.WebApi.Controllers
         [HttpGet("LastTenArticles")]
         public IActionResult GetLastTen()
         {
-            try
-            {
-                return Ok(_articleLogic.GetLastTen());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound("There are no articles.");
-            }
+            return Ok(_articleLogic.GetLastTen());
         }
     }
 }

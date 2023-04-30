@@ -20,8 +20,6 @@ public class CommentControllerTest
         
         CommentInModel commentIn = new CommentInModel()
         {
-            Owner = comment.Owner,
-            Article = comment.Article,
             Body = comment.Body,
             Reply = comment.Reply
         };

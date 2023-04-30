@@ -11,6 +11,7 @@ namespace Blog.WebApi.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [ExceptionFilter]
     public class UsersController : ControllerBase
     {
         private readonly IUserLogic _userLogic;
@@ -21,7 +22,6 @@ namespace Blog.WebApi.Controllers
         }
         
         [ServiceFilter(typeof(AuthorizationFilter))]
-        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
         [HttpGet("{id}")]
         public IActionResult GetUserById([FromRoute] Guid id)
         {

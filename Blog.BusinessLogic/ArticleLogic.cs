@@ -3,6 +3,7 @@ using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.BusinessLogic;
 
@@ -18,17 +19,43 @@ public class ArticleLogic: IArticleLogic
 
     public Article GetArticleById(Guid articleId)
     {
-        return _repository.GetById(a => a.Id == articleId);
+        var article = _repository.GetById(a => a.Id == articleId);
+        ValidateNull(article);
+        return article;
     }
 
     public IEnumerable<Article> GetAllArticles()
     {
-        return _repository.GetAll();
+        var articles = _repository.GetAll();
+        ValidateListNull(articles);
+        return articles;
+    }
+    
+    public IEnumerable<Article> GetAllPublicArticles()
+    {
+        var articles = _repository.GetPublicAll();
+        ValidateListNull(articles);
+        return articles;
     }
     
     public IEnumerable<Article> GetLastTen()
     {
-        return _repository.GetLastTen();
+        var articles = _repository.GetLastTen();
+        ValidateListNull(articles);
+        return articles;
+    }
+
+    public IEnumerable<Article> GetAllPrivateArticles(string username, Guid authorization)
+    {
+        var articles = _repository.GetPrivateAll(username);
+        ValidateListNull(articles);
+        
+        if (_sessionLogic.GetLoggedUser(authorization).Username != username)
+        {
+            throw new ArgumentException("You can´t update an article of other owner");
+        }
+
+        return articles;
     }
 
     public Article CreateArticle(Article article, Guid authorization)
@@ -43,19 +70,18 @@ public class ArticleLogic: IArticleLogic
 
     public IEnumerable<Article> GetArticleByText(string text)
     {
-        return _repository.GetByText(text);
+        var articles = _repository.GetByText(text);
+        ValidateListNull(articles);
+        
+        return articles;
     }
 
     public Article UpdateArticle(Guid id, Article article, Guid authorization)
     {
         var oldArticle = _repository.GetById(a => a.Id == id);
 
-        if (oldArticle == null)
-        {
-            throw new NotFoundException("The article was not found");
-        }
-
-        var userLogged = _sessionLogic.GetLoggedUser(authorization);
+        ValidateNull(oldArticle);
+        
 
         if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Blogger ))
         {
@@ -77,11 +103,8 @@ public class ArticleLogic: IArticleLogic
     public void DeleteArticle(Guid articleId, Guid authorization)
     {
         var article = _repository.GetById(a => a.Id == articleId);
-        
-        if (article == null)
-        {
-            throw new NotFoundException("The article was not found");
-        }
+
+        ValidateNull(article);
 
         if (_sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Blogger ))
         {
@@ -93,6 +116,22 @@ public class ArticleLogic: IArticleLogic
         
         _repository.Delete(article);
         _repository.Save();
+    }
+    
+    private static void ValidateNull(Article article)
+    {
+        if (article == null)
+        {
+            throw new NotFoundException("The article was not found");
+        }
+    }
+    
+    private static void ValidateListNull(IEnumerable<Article> articles)
+    {
+        if (articles == null || !articles.Any())
+        {
+            throw new NotFoundException("The are no articles");
+        }
     }
     
 }
