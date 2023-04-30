@@ -16,6 +16,8 @@ public class CommentControllerTest
     [TestMethod]
     public void AddingNewComment()
     {
+        var token = Guid.NewGuid();
+        var article = new Mock<Article>();
         Comment comment = CreateComment();
         
         CommentInModel commentIn = new CommentInModel()
@@ -26,16 +28,16 @@ public class CommentControllerTest
 
         CommentOutModel commentExpected = new CommentOutModel(comment);
         
-        var commentService = new Mock<ICommentLogic>(MockBehavior.Strict);
-
-        CommentController commentController = new CommentController(commentService.Object);
-
-        commentService.Setup(c => c.AddNewComment(It.IsAny<Comment>())).Returns(comment);
-
-        var result = commentController.PostNewComment(commentIn);
+        var commentLogic = new Mock<ICommentLogic>(MockBehavior.Strict);
         
-        commentService.VerifyAll();
-        var resultObject = result as OkObjectResult;
+        CommentController commentController = new CommentController(commentLogic.Object);
+
+        commentLogic.Setup(c => c.AddNewComment(It.IsAny<Comment>(), token, article.Object.Id)).Returns(comment);
+
+        var result = commentController.PostNewComment(commentIn,token, article.Object.Id);
+        
+        commentLogic.VerifyAll();
+        var resultObject = result as CreatedResult;
         var userResult = resultObject.Value as CommentOutModel;
         
         Assert.AreEqual(commentExpected.Id,userResult.Id);
