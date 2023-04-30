@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Blog.Domain.Entities;
 using Blog.IDataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +50,16 @@ public class Repository<T> : IRepository<T> where T : class
     }
 
     public virtual IEnumerable<T> GetLastTen()
+    {
+        return _context.Set<T>();
+    }
+
+    public virtual IEnumerable<T> GetPublicAll()
+    {
+        return _context.Set<T>();
+    }
+
+    public virtual IEnumerable<T> GetPrivateAll(string username)
     {
         return _context.Set<T>();
     }

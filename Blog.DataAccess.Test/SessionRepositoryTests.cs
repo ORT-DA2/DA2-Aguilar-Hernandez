@@ -1,8 +1,7 @@
-﻿using Blog.DataAccess;
-using Blog.Domain.Entities;
+﻿using Blog.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Tests.DataAccessTests;
+namespace Blog.DataAccess.Test;
 
 [TestClass]
 public class SessionRepositoryTests

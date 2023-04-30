@@ -19,7 +19,11 @@ public class UserLogic: IUserLogic
     }
     public User GetUserById(Guid id)
     {
-        return _repository.GetById(u => u.Id == id);
+        var user = _repository.GetById(u => u.Id == id);
+        
+        ValidateNull(user);
+        
+        return user;
     }
 
     public IEnumerable<User> GetAllUsers()
@@ -41,10 +45,7 @@ public class UserLogic: IUserLogic
         
         var oldUser = _repository.GetById(u => u.Id == id);
 
-        if (oldUser == null)
-        {
-            throw new NotFoundException("The user was not found");
-        }
+        ValidateNull(oldUser);
 
         if (_sessionLogic.GetLoggedUser(auth).Roles.All(ur => ur.Role != Role.Admin ))
         {
@@ -64,11 +65,8 @@ public class UserLogic: IUserLogic
     public void DeleteUser(Guid id)
     {
         var user = _repository.GetById(u => u.Id == id);
-        
-        if (user == null)
-        {
-            throw new NotFoundException("The user was not found");
-        }
+
+        ValidateNull(user);
         
         _repository.Delete(user);
         _repository.Save();
@@ -85,5 +83,13 @@ public class UserLogic: IUserLogic
         user.ValidateAlfanumericUsername();
         user.ValidateUsernameLenght();
         user.ValidatePasswordLenght();
+    }
+
+    private static void ValidateNull(User user)
+    {
+        if (user == null)
+        {
+            throw new NotFoundException("The user was not found");
+        }
     }
 }

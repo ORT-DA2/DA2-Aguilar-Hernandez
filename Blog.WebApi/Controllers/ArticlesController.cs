@@ -1,121 +1,109 @@
 using Blog.Domain.Entities;
 using Blog.Domain.Exceptions;
+using Blog.Filters;
 using Blog.IBusinessLogic;
-using Blog.Models.In.Article;
-using Blog.Models.Out.Article;
+using Blog.Models.In;
+using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Blog.WebApi.Controllers;
-
-[Route("api/articles")]
-[ApiController]
-public class ArticlesController : ControllerBase
+namespace Blog.WebApi.Controllers
 {
-    private readonly IArticleLogic _articleLogic;
-
-    public ArticlesController(IArticleLogic articleLogic)
+    [Route("api/articles")]
+    [ApiController]
+    [ExceptionFilter]
+    public class ArticlesController : ControllerBase
     {
-        _articleLogic = articleLogic;
-    }
+        private readonly IArticleLogic _articleLogic;
 
-    [HttpGet("{id}")]
-    public IActionResult GetArticleById([FromRoute] Guid id)
-    {
-        try
+        public ArticlesController(IArticleLogic articleLogic)
+        {
+            _articleLogic = articleLogic;
+        }
+
+        [HttpGet("id/{id}")]
+        public IActionResult GetArticleById([FromRoute] Guid id)
         {
             Article article = _articleLogic.GetArticleById(id);
             return Ok(new ArticleDetailDTO(article));
         }
-        catch (NotFoundException ex)
-        {
-            return NotFound("There are no articles with the id");
-        }
-    }
 
-    [HttpGet]
-    public IActionResult GetAllArticles()
-    {
-        try
-        {
+        [HttpGet]
+        public IActionResult GetAllArticles()
+        { 
             return Ok(_articleLogic.GetAllArticles());
         }
-        catch (NotFoundException ex)
+        
+        [HttpGet("public")]
+        public IActionResult GetAllPublicArticles()
         {
-            return NotFound("There are no articles.");
+            return Ok(_articleLogic.GetAllPublicArticles());
+
+        }
+        
+        [HttpGet("{username}")]
+        public IActionResult GetAllPrivateArticles([FromRoute] string username, [FromHeader] Guid authorization)
+        {
+            return Ok(_articleLogic.GetAllPrivateArticles(username, authorization));
+
         }
 
-    }
-
-    [HttpGet("search")]
-    public IActionResult GetArticleByText([FromQuery] string text)
-    {
-        try
+        [HttpGet("search")]
+        public IActionResult GetArticleByText([FromQuery] string text)
         {
             return Ok(_articleLogic.GetArticleByText(text));
         }
-        catch (NotFoundException ex)
-        {
-            return NotFound("There are no articles with that text.");
-        }
-    }
 
-    [HttpPost]
-    public IActionResult CreateArticle([FromForm] CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
-    {
-        try
+        [HttpPost]
+        public IActionResult CreateArticle([FromForm] CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
         {
-            Article article = articleDto.ToEntity();
-            Article newArticle = _articleLogic.CreateArticle(article, Authorization);
-            return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-
-    }
-
-    [HttpPut("{id}")]
-    public IActionResult UpdateArticle([FromRoute] Guid id, [FromForm] CreateArticleDTO articleDto,
-        [FromHeader] Guid Authorization)
-    {
-        try
-        {
-            Article article = articleDto.ToEntity();
-            Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
-            return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpDelete("{id}")]
-    public IActionResult DeleteArticle([FromRoute] Guid id, [FromHeader] Guid Authorization)
-    {
-        try
-        {
-            _articleLogic.DeleteArticle(id, Authorization);
-            return Ok($"Article with the id {id} was deleted");
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound(ex.Message);
+            try
+            {
+                Article article = articleDto.ToEntity();
+                Article newArticle = _articleLogic.CreateArticle(article, Authorization);
+                return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
-    }
 
-    [HttpGet("LastTenArticles")]
-    public IActionResult GetLastTen()
-    {
-        try
+        [HttpPut("{id}")]
+        public IActionResult UpdateArticle([FromRoute] Guid id, [FromForm] CreateArticleDTO articleDto,
+            [FromHeader] Guid Authorization)
+        {
+            try
+            {
+                Article article = articleDto.ToEntity();
+                Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
+                return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteArticle([FromRoute] Guid id, [FromHeader] Guid Authorization)
+        {
+            try
+            {
+                _articleLogic.DeleteArticle(id, Authorization);
+                return Ok($"Article with the id {id} was deleted");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+
+            }
+        }
+
+        [HttpGet("LastTenArticles")]
+        public IActionResult GetLastTen()
         {
             return Ok(_articleLogic.GetLastTen());
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound("There are no articles.");
         }
     }
 }

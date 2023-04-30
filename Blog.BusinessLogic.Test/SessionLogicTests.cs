@@ -1,11 +1,10 @@
 ﻿using System.Linq.Expressions;
 using System.Security.Authentication;
-using Blog.BusinessLogic;
 using Blog.Domain.Entities;
 using Blog.IDataAccess;
 using Moq;
 
-namespace Blog.Tests.BusinessLogicTests;
+namespace Blog.BusinessLogic.Test;
 
 [TestClass]
 public class SessionLogicTests

@@ -1,6 +1,6 @@
-﻿using Blog.Models.In.UserRole;
+﻿using Blog.Models.In;
 
-namespace Blog.Models.Out.User;
+namespace Blog.Models.Out;
 
 public class UserDetailDTO
 {
