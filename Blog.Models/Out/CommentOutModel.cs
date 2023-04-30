@@ -9,6 +9,7 @@ public class CommentOutModel
     public string Article { get; set; }
     public string Body { get; set; }
     public string? Reply { get; set; }
+    public DateTime DatePublished { get; set; }
     public CommentOutModel(Comment comment)
     {
         Id = comment.Id;
@@ -16,5 +17,6 @@ public class CommentOutModel
         Article = comment.Article.Title;
         Body = comment.Body;
         Reply = comment.Reply;
+        DatePublished = comment.DatePublished;
     }
 }

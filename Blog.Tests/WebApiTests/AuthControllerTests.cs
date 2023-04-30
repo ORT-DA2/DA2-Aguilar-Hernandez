@@ -48,6 +48,7 @@ public class AuthControllerTests
     }
     
     [TestMethod]
+    [ExpectedException(typeof(InvalidCredentialException))]
     public void LoginFailTest()
     {
         LoginDto session = new LoginDto()
@@ -58,8 +59,7 @@ public class AuthControllerTests
 
         var controller = new AuthController(_sessionMock.Object);
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
-        var result = controller.Login(session);
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
+        controller.Login(session);
     }
     
     [TestMethod]

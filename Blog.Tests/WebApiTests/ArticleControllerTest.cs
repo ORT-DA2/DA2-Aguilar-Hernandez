@@ -254,13 +254,13 @@ public class ArticleControllerTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException),
+        "There are no articles with the id")]
     public void GetByIdInvalidArticleTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetArticleById(_articleTest.Id)).Throws(new NotFoundException("There are no articles with the id"));
-        var result = controller.GetArticleById(_articleTest.Id);
-
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        controller.GetArticleById(_articleTest.Id);
     }
 
     [TestMethod]
@@ -284,16 +284,14 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException),
+        "There are no articles with that text.")]
     public void GetArticleByTextFailTest()
     {
         string textRecibed = "Hello";
-        
-        
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetArticleByText(textRecibed)).Throws(new NotFoundException("There are no articles with that text."));;
-        var result = controller.GetArticleByText(textRecibed);
-        
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        controller.GetArticleByText(textRecibed);
     }
 
     [TestMethod]
@@ -314,12 +312,13 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException),
+        "There are no articles.")]
     public void GetAllArticlesInvalidTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetAllArticles()).Throws(new NotFoundException("There are no articles."));
-        var result = controller.GetAllArticles();
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        controller.GetAllArticles();
     }
     
     [TestMethod]
@@ -336,6 +335,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
     public void CreateInvalidArticleTest()
     {
         var token = Guid.NewGuid();
@@ -362,6 +362,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
     public void UpdateArticleFailTest()
     {
         var token = Guid.NewGuid();
@@ -385,6 +386,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
     public void DeleteArticleFailTest()
     {
         var token = Guid.NewGuid();
@@ -409,6 +411,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
     public void GetLastTenInvalidTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);

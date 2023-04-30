@@ -1,5 +1,6 @@
 using Blog.BusinessLogic;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers;
@@ -16,32 +17,51 @@ public class CommentControllerTest
     [TestMethod]
     public void AddingNewComment()
     {
-        var token = Guid.NewGuid();
-        var articleId = Guid.NewGuid();
+        var user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Email = "nicolas@exmaple.com",
+            Password = "123456",
+            Roles = new List<UserRole>()
+
+        };
         
-        Comment comment = CreateComment();
+        var articleTest = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = ".NET 6 Webpage",
+            Content = "New features about .NET are being developed",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = "test.jpg",
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
+        var token = Guid.NewGuid();
+        var comment = CreateComment();
         
         CommentInModel commentIn = new CommentInModel()
         {
+            ArticleId = articleTest.Id,
             Body = comment.Body,
             Reply = comment.Reply
         };
 
         CommentOutModel commentExpected = new CommentOutModel(comment);
-        
-        var commentService = new Mock<ICommentLogic>(MockBehavior.Strict);
-
-        CommentController commentController = new CommentController(commentService.Object);
-
-        commentService.Setup(c => c.AddNewComment(It.IsAny<Comment>(),articleId, token)).Returns(comment);
-
+        var commentLogic = new Mock<ICommentLogic>(MockBehavior.Loose);
+        CommentController commentController = new CommentController(commentLogic.Object);
+        commentLogic.Setup(c => c.AddNewComment(It.IsAny<Comment>(),commentIn.ArticleId, token)).Returns(comment);
         var result = commentController.PostNewComment(commentIn, token);
-        
-        commentService.VerifyAll();
-        var resultObject = result as OkObjectResult;
+        var resultObject = result as CreatedResult;
         var userResult = resultObject.Value as CommentOutModel;
-        
-        Assert.AreEqual(commentExpected.Id,userResult.Id);
+        commentLogic.VerifyAll();
         Assert.AreEqual(commentExpected.Article, userResult.Article);
         Assert.AreEqual(commentExpected.Body, userResult.Body);
         Assert.AreEqual(commentExpected.Reply,userResult.Reply);

@@ -54,6 +54,7 @@ public class UserControllerTests
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
     public void GetByIdNotFoundUserTest()
     {
         User user = new User()
@@ -120,6 +121,7 @@ public class UserControllerTests
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
     public void GetAllUsersNotFoundTest()
     {
         var mock = new Mock<IUserLogic>(MockBehavior.Strict);
@@ -175,6 +177,7 @@ public class UserControllerTests
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
     public void CreateInvalidUser()
     {
         CreateUserDTO userDTO = new CreateUserDTO()
@@ -199,9 +202,8 @@ public class UserControllerTests
 
         var controller = new UsersController(mock.Object);
         mock.Setup(o => o.CreateUser(It.IsAny<User>())).Throws(new ArgumentException());;
-        var result = controller.CreateUser(userDTO);
+        controller.CreateUser(userDTO);
         mock.VerifyAll();
-        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
     
     [TestMethod]
@@ -249,6 +251,7 @@ public class UserControllerTests
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
     public void UpdateInvalidUser()
     {
         var id = new Guid("f2929c98-e6f8-4d48-8d36-9eccb6fe7558");
@@ -277,9 +280,8 @@ public class UserControllerTests
 
         var controller = new UsersController(mock.Object);
         mock.Setup(o => o.UpdateUser(id, It.IsAny<User>(), token)).Throws(new ArgumentException());
-        var result = controller.UpdateUser(id, userDTO, token);
+        controller.UpdateUser(id, userDTO, token);
         mock.VerifyAll();
-        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
     
     [TestMethod]
@@ -307,6 +309,7 @@ public class UserControllerTests
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
     public void DeleteInvalidUser()
     {
         User user = new User()
@@ -324,9 +327,8 @@ public class UserControllerTests
 
         var controller = new UsersController(mock.Object);
         mock.Setup(o => o.DeleteUser(user.Id)).Throws(new NotFoundException("There are no users."));
-        var result = controller.DeleteUser(user.Id);
+        controller.DeleteUser(user.Id);
         mock.VerifyAll();
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
     
     

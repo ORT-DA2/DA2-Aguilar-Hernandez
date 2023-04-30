@@ -19,4 +19,9 @@ public class UserRepository: Repository<User>
     {
         return _context.Set<User>().Include(u => u.Roles).FirstOrDefault(expression);
     }
+
+    public User GetByUsername(string username)
+    {
+        return _context.Set<User>().Include(u => u.Roles).Where(u => u.Username == username).FirstOrDefault();
+    }
 }

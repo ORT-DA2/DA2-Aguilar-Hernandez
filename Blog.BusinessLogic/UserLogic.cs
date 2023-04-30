@@ -36,6 +36,8 @@ public class UserLogic: IUserLogic
 
     public User CreateUser(User user)
     {
+        var userExist = _repository.GetByUsername(u => u.Username == user.Username);
+        UserAlreadyExist(userExist);
         ValidateNull(user);
         GeneralValidation(user);
         _repository.Insert(user);
@@ -50,6 +52,8 @@ public class UserLogic: IUserLogic
         var oldUser = _repository.GetById(u => u.Id == id);
 
         ValidateNull(oldUser);
+        var userExist = _repository.GetByUsername(u => u.Username == userUpdated.Username);
+        UsernameAlreadyExistUpdate(userExist, oldUser);
 
         if (_sessionLogic.GetLoggedUser(auth).Roles.All(ur => ur.Role != Role.Admin ))
         {
@@ -87,6 +91,22 @@ public class UserLogic: IUserLogic
         user.ValidateAlfanumericUsername();
         user.ValidateUsernameLenght();
         user.ValidatePasswordLenght();
+    }
+
+    private static void UserAlreadyExist(User user)
+    {
+        if (user != null)
+        {
+            throw new ArgumentException("User already exists");
+        }
+    }
+    
+    private static void UsernameAlreadyExistUpdate(User user, User oldUser)
+    {
+        if (user != null && user.Id != oldUser.Id)
+        {
+            throw new ArgumentException("User with that username already exists");
+        }
     }
 
     private static void ValidateNull(User user)

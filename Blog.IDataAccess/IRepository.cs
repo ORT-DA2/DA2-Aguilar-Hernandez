@@ -16,4 +16,5 @@ public interface IRepository<T> where T : class
     IEnumerable<T> GetLastTen();
     IEnumerable<T> GetPublicAll();
     IEnumerable<T> GetPrivateAll(string username);
+    T? GetByUsername(Expression<Func<T, bool>> expression);
 }

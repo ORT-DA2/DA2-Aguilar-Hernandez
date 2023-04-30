@@ -63,4 +63,10 @@ public class Repository<T> : IRepository<T> where T : class
     {
         return _context.Set<T>();
     }
+
+    public T? GetByUsername(Expression<Func<T, bool>> expression)
+    {
+        return _context.Set<T>().FirstOrDefault(expression);
+    }
+    
 }

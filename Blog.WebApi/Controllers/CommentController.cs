@@ -6,42 +6,42 @@ using Blog.IBusinessLogic;
 using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Blog.WebApi.Controllers
-{
-    [ApiController]
-    [Route("api/comments")]
-    [ExceptionFilter]
-    public class CommentController : ControllerBase
-    {
-        private readonly ICommentLogic _commentService;
-        public CommentController(ICommentLogic commentService)
-        {
-            _commentService = commentService;
-        }
+namespace Blog.WebApi.Controllers;
 
-        
-        [HttpPost]
-        public IActionResult PostNewComment([FromBody] CommentInModel commentInModel, [FromHeader] Guid Authorization)
-        {
+[ApiController]
+[Route("api/comments")]
+[ExceptionFilter]
+[ServiceFilter(typeof(AuthorizationFilter))]
+public class CommentController : ControllerBase{
+
+    private readonly ICommentLogic _commentLogic;
+    public CommentController(ICommentLogic commentLogic)
+    {
+        _commentLogic = commentLogic;
+    }
+
+
+    [HttpPost]
+    public IActionResult PostNewComment([FromBody] CommentInModel commentInModel, [FromHeader] Guid Authorization)
+    {
             Comment comment = commentInModel.ToEntity();
-            Comment result = _commentService.AddNewComment(comment, commentInModel.Article, Authorization);
+            Comment result = _commentLogic.AddNewComment(comment, commentInModel.ArticleId, Authorization);
             CommentOutModel commentOut = new CommentOutModel(result);
-            return Ok(commentOut);
-        }
+            return Created("Comment created ",commentOut);
+    }
         
-        [HttpDelete("{id}")]
-        public IActionResult DeleteCommentById([FromRoute] Guid id)
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCommentById([FromRoute] Guid id)
+    {
+        try
         {
-            try
-            {
-                _commentService.DeleteCommentById(id);
-                return Ok($"Comment with the id {id} was deleted");
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            _commentLogic.DeleteCommentById(id);
+            return Ok($"Comment with the id {id} was deleted");
         }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
         
-    }    
 }
