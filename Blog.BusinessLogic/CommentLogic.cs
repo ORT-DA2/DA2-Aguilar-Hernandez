@@ -8,13 +8,19 @@ namespace Blog.BusinessLogic;
 public class CommentLogic: ICommentLogic
 {
     private readonly IRepository<Comment> _repository;
-
-    public CommentLogic(IRepository<Comment> repository)
+    private readonly ISessionLogic _sessionLogic;
+    private readonly IArticleLogic _articleLogic;
+    public CommentLogic(IRepository<Comment> repository, ISessionLogic sessionLogic, IArticleLogic articleLogic)
     {
         _repository = repository;
+        _sessionLogic = sessionLogic;
+        _articleLogic = articleLogic;
     }
-    public Comment AddNewComment(Comment comment)
+    public Comment AddNewComment(Comment comment, Guid authorization, Guid articleId)
     {
+        comment.Owner = _sessionLogic.GetLoggedUser(authorization);
+        comment.Article = _articleLogic.GetArticleById(articleId); 
+        comment.DatePublished = DateTime.Now;
         _repository.Insert(comment);
         _repository.Save();
         return comment;

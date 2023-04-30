@@ -4,19 +4,19 @@ namespace Blog.Models.In;
 
 public class CommentInModel
 {
-    public Domain.Entities.User Owner { get; set; }
-    public Domain.Entities.Article Article { get; set; }
+    public Guid OwnerId { get; set; }
+    public Guid ArticleId { get; set; }
     public string Body { get; set; }
     public string? Reply { get; set; }
-
+    public DateTime DatePublished { get; set; }
+    
     public Comment ToEntity()
     {
         return new Comment()
         {
-            Owner = this.Owner,
-            Article = this.Article,
             Body = this.Body,
-            Reply = this.Reply
+            Reply = this.Reply,
+            DatePublished = this.DatePublished
         };
     }
 }
