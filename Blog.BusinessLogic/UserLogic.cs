@@ -82,7 +82,7 @@ public class UserLogic: IUserLogic
         _repository.Save();
     }
 
-    private static void GeneralValidation(User user)
+    public void GeneralValidation(User user)
     {
         user.FirstNameValidation();
         user.UsernameValidation();
@@ -95,7 +95,7 @@ public class UserLogic: IUserLogic
         user.ValidatePasswordLenght();
     }
 
-    private static void UserAlreadyExist(User user)
+    public void UserAlreadyExist(User user)
     {
         if (user != null)
         {
@@ -103,7 +103,7 @@ public class UserLogic: IUserLogic
         }
     }
     
-    private static void UsernameAlreadyExistUpdate(User user, User oldUser)
+    public static void UsernameAlreadyExistUpdate(User user, User oldUser)
     {
         if (user != null && user.Id != oldUser.Id)
         {
@@ -111,7 +111,7 @@ public class UserLogic: IUserLogic
         }
     }
     
-    private static void EmailAlreadyExistUpdate(User user, User oldUser)
+    public static void EmailAlreadyExistUpdate(User user, User oldUser)
     {
         if (user != null && user.Id != oldUser.Id)
         {
@@ -119,7 +119,7 @@ public class UserLogic: IUserLogic
         }
     }
 
-    private static void ValidateNull(User user)
+    public void ValidateNull(User user)
     {
         if (user == null)
         {
@@ -127,7 +127,7 @@ public class UserLogic: IUserLogic
         }
     }
     
-    private static void ValidateListNull(IEnumerable<User> users)
+    public void ValidateListNull(IEnumerable<User> users)
     {
         if (users == null || !users.Any())
         {

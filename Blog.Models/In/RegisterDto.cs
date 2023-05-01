@@ -29,7 +29,6 @@ public class RegisterDto
             Password = Password,
             Email = Email,
             Roles = rolList
-            
         };
     }
 }

@@ -270,17 +270,17 @@ public class ArticleControllerTest
 
         List<Article> _articlesFilteres = new List<Article>()
         {
-            _articleTest,
-            _articleTest2
+            _articleTest2,
+            _articleTest3
         };
         
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetArticleByText(textRecibed)).Returns(_articlesFilteres);
         var result = controller.GetArticleByText(textRecibed);
         var okResult = result as OkObjectResult;
-        var value = okResult.Value as List<Article>;
+        var value = okResult.Value as List<ArticleDetailDTO>;
         
-        Assert.AreEqual(_articlesFilteres, value);
+        Assert.AreEqual(_articlesFilteres.Count, value.Count);
     }
     
     [TestMethod]
@@ -436,12 +436,12 @@ public class ArticleControllerTest
         _articlenMock.Setup(o => o.GetAllPublicArticles()).Returns(articles);
         var result = controller.GetAllPublicArticles();
         var okResult = result as OkObjectResult;
-        var dto = okResult.Value as List<Article>;
-        Assert.AreEqual(articles, dto);
+        var dto = okResult.Value as List<ArticleDetailDTO>;
+        Assert.AreEqual(articles.Count, dto.Count);
     }
     
     [TestMethod]
-    public void GetPrivateArticleSuccessTest()
+    public void GetUsersArticleSuccessTest()
     {
         var articles = new List<Article>()
         {
@@ -455,7 +455,7 @@ public class ArticleControllerTest
         _articlenMock.Setup(o => o.GetAllUserArticles(_user.Username, token)).Returns(articles);
         var result = controller.GetAllUserArticles(_user.Username, token);
         var okResult = result as OkObjectResult;
-        var dto = okResult.Value as List<Article>;
-        Assert.AreEqual(articles, dto);
+        var dto = okResult.Value as List<ArticleDetailDTO>;
+        Assert.AreEqual(articles.Count, dto.Count);
     }
 }

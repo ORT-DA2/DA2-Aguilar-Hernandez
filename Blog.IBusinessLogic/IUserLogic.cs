@@ -10,4 +10,7 @@ public interface IUserLogic
         public User UpdateUser(Guid id, User user, Guid auth);
         public void DeleteUser(Guid id);
 
+        void UserAlreadyExist(User userExist);
+        void ValidateNull(User user);
+        void GeneralValidation(User user);
 }

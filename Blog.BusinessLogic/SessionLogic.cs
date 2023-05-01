@@ -9,11 +9,13 @@ public class SessionLogic: ISessionLogic
 {
     private IRepository<Session> _sessionRepository;
     private IRepository<User> _userRepository;
+    private IUserLogic _userLogic;
 
-    public SessionLogic(IRepository<Session> sessionRepository, IRepository<User> userRepository)
+    public SessionLogic(IRepository<Session> sessionRepository, IRepository<User> userRepository, IUserLogic userLogic)
     {
         _sessionRepository = sessionRepository;
         _userRepository = userRepository;
+        _userLogic = userLogic;
     }
 
     public User? GetLoggedUser(Guid token)
@@ -52,6 +54,6 @@ public class SessionLogic: ISessionLogic
 
     public User Register(User user)
     {
-        throw new NotImplementedException();
+        return null;
     }
 }
