@@ -6,6 +6,7 @@ using Blog.IBusinessLogic;
 using Blog.Models.In;
 using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Blog.WebApi.Controllers;
 
@@ -30,7 +31,13 @@ public class UsersController : ControllerBase
          return Ok(new UserDetailDTO(user));        
     }
 
-
+    [HttpGet("ranking")]
+    public IActionResult GetUserRanking([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+    {
+        var result = _userLogic.UserActivityRanking(startDate, endDate);
+        return Ok(result);
+    }
+    
     [ServiceFilter(typeof(AuthorizationFilter))]
     [HttpGet]
     public IActionResult GetAllUsers()

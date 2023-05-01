@@ -10,12 +10,14 @@ namespace Blog.BusinessLogic;
 public class UserLogic: IUserLogic
 {
     private readonly IRepository<User> _repository;
+    private readonly IRepository<Article> _articleRepository;
     private readonly ISessionLogic _sessionLogic;
 
-    public UserLogic(IRepository<User> userRepository, ISessionLogic sessionLogic)
+    public UserLogic(IRepository<User> userRepository, ISessionLogic sessionLogic, IRepository<Article> articleRepository)
     {
         _repository = userRepository;
         _sessionLogic = sessionLogic;
+        _articleRepository = articleRepository;
     }
     public User GetUserById(Guid id)
     {
@@ -80,6 +82,30 @@ public class UserLogic: IUserLogic
         
         _repository.Delete(user);
         _repository.Save();
+    }
+
+    public Dictionary<string, int> UserActivityRanking(DateTime startDate, DateTime endDate)
+    {
+        ValidateDates(startDate, endDate);
+        var users = _repository.GetAll();
+        var articles = _articleRepository.GetAll().Where(a => a.DatePublished >= startDate && a.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1));
+        var articleCounts = articles
+            .GroupBy(a => a.Owner.Username)
+            .ToDictionary(g => g.Key, g => g.Count());
+        var commentCounts = users.ToDictionary(user => user.Username, user => user.Comments.Where(c => c.DatePublished >= startDate && c.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1)).Count());
+        var counts = articleCounts
+            .Concat(commentCounts)
+            .GroupBy(d => d.Key)
+            .ToDictionary(g => g.Key, g => g.Sum(d => d.Value));
+        return counts;
+    }
+
+    private void ValidateDates(DateTime startDate, DateTime endDate)
+    {
+        if (startDate > endDate)
+        {
+            throw new ArgumentException("Start date couldn't be set after end Date");
+        }
     }
 
     public void GeneralValidation(User user)

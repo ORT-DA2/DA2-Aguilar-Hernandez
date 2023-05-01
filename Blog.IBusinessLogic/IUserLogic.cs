@@ -9,8 +9,5 @@ public interface IUserLogic
         public User CreateUser(User user);
         public User UpdateUser(Guid id, User user, Guid auth);
         public void DeleteUser(Guid id);
-
-        void UserAlreadyExist(User userExist);
-        void ValidateNull(User user);
-        void GeneralValidation(User user);
+        public Dictionary<string, int> UserActivityRanking(DateTime startDate, DateTime endDate);
 }
