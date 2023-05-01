@@ -6,7 +6,7 @@ namespace Blog.IDataAccess;
 public interface IRepository<T> where T : class
 {
     IEnumerable<T> GetAll();
-    T? GetById(Expression<Func<T, bool>> expression);
+    T? GetBy(Expression<Func<T, bool>> expression);
     void Insert(T elem);
     void Delete(T elem);
     void Update(T elem);
@@ -15,6 +15,5 @@ public interface IRepository<T> where T : class
     IEnumerable<T> GetByText(string text);
     IEnumerable<T> GetLastTen();
     IEnumerable<T> GetPublicAll();
-    IEnumerable<T> GetPrivateAll(string username);
-    T? GetByUsername(Expression<Func<T, bool>> expression);
+    IEnumerable<T> GetUserArticles(string username);
 }

@@ -19,7 +19,7 @@ public class UserLogic: IUserLogic
     }
     public User GetUserById(Guid id)
     {
-        var user = _repository.GetById(u => u.Id == id);
+        var user = _repository.GetBy(u => u.Id == id);
         
         ValidateNull(user);
         
@@ -36,7 +36,7 @@ public class UserLogic: IUserLogic
 
     public User CreateUser(User user)
     {
-        var userExist = _repository.GetByUsername(u => u.Username == user.Username);
+        var userExist = _repository.GetBy(u => u.Username == user.Username);
         UserAlreadyExist(userExist);
         ValidateNull(user);
         GeneralValidation(user);
@@ -49,11 +49,13 @@ public class UserLogic: IUserLogic
     {
         GeneralValidation(userUpdated);
         
-        var oldUser = _repository.GetById(u => u.Id == id);
+        var oldUser = _repository.GetBy(u => u.Id == id);
 
         ValidateNull(oldUser);
-        var userExist = _repository.GetByUsername(u => u.Username == userUpdated.Username);
-        UsernameAlreadyExistUpdate(userExist, oldUser);
+        var userExistUsername = _repository.GetBy(u => u.Username == userUpdated.Username);
+        var userExistEmail = _repository.GetBy(u => u.Email == userUpdated.Email);
+        UsernameAlreadyExistUpdate(userExistUsername, oldUser);
+        EmailAlreadyExistUpdate(userExistEmail, oldUser);
 
         if (_sessionLogic.GetLoggedUser(auth).Roles.All(ur => ur.Role != Role.Admin ))
         {
@@ -72,7 +74,7 @@ public class UserLogic: IUserLogic
 
     public void DeleteUser(Guid id)
     {
-        var user = _repository.GetById(u => u.Id == id);
+        var user = _repository.GetBy(u => u.Id == id);
 
         ValidateNull(user);
         
@@ -106,6 +108,14 @@ public class UserLogic: IUserLogic
         if (user != null && user.Id != oldUser.Id)
         {
             throw new ArgumentException("User with that username already exists");
+        }
+    }
+    
+    private static void EmailAlreadyExistUpdate(User user, User oldUser)
+    {
+        if (user != null && user.Id != oldUser.Id)
+        {
+            throw new ArgumentException("User with that email already exists");
         }
     }
 

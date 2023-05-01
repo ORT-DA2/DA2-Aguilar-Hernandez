@@ -71,9 +71,11 @@ public class AuthControllerTests
         var controller = new AuthController(_sessionMock.Object);
         _sessionMock.Setup(o => o.Logout(token));
         var result = controller.Logout(token);
-        
+        var okResult = result as OkObjectResult;
+        var value = okResult.Value.ToString();
         _sessionMock.VerifyAll();
         
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.AreEqual(value, "Logout successfuly");
+        
     }
 }

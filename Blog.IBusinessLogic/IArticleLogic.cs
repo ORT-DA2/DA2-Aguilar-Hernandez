@@ -12,5 +12,5 @@ public interface IArticleLogic
     public Article UpdateArticle(Guid id, Article article, Guid authorization);
     public void DeleteArticle(Guid articleId, Guid authorization);
     public IEnumerable<Article> GetLastTen();
-    public IEnumerable<Article> GetAllPrivateArticles(string username, Guid auth);
+    public IEnumerable<Article> GetAllUserArticles(string username, Guid auth);
 }

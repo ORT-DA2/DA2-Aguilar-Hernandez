@@ -61,7 +61,7 @@ public class UserRepositoryTests
     {
         var elementExpected = _elementsInDatabase.Where(e => e.Id.ToString().Equals("b90af3a0-f9d9-436e-b0c5-52b1f78fc567")).FirstOrDefault();
 
-        var elementSaved = _userRepository.GetById(e => e.Id.Equals(elementExpected.Id));
+        var elementSaved = _userRepository.GetBy(e => e.Id.Equals(elementExpected.Id));
         
         Assert.AreEqual(elementExpected, elementSaved);
     }

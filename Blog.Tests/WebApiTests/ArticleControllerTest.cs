@@ -245,7 +245,7 @@ public class ArticleControllerTest
         Assert.IsTrue(_articleTest2.Id.Equals(value.Id));
         Assert.IsTrue(_articleTest2.Title.Equals(value.Title));
         Assert.IsTrue(_articleTest2.Content.Equals(value.Content));
-        Assert.IsTrue(_articleTest2.Comments.Equals(value.Comments));
+        Assert.IsTrue(_articleTest2.Comments.Count.Equals(value.Comments.Count));
         Assert.IsTrue(_articleTest2.DatePublished.Equals(value.DatePublished));
         Assert.IsTrue(_articleTest2.DateLastModified.Equals(value.DateLastModified));
         Assert.IsTrue(_articleTest2.Image.Equals(value.Image));
@@ -299,16 +299,21 @@ public class ArticleControllerTest
     {
         List<Article> articles = new List<Article>()
         {
-            _articleTest,
-            _articleTest2
+            _articleTest2,
+            _articleTest3
         };
+        var articlesDTO = new List<ArticleDetailDTO>();
+        foreach (var article in articles)
+        {
+            articlesDTO.Add(new ArticleDetailDTO(article));
+        }
         
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetAllArticles()).Returns(articles);
         var result = controller.GetAllArticles();
         var okResult = result as OkObjectResult;
-        var dto = okResult.Value as List<Article>;
-        Assert.AreEqual(articles, dto);
+        var dto = okResult.Value as List<ArticleDetailDTO>;
+        Assert.AreEqual(articlesDTO.Count, dto.Count());
     }
     
     [TestMethod]
@@ -447,8 +452,8 @@ public class ArticleControllerTest
         var token = Guid.NewGuid();
 
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.GetAllPrivateArticles(_user.Username, token)).Returns(articles);
-        var result = controller.GetAllPrivateArticles(_user.Username, token);
+        _articlenMock.Setup(o => o.GetAllUserArticles(_user.Username, token)).Returns(articles);
+        var result = controller.GetAllUserArticles(_user.Username, token);
         var okResult = result as OkObjectResult;
         var dto = okResult.Value as List<Article>;
         Assert.AreEqual(articles, dto);

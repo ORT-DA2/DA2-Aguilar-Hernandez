@@ -78,7 +78,7 @@ public class CommentRepositoryTest
         _blogContext.SaveChanges();
         var elementExpected = elementsInDatabase.FirstOrDefault(e => e.Id.ToString().Equals("b90af3a0-f9d9-436e-b0c5-52b1f78fc567"));
 
-        var elementSaved = _commentRepository.GetById(e => e.Id.Equals(elementExpected.Id));
+        var elementSaved = _commentRepository.GetBy(e => e.Id.Equals(elementExpected.Id));
         
         Assert.AreEqual(elementExpected, elementSaved);
     }

@@ -18,7 +18,7 @@ public class SessionLogic: ISessionLogic
 
     public User? GetLoggedUser(Guid token)
     {
-        Session session = _sessionRepository.GetById(s => s.AuthToken == token);
+        Session session = _sessionRepository.GetBy(s => s.AuthToken == token);
         if (session != null)
             return session.User;
         else
@@ -30,7 +30,7 @@ public class SessionLogic: ISessionLogic
     public Guid Login(string username, string password)
     {
         User user = new User();
-        user = _userRepository.GetById(u => u.Username.Equals(username) && u.Password.Equals(password));
+        user = _userRepository.GetBy(u => u.Username.Equals(username) && u.Password.Equals(password));
         if (user == null)
         {
             throw new InvalidCredentialException("Invalid credentials");
@@ -45,7 +45,7 @@ public class SessionLogic: ISessionLogic
 
     public void Logout(Guid token)
     {
-        Session session = _sessionRepository.GetById(s => s.AuthToken == token);
+        Session session = _sessionRepository.GetBy(s => s.AuthToken == token);
         _sessionRepository.Delete(session);
         _sessionRepository.Save();
     }

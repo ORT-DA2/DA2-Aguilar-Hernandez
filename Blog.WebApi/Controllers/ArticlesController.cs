@@ -33,8 +33,11 @@ namespace Blog.WebApi.Controllers
         [ServiceFilter(typeof(AuthorizationFilter))]
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetAllArticles()
-        { 
-            return Ok(_articleLogic.GetAllArticles());
+        {
+            var articles = _articleLogic.GetAllArticles();
+            var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
+
+            return Ok(articlesDTO);
         }
         
         [HttpGet("public")]
@@ -42,16 +45,20 @@ namespace Blog.WebApi.Controllers
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetAllPublicArticles()
         {
-            return Ok(_articleLogic.GetAllPublicArticles());
+            var articles = _articleLogic.GetAllPublicArticles();
+            var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
+            return Ok(articlesDTO);
 
         }
         
         [HttpGet("{username}")]
         [ServiceFilter(typeof(AuthorizationFilter))]
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
-        public IActionResult GetAllPrivateArticles([FromRoute] string username, [FromHeader] Guid authorization)
+        public IActionResult GetAllUserArticles([FromRoute] string username, [FromHeader] Guid authorization)
         {
-            return Ok(_articleLogic.GetAllPrivateArticles(username, authorization));
+            var articles = _articleLogic.GetAllUserArticles(username, authorization);
+            var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
+            return Ok(articlesDTO);
 
         }
 
@@ -60,7 +67,9 @@ namespace Blog.WebApi.Controllers
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetArticleByText([FromQuery] string text)
         {
-            return Ok(_articleLogic.GetArticleByText(text));
+            var articles = _articleLogic.GetArticleByText(text);
+            var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
+            return Ok(articlesDTO);
         }
 
         [HttpPost]

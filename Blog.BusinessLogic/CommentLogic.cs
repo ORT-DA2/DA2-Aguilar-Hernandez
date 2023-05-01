@@ -33,7 +33,7 @@ public class CommentLogic: ICommentLogic
 
     public void DeleteCommentById(Guid id)
     {
-        Comment comment = _repository.GetById(c => c.Id == id);
+        Comment comment = _repository.GetBy(c => c.Id == id);
         
         if (comment == null)
         {

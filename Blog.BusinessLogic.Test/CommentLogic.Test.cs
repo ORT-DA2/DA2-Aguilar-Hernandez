@@ -62,7 +62,7 @@ public class CommentLogicTest
         var sessionLogic = new Mock<ISessionLogic>();
         var articleLogic = new Mock<IArticleLogic>();
         var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object);
-        mockRepository.Setup(o => o.GetById(It.IsAny<Expression<Func<Comment, bool>>>())).Returns(comment);
+        mockRepository.Setup(o => o.GetBy(It.IsAny<Expression<Func<Comment, bool>>>())).Returns(comment);
         mockRepository.Setup(o => o.Save());
         
         commentLogic.DeleteCommentById(comment.Id);

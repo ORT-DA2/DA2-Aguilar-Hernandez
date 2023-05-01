@@ -19,7 +19,7 @@ public class ArticleLogic: IArticleLogic
 
     public Article GetArticleById(Guid articleId)
     {
-        var article = _repository.GetById(a => a.Id == articleId);
+        var article = _repository.GetBy(a => a.Id == articleId);
         ValidateNull(article);
         return article;
     }
@@ -45,9 +45,9 @@ public class ArticleLogic: IArticleLogic
         return articles;
     }
 
-    public IEnumerable<Article> GetAllPrivateArticles(string username, Guid authorization)
+    public IEnumerable<Article> GetAllUserArticles(string username, Guid authorization)
     {
-        var articles = _repository.GetPrivateAll(username);
+        var articles = _repository.GetUserArticles(username);
         ValidateListNull(articles);
         
         if (_sessionLogic.GetLoggedUser(authorization).Username != username)
@@ -78,7 +78,7 @@ public class ArticleLogic: IArticleLogic
 
     public Article UpdateArticle(Guid id, Article article, Guid authorization)
     {
-        var oldArticle = _repository.GetById(a => a.Id == id);
+        var oldArticle = _repository.GetBy(a => a.Id == id);
 
         ValidateNull(oldArticle);
         ValidateUserOwner(oldArticle.Owner.Id, authorization);
@@ -95,7 +95,7 @@ public class ArticleLogic: IArticleLogic
 
     public void DeleteArticle(Guid articleId, Guid authorization)
     {
-        var article = _repository.GetById(a => a.Id == articleId);
+        var article = _repository.GetBy(a => a.Id == articleId);
 
         ValidateNull(article);
         ValidateUserOwner(article.Owner.Id, authorization);

@@ -19,7 +19,7 @@ public class Repository<T> : IRepository<T> where T : class
         return _context.Set<T>();
     }
 
-    public virtual T? GetById(Expression<Func<T, bool>> expression)
+    public virtual T? GetBy(Expression<Func<T, bool>> expression)
     {
         return _context.Set<T>().FirstOrDefault(expression);
     }
@@ -59,14 +59,9 @@ public class Repository<T> : IRepository<T> where T : class
         return _context.Set<T>();
     }
 
-    public virtual IEnumerable<T> GetPrivateAll(string username)
+    public virtual IEnumerable<T> GetUserArticles(string username)
     {
         return _context.Set<T>();
-    }
-
-    public T? GetByUsername(Expression<Func<T, bool>> expression)
-    {
-        return _context.Set<T>().FirstOrDefault(expression);
     }
     
 }
