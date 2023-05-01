@@ -32,6 +32,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("ranking")]
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
     public IActionResult GetUserRanking([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
     {
         var result = _userLogic.UserActivityRanking(startDate, endDate);
