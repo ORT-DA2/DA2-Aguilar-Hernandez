@@ -54,6 +54,12 @@ public class SessionLogic: ISessionLogic
 
     public User Register(User user)
     {
+        var userExist = _userRepository.GetBy(u => u.Username == user.Username);
+        _userLogic.UserAlreadyExist(userExist);
+        _userLogic.ValidateNull(user);
+        _userLogic.GeneralValidation(user);
+        _userRepository.Insert(user);
+        _userRepository.Save();
         return user;
     }
 }
