@@ -54,6 +54,6 @@ public class SessionLogic: ISessionLogic
 
     public User Register(User user)
     {
-        return null;
+        return user;
     }
 }
