@@ -16,6 +16,14 @@ public class AuthController : ControllerBase
     {
         _sessionService = sessionService;
     }
+    
+    [HttpPost]
+    [Route("register")]
+    public IActionResult Register([FromBody] RegisterDto register)
+    {
+        var newUser = _sessionService.Register(register);
+        return Ok(newUser);
+    }
         
     [HttpPost]
     [Route("login")]

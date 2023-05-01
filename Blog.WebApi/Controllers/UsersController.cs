@@ -38,7 +38,8 @@ public class UsersController : ControllerBase
          return Ok(_userLogic.GetAllUsers());
     }        
     
-
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
     [HttpPost]
     public IActionResult CreateUser([FromBody]CreateUserDTO userDto)
     {

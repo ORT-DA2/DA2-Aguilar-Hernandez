@@ -1,5 +1,6 @@
 ﻿using System.Security.Authentication;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
 using Blog.WebApi.Controllers;
@@ -77,5 +78,36 @@ public class AuthControllerTests
         
         Assert.AreEqual(value, "Logout successfuly");
         
+    }
+    
+    [TestMethod]
+    public void SuccessfulRegisterTest()
+    {
+        RegisterDto session = new RegisterDto()
+        {
+            Username = "NicolasAHF",
+            Password = "123456"
+        };
+
+        var newUser = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Roles = new List<UserRole>{},
+            Email = "nicolas@example.com"
+        };
+
+        
+
+        var controller = new AuthController(_sessionMock.Object);
+        _sessionMock.Setup(o => o.Register(session)).Returns(newUser);
+        var result = controller.Login(session);
+        var okResult = result as OkObjectResult;
+        var userResult = okResult.Value;
+
+        Assert.AreEqual(newUser.ToString(), userResult);
     }
 }
