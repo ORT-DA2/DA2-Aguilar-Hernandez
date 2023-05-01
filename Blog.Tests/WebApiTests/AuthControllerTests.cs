@@ -13,11 +13,13 @@ namespace Blog.Tests.WebApiTests;
 public class AuthControllerTests
 {
     private Mock<ISessionLogic> _sessionMock;
-    
+    private Mock<IUserLogic> _userMock;
+
     [TestInitialize]
     public void Setup()
     {
         _sessionMock = new Mock<ISessionLogic>(MockBehavior.Strict);
+        _userMock = new Mock<IUserLogic>(MockBehavior.Strict);
     }
 
     [TestCleanup]
@@ -38,7 +40,7 @@ public class AuthControllerTests
         Guid token = Guid.NewGuid();
         
 
-        var controller = new AuthController(_sessionMock.Object);
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
         var result = controller.Login(session);
         var okResult = result as OkObjectResult;
@@ -58,7 +60,7 @@ public class AuthControllerTests
             Password = "123456"
         };
 
-        var controller = new AuthController(_sessionMock.Object);
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
         controller.Login(session);
     }
@@ -69,7 +71,7 @@ public class AuthControllerTests
         
         Guid token = Guid.NewGuid();
 
-        var controller = new AuthController(_sessionMock.Object);
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
         _sessionMock.Setup(o => o.Logout(token));
         var result = controller.Logout(token);
         var okResult = result as OkObjectResult;
@@ -104,8 +106,8 @@ public class AuthControllerTests
         };
         
 
-        var controller = new AuthController(_sessionMock.Object);
-        _sessionMock.Setup(o => o.Register(It.IsAny<User>())).Returns(newUser);
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
+        _userMock.Setup(o => o.CreateUser(It.IsAny<User>())).Returns(newUser);
         var result = controller.Register(session);
         var okResult = result as OkObjectResult;
         var userResult = okResult.Value;

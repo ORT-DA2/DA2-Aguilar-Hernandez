@@ -7,15 +7,13 @@ namespace Blog.BusinessLogic;
 
 public class SessionLogic: ISessionLogic
 {
-    private IRepository<Session> _sessionRepository;
-    private IRepository<User> _userRepository;
-    private IUserLogic _userLogic;
+    private readonly IRepository<Session> _sessionRepository;
+    private readonly IRepository<User> _userRepository;
 
-    public SessionLogic(IRepository<Session> sessionRepository, IRepository<User> userRepository, IUserLogic userLogic)
+    public SessionLogic(IRepository<Session> sessionRepository, IRepository<User> userRepository)
     {
         _sessionRepository = sessionRepository;
         _userRepository = userRepository;
-        _userLogic = userLogic;
     }
 
     public User? GetLoggedUser(Guid token)
@@ -50,16 +48,5 @@ public class SessionLogic: ISessionLogic
         Session session = _sessionRepository.GetBy(s => s.AuthToken == token);
         _sessionRepository.Delete(session);
         _sessionRepository.Save();
-    }
-
-    public User Register(User user)
-    {
-        var userExist = _userRepository.GetBy(u => u.Username == user.Username);
-        _userLogic.UserAlreadyExist(userExist);
-        _userLogic.ValidateNull(user);
-        _userLogic.GeneralValidation(user);
-        _userRepository.Insert(user);
-        _userRepository.Save();
-        return user;
     }
 }

@@ -11,10 +11,12 @@ namespace Blog.WebApi.Controllers;
 public class AuthController : ControllerBase
 {
     private ISessionLogic _sessionService;
+    private IUserLogic _userLogic;
 
-    public AuthController(ISessionLogic sessionService)
+    public AuthController(ISessionLogic sessionService, IUserLogic userLogic)
     {
         _sessionService = sessionService;
+        _userLogic = userLogic;
     }
     
     [HttpPost]
@@ -22,7 +24,7 @@ public class AuthController : ControllerBase
     public IActionResult Register([FromBody] RegisterDto register)
     {
         var user = register.ToEntity();
-        var newUser = _sessionService.Register(user);
+        var newUser = _userLogic.CreateUser(user);
         return Ok(newUser);
     }
         

@@ -429,6 +429,7 @@ public class ArticleControllerTest
     public void GetPublicArticleSuccessTest()
     {
         var articles = _articles;
+        articles.Remove(_articleTest);
         articles.Remove(_articleTest5);
         articles.Remove(_articleTest7);
         
