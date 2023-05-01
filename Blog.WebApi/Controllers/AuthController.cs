@@ -21,7 +21,8 @@ public class AuthController : ControllerBase
     [Route("register")]
     public IActionResult Register([FromBody] RegisterDto register)
     {
-        var newUser = _sessionService.Register(register);
+        var user = register.ToEntity();
+        var newUser = _sessionService.Register(user);
         return Ok(newUser);
     }
         

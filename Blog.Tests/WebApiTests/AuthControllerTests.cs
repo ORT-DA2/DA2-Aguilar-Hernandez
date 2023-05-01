@@ -85,8 +85,11 @@ public class AuthControllerTests
     {
         RegisterDto session = new RegisterDto()
         {
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
             Username = "NicolasAHF",
-            Password = "123456"
+            Password = "123456",
+            Email = "nicolas@example.com"
         };
 
         var newUser = new User()
@@ -99,15 +102,14 @@ public class AuthControllerTests
             Roles = new List<UserRole>{},
             Email = "nicolas@example.com"
         };
-
         
 
         var controller = new AuthController(_sessionMock.Object);
-        _sessionMock.Setup(o => o.Register(session)).Returns(newUser);
-        var result = controller.Login(session);
+        _sessionMock.Setup(o => o.Register(It.IsAny<User>())).Returns(newUser);
+        var result = controller.Register(session);
         var okResult = result as OkObjectResult;
         var userResult = okResult.Value;
 
-        Assert.AreEqual(newUser.ToString(), userResult);
+        Assert.AreEqual(newUser, userResult);
     }
 }

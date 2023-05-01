@@ -49,4 +49,9 @@ public class SessionLogic: ISessionLogic
         _sessionRepository.Delete(session);
         _sessionRepository.Save();
     }
+
+    public User Register(User user)
+    {
+        throw new NotImplementedException();
+    }
 }
