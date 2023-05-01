@@ -12,6 +12,7 @@ public class BlogDbContext: DbContext
     public DbSet<Session> Sessions { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Article> Articles { get; set; }
+    public DbSet<Notification> Notifications {get; set; }
     public BlogDbContext(DbContextOptions options): base(options){}
 
     public BlogDbContext() : base() {}

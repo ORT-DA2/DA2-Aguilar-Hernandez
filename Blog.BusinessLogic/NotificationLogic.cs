@@ -24,10 +24,16 @@ public class NotificationLogic : INotificationLogic
             UserToNotify = comment.Article.Owner,
             IsRead = false
         };
-
+        // Send notification even if made a comment in a self post
         _repository.Insert(notification);
         _repository.Save();
         return notification;
+    }
+
+    public IEnumerable<Notification> GetNotificationsByUser(User user)
+    {
+        // TODO
+        throw new NotImplementedException();
     }
 
 }
