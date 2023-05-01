@@ -22,6 +22,7 @@ public class RegisterService
         serviceCollection.AddScoped<IRepository<Comment>, CommentRepository>();
         serviceCollection.AddScoped<ICommentLogic, CommentLogic>();
         serviceCollection.AddScoped<IArticleLogic, ArticleLogic>();
+        serviceCollection.AddScoped<INotificationLogic, NotificationLogic>();
         serviceCollection.AddScoped<IRepository<Article>, ArticleRepository>();
         
     }
