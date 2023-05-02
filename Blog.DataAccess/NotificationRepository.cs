@@ -16,7 +16,7 @@ public class NotificationRepository : Repository<Notification>
         return _context.Set<Notification>()
             .Include(n=>n.UserToNotify)
             .Include(n=>n.Comment)
-            .Where(n => n.UserToNotify.Id == user.Id && !n.IsRead);
+            .Where(n => n.UserToNotify.Id == user.Id && !n.IsRead).ToList();
     }
 
 }
