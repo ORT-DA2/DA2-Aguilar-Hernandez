@@ -1,4 +1,5 @@
 using System.Security.Authentication;
+using Blog.Domain.Entities;
 using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In.Auth;
@@ -11,10 +12,11 @@ namespace Blog.WebApi.Controllers;
 public class AuthController : ControllerBase
 {
     private ISessionLogic _sessionService;
-        
-    public AuthController(ISessionLogic sessionService)
+    private INotificationLogic _notificationLogic;
+    public AuthController(ISessionLogic sessionService, INotificationLogic notificationLogic)
     {
         _sessionService = sessionService;
+        _notificationLogic = notificationLogic;
     }
         
     [HttpPost]
@@ -23,8 +25,10 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var token = _sessionService.Login(login.Username, login.Password);
-            return Ok(new{token = token});
+            Guid token = _sessionService.Login(login.Username, login.Password);
+            User? loggedUser = _sessionService.GetLoggedUser(token);
+            IEnumerable<Notification> notifications = _notificationLogic.GetUnreadNotificationsByUser(loggedUser);
+            return Ok(new{token = token, notifications = notifications});
         }
         catch (InvalidCredentialException ex)
         {
