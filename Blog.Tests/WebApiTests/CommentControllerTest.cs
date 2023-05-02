@@ -109,8 +109,7 @@ public class CommentControllerTest
         commentReplied.Reply = "Muchas gracias!";
         var mock = new Mock<ICommentLogic>(MockBehavior.Strict);
         var controller = new CommentController(mock.Object);
-        mock.Setup(c => c.GetBy(comment.Id)).Return(comment);
-        mock.Setup(c => c.ReplyComment(comment.Id, It.IsAny<string>())).Return(commentReplied);
+        mock.Setup(c => c.ReplyComment(comment.Id, It.IsAny<string>())).Returns(commentReplied);
         var result = controller.ReplyComment(comment.Id, commentReplied.Reply);
         var resultObject = result as OkObjectResult;
         var commentResult = resultObject.Value as CommentOutModel;

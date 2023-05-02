@@ -30,8 +30,8 @@ public class CommentController : ControllerBase{
             return Created("Comment created ",commentOut);
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteCommentById([FromRoute] Guid id)
+    [HttpDelete]
+    public IActionResult DeleteCommentById([FromBody] Guid id)
     {
         try
         {
@@ -43,5 +43,11 @@ public class CommentController : ControllerBase{
             return NotFound(ex.Message);
         }
     }
-        
+
+    [HttpPut]
+    public IActionResult ReplyComment([FromBody]Guid id, string reply)
+    {
+        Comment commentReplied = _commentLogic.ReplyComment(id, reply);
+        return Ok(new CommentOutModel(commentReplied));
+    }
 }

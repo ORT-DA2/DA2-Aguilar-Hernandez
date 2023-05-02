@@ -43,5 +43,14 @@ public class CommentLogic: ICommentLogic
         _repository.Delete(comment);
         _repository.Save();
     }
-    
+
+    public Comment GetBy(Guid commentId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Comment ReplyComment(Guid commentId, string reply)
+    {
+        throw new NotImplementedException();
+    }
 }
