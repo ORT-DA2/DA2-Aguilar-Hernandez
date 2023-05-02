@@ -21,7 +21,7 @@ public class UserLogic: IUserLogic
     }
     public User GetUserById(Guid id)
     {
-        var user = _repository.GetBy(u => u.Id == id);
+        User? user = _repository.GetBy(u => u.Id == id);
         
         ValidateNull(user);
         
@@ -30,7 +30,7 @@ public class UserLogic: IUserLogic
 
     public IEnumerable<User> GetAllUsers()
     {
-        var users = _repository.GetAll();
+        IEnumerable<User> users = _repository.GetAll();
         ValidateListNull(users);
         
         return users;
@@ -38,7 +38,7 @@ public class UserLogic: IUserLogic
 
     public User CreateUser(User user)
     {
-        var userExist = _repository.GetBy(u => u.Username == user.Username);
+        User? userExist = _repository.GetBy(u => u.Username == user.Username);
         UserAlreadyExist(userExist);
         ValidateNull(user);
         GeneralValidation(user);
@@ -51,11 +51,11 @@ public class UserLogic: IUserLogic
     {
         GeneralValidation(userUpdated);
         
-        var oldUser = _repository.GetBy(u => u.Id == id);
+        User? oldUser = _repository.GetBy(u => u.Id == id);
 
         ValidateNull(oldUser);
-        var userExistUsername = _repository.GetBy(u => u.Username == userUpdated.Username);
-        var userExistEmail = _repository.GetBy(u => u.Email == userUpdated.Email);
+        User? userExistUsername = _repository.GetBy(u => u.Username == userUpdated.Username);
+        User? userExistEmail = _repository.GetBy(u => u.Email == userUpdated.Email);
         UsernameAlreadyExistUpdate(userExistUsername, oldUser);
         EmailAlreadyExistUpdate(userExistEmail, oldUser);
 
@@ -76,7 +76,7 @@ public class UserLogic: IUserLogic
 
     public void DeleteUser(Guid id)
     {
-        var user = _repository.GetBy(u => u.Id == id);
+        User? user = _repository.GetBy(u => u.Id == id);
 
         ValidateNull(user);
         

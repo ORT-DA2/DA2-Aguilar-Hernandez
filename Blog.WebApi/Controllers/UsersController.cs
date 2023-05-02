@@ -52,8 +52,8 @@ public class UsersController : ControllerBase
     [HttpPost]
     public IActionResult CreateUser([FromBody]CreateUserDTO userDto)
     {
-        var user = userDto.ToEntity(userDto.Roles);
-        var newUser = _userLogic.CreateUser(user);
+        User user = userDto.ToEntity(userDto.Roles);
+        User newUser = _userLogic.CreateUser(user);
         return Created($"api/users/{newUser.Id}",new UserDetailDTO(newUser));
     }
 

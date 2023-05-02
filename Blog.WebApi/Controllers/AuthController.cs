@@ -28,8 +28,8 @@ public class AuthController : ControllerBase
     [Route("register")]
     public IActionResult Register([FromBody] RegisterDto register)
     {
-        var user = register.ToEntity();
-        var newUser = _userLogic.CreateUser(user);
+        User user = register.ToEntity();
+        User newUser = _userLogic.CreateUser(user);
         return Ok(newUser);
     }
         

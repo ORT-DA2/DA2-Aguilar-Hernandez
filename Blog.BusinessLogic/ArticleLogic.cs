@@ -19,35 +19,35 @@ public class ArticleLogic: IArticleLogic
 
     public Article GetArticleById(Guid articleId)
     {
-        var article = _repository.GetBy(a => a.Id == articleId);
+        Article? article = _repository.GetBy(a => a.Id == articleId);
         ValidateNull(article);
         return article;
     }
 
     public IEnumerable<Article> GetAllArticles()
     {
-        var articles = _repository.GetAll();
+        IEnumerable<Article> articles = _repository.GetAll();
         ValidateListNull(articles);
         return articles;
     }
     
     public IEnumerable<Article> GetAllPublicArticles()
     {
-        var articles = _repository.GetPublicAll();
+        IEnumerable<Article> articles = _repository.GetPublicAll();
         ValidateListNull(articles);
         return articles;
     }
     
     public IEnumerable<Article> GetLastTen()
     {
-        var articles = _repository.GetLastTen();
+        IEnumerable<Article> articles = _repository.GetLastTen();
         ValidateListNull(articles);
         return articles;
     }
 
     public IEnumerable<Article> GetAllUserArticles(string username, Guid authorization)
     {
-        var articles = _repository.GetUserArticles(username);
+        IEnumerable<Article> articles = _repository.GetUserArticles(username);
         ValidateListNull(articles);
         
         if (_sessionLogic.GetLoggedUser(authorization).Username != username)
@@ -70,7 +70,7 @@ public class ArticleLogic: IArticleLogic
 
     public IEnumerable<Article> GetArticleByText(string text)
     {
-        var articles = _repository.GetByText(text);
+        IEnumerable<Article> articles = _repository.GetByText(text);
         ValidateListNull(articles);
         
         return articles;
@@ -78,7 +78,7 @@ public class ArticleLogic: IArticleLogic
 
     public Article UpdateArticle(Guid id, Article article, Guid authorization)
     {
-        var oldArticle = _repository.GetBy(a => a.Id == id);
+        Article? oldArticle = _repository.GetBy(a => a.Id == id);
 
         ValidateNull(oldArticle);
         ValidateUserOwner(oldArticle.Owner.Id, authorization);
@@ -95,7 +95,7 @@ public class ArticleLogic: IArticleLogic
 
     public void DeleteArticle(Guid articleId, Guid authorization)
     {
-        var article = _repository.GetBy(a => a.Id == articleId);
+        Article? article = _repository.GetBy(a => a.Id == articleId);
 
         ValidateNull(article);
         ValidateUserOwner(article.Owner.Id, authorization);

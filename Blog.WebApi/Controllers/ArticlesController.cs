@@ -34,8 +34,8 @@ namespace Blog.WebApi.Controllers
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetAllPublicArticles()
         {
-            var articles = _articleLogic.GetAllPublicArticles();
-            var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
+            IEnumerable<Article> articles = _articleLogic.GetAllPublicArticles();
+            List<ArticleDetailDTO> articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
             return Ok(articlesDTO);
 
         }
@@ -45,8 +45,8 @@ namespace Blog.WebApi.Controllers
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetAllUserArticles([FromQuery] string username, [FromHeader] Guid authorization)
         {
-            var articles = _articleLogic.GetAllUserArticles(username, authorization);
-            var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
+            IEnumerable<Article> articles = _articleLogic.GetAllUserArticles(username, authorization);
+            List<ArticleDetailDTO> articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
             return Ok(articlesDTO);
 
         }
@@ -56,8 +56,8 @@ namespace Blog.WebApi.Controllers
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetArticleByText([FromQuery] string text)
         {
-            var articles = _articleLogic.GetArticleByText(text);
-            var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
+            IEnumerable<Article> articles = _articleLogic.GetArticleByText(text);
+            List<ArticleDetailDTO> articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
             return Ok(articlesDTO);
         }
 
