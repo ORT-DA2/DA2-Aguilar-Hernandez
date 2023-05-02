@@ -44,13 +44,19 @@ public class CommentLogic: ICommentLogic
         _repository.Save();
     }
 
-    public Comment GetBy(Guid commentId)
-    {
-        throw new NotImplementedException();
-    }
-
     public Comment ReplyComment(Guid commentId, string reply)
     {
-        throw new NotImplementedException();
+        Comment comment = _repository.GetBy(c => c.Id == commentId);
+        
+        if (comment == null)
+        {
+            throw new NotFoundException("The comment was not found");
+        }
+
+        comment.Reply = reply;
+        
+        _repository.Update(comment);
+        _repository.Save();
+        return comment;
     }
 }

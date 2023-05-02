@@ -70,6 +70,12 @@ public class CommentLogicTest
         mockRepository.VerifyAll();
 
     }
+
+    [TestMethod]
+    public void ReplyComment()
+    {
+        
+    }
     
     private static Comment CreateComment()
     {

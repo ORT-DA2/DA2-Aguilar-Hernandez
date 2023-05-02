@@ -51,7 +51,6 @@ public class CommentControllerTest
         {
             ArticleId = articleTest.Id,
             Body = comment.Body,
-            Reply = comment.Reply
         };
 
         CommentOutModel commentExpected = new CommentOutModel(comment);
@@ -64,7 +63,6 @@ public class CommentControllerTest
         commentLogic.VerifyAll();
         Assert.AreEqual(commentExpected.Article, commentResult.Article);
         Assert.AreEqual(commentExpected.Body, commentResult.Body);
-        Assert.AreEqual(commentExpected.Reply,commentResult.Reply);
     }
 
     [TestMethod]
@@ -84,6 +82,7 @@ public class CommentControllerTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
     public void DeleteInvalidCommentById()
     {
         Comment comment = CreateComment();
@@ -105,12 +104,17 @@ public class CommentControllerTest
             Article = Mock.Of<Article>(),
             Body = "Buen post Maquinola"
         };
+        ReplyCommentDto reply = new ReplyCommentDto()
+        {
+            Id = comment.Id,
+            Reply = "Gracias!"
+        };
         Comment commentReplied = comment;
         commentReplied.Reply = "Muchas gracias!";
         var mock = new Mock<ICommentLogic>(MockBehavior.Strict);
         var controller = new CommentController(mock.Object);
         mock.Setup(c => c.ReplyComment(comment.Id, It.IsAny<string>())).Returns(commentReplied);
-        var result = controller.ReplyComment(comment.Id, commentReplied.Reply);
+        var result = controller.ReplyComment(reply);
         var resultObject = result as OkObjectResult;
         var commentResult = resultObject.Value as CommentOutModel;
         mock.VerifyAll();

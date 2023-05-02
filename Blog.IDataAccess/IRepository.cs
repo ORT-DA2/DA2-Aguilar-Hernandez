@@ -16,5 +16,4 @@ public interface IRepository<T> where T : class
     IEnumerable<T> GetLastTen();
     IEnumerable<T> GetPublicAll();
     IEnumerable<T> GetUserArticles(string username);
-    Dictionary<T, int> GetUserByActivity(DateTime startDate, DateTime endDate);
 }

@@ -63,10 +63,5 @@ public class Repository<T> : IRepository<T> where T : class
     {
         return _context.Set<T>();
     }
-    
-    public virtual Dictionary<T, int> GetUserByActivity(DateTime startDate, DateTime endDate)
-    {
-        return _context.Set<T>().ToDictionary(group => group, group => group.GetHashCode());
-    }
-    
+
 }
