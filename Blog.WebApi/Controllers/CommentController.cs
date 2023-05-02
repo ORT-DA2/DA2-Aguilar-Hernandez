@@ -1,5 +1,6 @@
 ﻿using Blog.Models.In;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.Filters;
 using Blog.IBusinessLogic;
@@ -12,6 +13,7 @@ namespace Blog.WebApi.Controllers;
 [Route("api/comments")]
 [ExceptionFilter]
 [ServiceFilter(typeof(AuthorizationFilter))]
+[AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
 public class CommentController : ControllerBase{
 
     private readonly ICommentLogic _commentLogic;
@@ -32,19 +34,18 @@ public class CommentController : ControllerBase{
         return Created($"api/comments/{comment.Id}", new CommentOutModel(result));
 
     }
-        
-    [HttpDelete("{id}")]
-    public IActionResult DeleteCommentById([FromRoute] Guid id)
+
+    [HttpDelete]
+    public IActionResult DeleteCommentById([FromBody] Guid id)
     {
-        try
-        {
-            _commentLogic.DeleteCommentById(id);
-            return Ok($"Comment with the id {id} was deleted");
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        _commentLogic.DeleteCommentById(id);
+        return Ok($"Comment with the id {id} was deleted");
     }
-        
+
+    [HttpPut]
+    public IActionResult ReplyComment([FromBody]ReplyCommentDto reply)
+    {
+        Comment commentReplied = _commentLogic.ReplyComment(reply.Id, reply.Reply);
+        return Ok(new CommentOutModel(commentReplied));
+    }
 }

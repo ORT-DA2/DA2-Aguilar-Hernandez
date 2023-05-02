@@ -245,10 +245,40 @@ public class RepositoryTests
         
         Assert.IsNull(elementSaved);
     }
-
+    
     [TestMethod]
     public void GetByText()
     {
+        var elementsInDatabase = new List<User>
+        {
+            new User()
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Nicolas",
+                LastName = "Hernandez",
+                Username = "NicolasAHF",
+                Password = "123456",
+                Roles = new List<UserRole>{},
+                Email = "nicolas@example.com"
+            },
+
+            new User()
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Francisco",
+                LastName = "Aguilar",
+                Username = "FAguilar",
+                Password = "123456",
+                Roles = new List<UserRole>{},
+                Email = "Francisco@example.com"
+            }
+        };
+        _blogContext.AddRange(elementsInDatabase);
+        _blogContext.SaveChanges();
+        var elementsExpected = elementsInDatabase;
+
+        var elementsSaved = _repository.GetByText(elementsInDatabase.First().FirstName);
         
+        Assert.AreEqual(elementsExpected.Count(), elementsSaved.Count());
     }
 }

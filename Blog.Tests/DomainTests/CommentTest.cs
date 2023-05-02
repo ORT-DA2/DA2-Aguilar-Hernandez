@@ -43,11 +43,13 @@ public class CommentTest
         comment.Article = article;
         comment.Body = "Nice Article";
         comment.Reply = "Thank you!";
+        comment.DatePublished = DateTime.Now.Date;
 
         Assert.AreEqual(id, comment.Id);
         Assert.AreEqual(user, comment.Owner);
         Assert.AreEqual(article, comment.Article);
         Assert.AreEqual("Nice Article", comment.Body);
         Assert.AreEqual("Thank you!", comment.Reply);
+        Assert.AreEqual(DateTime.Now.Date, comment.DatePublished);
     }
 }

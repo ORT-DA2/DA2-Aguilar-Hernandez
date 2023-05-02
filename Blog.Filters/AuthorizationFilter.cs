@@ -1,4 +1,5 @@
-﻿using Blog.IBusinessLogic;
+﻿using Blog.Domain.Exceptions;
+using Blog.IBusinessLogic;
 using Blog.Models.Error;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -7,9 +8,10 @@ using Microsoft.Extensions.Primitives;
 
 namespace Blog.Filters;
 
+[ExceptionFilter]
 public class AuthorizationFilter: Attribute, IAuthorizationFilter
 {
-    private ISessionLogic? _sessionLogic;
+    public ISessionLogic? _sessionLogic;
     
     public void OnAuthorization(AuthorizationFilterContext context)
     {
@@ -35,7 +37,7 @@ public class AuthorizationFilter: Attribute, IAuthorizationFilter
             Guid guidToken = new Guid(token);
             _sessionLogic.GetLoggedUser(guidToken);
         }
-        catch (KeyNotFoundException e)
+        catch (NotFoundException e)
         {
             context.Result = new ObjectResult(errorDto)
             {

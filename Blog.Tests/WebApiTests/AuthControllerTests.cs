@@ -90,6 +90,7 @@ public class AuthControllerTests
     [TestMethod]
     public void SuccessfulRegisterTest()
     {
+        var notificationLogic = new Mock<INotificationLogic>();
         RegisterDto session = new RegisterDto()
         {
             FirstName = "Nicolas",
@@ -111,7 +112,7 @@ public class AuthControllerTests
         };
         
 
-        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
         _userMock.Setup(o => o.CreateUser(It.IsAny<User>())).Returns(newUser);
         var result = controller.Register(session);
         var okResult = result as OkObjectResult;

@@ -35,13 +35,30 @@ public class CommentLogic: ICommentLogic
     {
         Comment comment = _repository.GetBy(c => c.Id == id);
         
-        if (comment == null)
-        {
-            throw new NotFoundException("The comment was not found");
-        }
+        ValidateNull(comment);
         
         _repository.Delete(comment);
         _repository.Save();
     }
+
+    public Comment ReplyComment(Guid commentId, string reply)
+    {
+        Comment comment = _repository.GetBy(c => c.Id == commentId);
+
+        ValidateNull(comment);
+
+        comment.Reply = reply;
+        
+        _repository.Update(comment);
+        _repository.Save();
+        return comment;
+    }
     
+    public void ValidateNull(Comment comment)
+    {
+        if (comment == null)
+        {
+            throw new NotFoundException("The comment was not found");
+        }
+    }
 }
