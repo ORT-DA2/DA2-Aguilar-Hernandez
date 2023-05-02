@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
+using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
 using Moq;
@@ -70,11 +71,60 @@ public class CommentLogicTest
         mockRepository.VerifyAll();
 
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
+    public void DeleteCommentByIdFail()
+    {
+        Comment comment = CreateComment();
+        var mockRepository = new Mock<IRepository<Comment>>();
+        var sessionLogic = new Mock<ISessionLogic>();
+        var articleLogic = new Mock<IArticleLogic>();
+        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object);
+        mockRepository.Setup(o => o.GetBy(It.IsAny<Expression<Func<Comment, bool>>>())).Returns((Comment)null);
+        mockRepository.Setup(o => o.Save());
+        
+        commentLogic.DeleteCommentById(comment.Id);
+        
+        mockRepository.VerifyAll();
+
+    }
 
     [TestMethod]
     public void ReplyComment()
     {
+        string reply = "gracias";
+        Comment comment = CreateComment();
+        var mockRepository = new Mock<IRepository<Comment>>();
+        var sessionLogic = new Mock<ISessionLogic>();
+        var articleLogic = new Mock<IArticleLogic>();
+        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object);
+        mockRepository.Setup(o => o.GetBy(It.IsAny<Expression<Func<Comment, bool>>>())).Returns(comment);
+        mockRepository.Setup(o => o.Update(comment));
+        mockRepository.Setup(o => o.Save());
         
+        commentLogic.ReplyComment(comment.Id, reply);
+        
+        mockRepository.VerifyAll();
+        
+        Assert.AreEqual(comment.Reply, reply);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
+    public void ReplyCommentFail()
+    {
+        Comment comment = CreateComment();
+        var mockRepository = new Mock<IRepository<Comment>>();
+        var sessionLogic = new Mock<ISessionLogic>();
+        var articleLogic = new Mock<IArticleLogic>();
+        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object);
+        mockRepository.Setup(o => o.GetBy(It.IsAny<Expression<Func<Comment, bool>>>())).Returns((Comment)null);
+
+        commentLogic.ReplyComment(comment.Id, "gracias");
+        
+        mockRepository.VerifyAll();
+
     }
     
     private static Comment CreateComment()
