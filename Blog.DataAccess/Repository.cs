@@ -54,11 +54,15 @@ public class Repository<T> : IRepository<T> where T : class
         return _context.Set<T>();
     }
 
+     public virtual IEnumerable<T> GetByUser(User user)
+    {
+        return _context.Set<T>();
+    }
+    
     public virtual IEnumerable<T> GetPublicAll()
     {
         return _context.Set<T>();
     }
-
     public virtual IEnumerable<T> GetUserArticles(string username)
     {
         return _context.Set<T>();

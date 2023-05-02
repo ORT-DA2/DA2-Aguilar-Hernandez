@@ -12,6 +12,7 @@ public class BlogDbContext: DbContext
     public DbSet<Session> Sessions { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Article> Articles { get; set; }
+    public DbSet<Notification> Notifications {get; set; }
     public BlogDbContext(DbContextOptions options): base(options){}
 
     public BlogDbContext() : base() {}
@@ -40,6 +41,15 @@ public class BlogDbContext: DbContext
             .WithMany(u => u.Comments)
             .OnDelete(DeleteBehavior.NoAction);
         
+        modelBuilder.Entity<Notification>()
+            .HasOne(n=>n.Comment)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        modelBuilder.Entity<Notification>()
+            .HasOne(n=>n.UserToNotify)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

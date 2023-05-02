@@ -55,13 +55,20 @@ public class CommentControllerTest
         };
 
         CommentOutModel commentExpected = new CommentOutModel(comment);
-        var commentLogic = new Mock<ICommentLogic>(MockBehavior.Loose);
-        CommentController commentController = new CommentController(commentLogic.Object);
-        commentLogic.Setup(c => c.AddNewComment(It.IsAny<Comment>(),commentIn.ArticleId, token)).Returns(comment);
-        var result = commentController.PostNewComment(commentIn, token);
+        
+        var commentLogic = new Mock<ICommentLogic>(MockBehavior.Strict);
+        var notificationLogic = new Mock<INotificationLogic>();
+        CommentController commentController = new CommentController(commentLogic.Object, notificationLogic.Object);
+
+        commentLogic.Setup(c => c.AddNewComment(It.IsAny<Comment>(), token, article.Object.Id)).Returns(comment);
+
+        var result = commentController.PostNewComment(commentIn,token, article.Object.Id);
+        
+        commentLogic.VerifyAll();
+
         var resultObject = result as CreatedResult;
         var userResult = resultObject.Value as CommentOutModel;
-        commentLogic.VerifyAll();
+        
         Assert.AreEqual(commentExpected.Article, userResult.Article);
         Assert.AreEqual(commentExpected.Body, userResult.Body);
         Assert.AreEqual(commentExpected.Reply,userResult.Reply);
@@ -73,8 +80,8 @@ public class CommentControllerTest
         Comment comment = new Comment();
 
         var mock = new Mock<ICommentLogic>(MockBehavior.Strict);
-
-        var controller = new CommentController(mock.Object);
+        var notificationLogic = new Mock<INotificationLogic>(MockBehavior.Strict);
+        var controller = new CommentController(mock.Object, notificationLogic.Object);
         mock.Setup(c => c.DeleteCommentById(comment.Id));
         var result = controller.DeleteCommentById(comment.Id);
 
@@ -88,7 +95,8 @@ public class CommentControllerTest
     {
         Comment comment = CreateComment();
         var mock = new Mock<ICommentLogic>(MockBehavior.Strict);
-        var controller = new CommentController(mock.Object);
+        var notificationLogic = new Mock<INotificationLogic>(MockBehavior.Strict);
+        var controller = new CommentController(mock.Object, notificationLogic.Object);
         mock.Setup(c => c.DeleteCommentById(comment.Id)).Throws(new NotFoundException("There are no comments."));
         var result = controller.DeleteCommentById(comment.Id);
         mock.VerifyAll();

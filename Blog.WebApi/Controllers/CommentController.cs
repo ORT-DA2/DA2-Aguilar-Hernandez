@@ -15,19 +15,22 @@ namespace Blog.WebApi.Controllers;
 public class CommentController : ControllerBase{
 
     private readonly ICommentLogic _commentLogic;
-    public CommentController(ICommentLogic commentLogic)
+    private readonly INotificationLogic _notificationLogic;
+    public CommentController(ICommentLogic commentLogic, INotificationLogic notificationLogic)
     {
         _commentLogic = commentLogic;
+        _notificationLogic = notificationLogic;
     }
 
 
     [HttpPost]
     public IActionResult PostNewComment([FromBody] CommentInModel commentInModel, [FromHeader] Guid Authorization)
     {
-            Comment comment = commentInModel.ToEntity();
-            Comment result = _commentLogic.AddNewComment(comment, commentInModel.ArticleId, Authorization);
-            CommentOutModel commentOut = new CommentOutModel(result);
-            return Created("Comment created ",commentOut);
+        Comment comment = commentInModel.ToEntity();
+        Comment result = _commentLogic.AddNewComment(comment,Authorization,articleId);
+        _notificationLogic.SendNotification(comment);
+        return Created($"api/comments/{comment.Id}", new CommentOutModel(result));
+
     }
         
     [HttpDelete("{id}")]

@@ -48,13 +48,11 @@ public class NotificationTests
         Notification notification = new Notification();
         notification.Id = new Guid();
         Guid id = notification.Id;
-        notification.Owner = user;
-        notification.Article = article;
+        notification.UserToNotify = user;
         notification.Comment = comment;
 
         Assert.AreEqual(id, notification.Id);
-        Assert.AreEqual(user, notification.Owner);
-        Assert.AreEqual(article, notification.Article);
+        Assert.AreEqual(user, notification.UserToNotify);
         Assert.AreEqual(comment, notification.Comment);
     }
 }

@@ -1,3 +1,6 @@
+using System.Security.Authentication;
+using Blog.Domain.Entities;
+
 using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
@@ -11,12 +14,14 @@ namespace Blog.WebApi.Controllers;
 public class AuthController : ControllerBase
 {
     private ISessionLogic _sessionService;
+    private INotificationLogic _notificationLogic;
     private IUserLogic _userLogic;
 
-    public AuthController(ISessionLogic sessionService, IUserLogic userLogic)
+    public AuthController(ISessionLogic sessionService, IUserLogic userLogic, INotificationLogic notificationLogic)
     {
         _sessionService = sessionService;
         _userLogic = userLogic;
+        _notificationLogic = notificationLogic;
     }
     
     [HttpPost]
@@ -32,8 +37,11 @@ public class AuthController : ControllerBase
     [Route("login")]
     public IActionResult Login([FromBody] LoginDto login)
     {
-        var token = _sessionService.Login(login.Username, login.Password);
-        return Ok(new{token = token});
+        Guid token = _sessionService.Login(login.Username, login.Password);
+        User? loggedUser = _sessionService.GetLoggedUser(token);
+        IEnumerable<Notification> notifications = _notificationLogic.GetUnreadNotificationsByUser(loggedUser);
+        return Ok(new{token = token, notifications = notifications});
+
     }
         
     [HttpDelete]
