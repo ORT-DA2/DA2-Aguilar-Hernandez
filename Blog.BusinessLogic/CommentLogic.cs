@@ -8,18 +8,23 @@ namespace Blog.BusinessLogic;
 public class CommentLogic: ICommentLogic
 {
     private readonly IRepository<Comment> _repository;
-    private readonly ISessionLogic _sessionLogic;
     private readonly IArticleLogic _articleLogic;
-    public CommentLogic(IRepository<Comment> repository, ISessionLogic sessionLogic, IArticleLogic articleLogic)
+    private readonly ISessionLogic _sessionLogic;
+
+    public CommentLogic(IRepository<Comment> repository, IArticleLogic articleLogic, ISessionLogic sessionLogic)
     {
         _repository = repository;
-        _sessionLogic = sessionLogic;
         _articleLogic = articleLogic;
+        _sessionLogic = sessionLogic;
     }
-    public Comment AddNewComment(Comment comment, Guid authorization, Guid articleId)
+
+
+    public Comment AddNewComment(Comment comment, Guid articleId, Guid authorization)
     {
+        var article = _articleLogic.GetArticleById(articleId);
+        article.Comments.Add(comment);
         comment.Owner = _sessionLogic.GetLoggedUser(authorization);
-        comment.Article = _articleLogic.GetArticleById(articleId); 
+        comment.Article = article;
         comment.DatePublished = DateTime.Now;
         _repository.Insert(comment);
         _repository.Save();
@@ -28,7 +33,7 @@ public class CommentLogic: ICommentLogic
 
     public void DeleteCommentById(Guid id)
     {
-        Comment comment = _repository.GetById(c => c.Id == id);
+        Comment comment = _repository.GetBy(c => c.Id == id);
         
         if (comment == null)
         {
@@ -38,4 +43,5 @@ public class CommentLogic: ICommentLogic
         _repository.Delete(comment);
         _repository.Save();
     }
+    
 }

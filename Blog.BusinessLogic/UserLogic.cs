@@ -10,25 +10,37 @@ namespace Blog.BusinessLogic;
 public class UserLogic: IUserLogic
 {
     private readonly IRepository<User> _repository;
+    private readonly IRepository<Article> _articleRepository;
     private readonly ISessionLogic _sessionLogic;
 
-    public UserLogic(IRepository<User> userRepository, ISessionLogic sessionLogic)
+    public UserLogic(IRepository<User> userRepository, ISessionLogic sessionLogic, IRepository<Article> articleRepository)
     {
         _repository = userRepository;
         _sessionLogic = sessionLogic;
+        _articleRepository = articleRepository;
     }
     public User GetUserById(Guid id)
     {
-        return _repository.GetById(u => u.Id == id);
+        var user = _repository.GetBy(u => u.Id == id);
+        
+        ValidateNull(user);
+        
+        return user;
     }
 
     public IEnumerable<User> GetAllUsers()
     {
-        return _repository.GetAll();
+        var users = _repository.GetAll();
+        ValidateListNull(users);
+        
+        return users;
     }
 
     public User CreateUser(User user)
     {
+        var userExist = _repository.GetBy(u => u.Username == user.Username);
+        UserAlreadyExist(userExist);
+        ValidateNull(user);
         GeneralValidation(user);
         _repository.Insert(user);
         _repository.Save();
@@ -39,12 +51,13 @@ public class UserLogic: IUserLogic
     {
         GeneralValidation(userUpdated);
         
-        var oldUser = _repository.GetById(u => u.Id == id);
+        var oldUser = _repository.GetBy(u => u.Id == id);
 
-        if (oldUser == null)
-        {
-            throw new NotFoundException("The user was not found");
-        }
+        ValidateNull(oldUser);
+        var userExistUsername = _repository.GetBy(u => u.Username == userUpdated.Username);
+        var userExistEmail = _repository.GetBy(u => u.Email == userUpdated.Email);
+        UsernameAlreadyExistUpdate(userExistUsername, oldUser);
+        EmailAlreadyExistUpdate(userExistEmail, oldUser);
 
         if (_sessionLogic.GetLoggedUser(auth).Roles.All(ur => ur.Role != Role.Admin ))
         {
@@ -63,18 +76,39 @@ public class UserLogic: IUserLogic
 
     public void DeleteUser(Guid id)
     {
-        var user = _repository.GetById(u => u.Id == id);
-        
-        if (user == null)
-        {
-            throw new NotFoundException("The user was not found");
-        }
+        var user = _repository.GetBy(u => u.Id == id);
+
+        ValidateNull(user);
         
         _repository.Delete(user);
         _repository.Save();
     }
 
-    private static void GeneralValidation(User user)
+    public Dictionary<string, int> UserActivityRanking(DateTime startDate, DateTime endDate)
+    {
+        ValidateDates(startDate, endDate);
+        var users = _repository.GetAll();
+        var articles = _articleRepository.GetAll().Where(a => a.DatePublished >= startDate && a.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1));
+        var articleCounts = articles
+            .GroupBy(a => a.Owner.Username)
+            .ToDictionary(g => g.Key, g => g.Count());
+        var commentCounts = users.ToDictionary(user => user.Username, user => user.Comments.Where(c => c.DatePublished >= startDate && c.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1)).Count());
+        var counts = articleCounts
+            .Concat(commentCounts)
+            .GroupBy(d => d.Key)
+            .ToDictionary(g => g.Key, g => g.Sum(d => d.Value));
+        return counts;
+    }
+
+    private void ValidateDates(DateTime startDate, DateTime endDate)
+    {
+        if (startDate > endDate)
+        {
+            throw new ArgumentException("Start date couldn't be set after end Date");
+        }
+    }
+
+    public void GeneralValidation(User user)
     {
         user.FirstNameValidation();
         user.UsernameValidation();
@@ -85,5 +119,45 @@ public class UserLogic: IUserLogic
         user.ValidateAlfanumericUsername();
         user.ValidateUsernameLenght();
         user.ValidatePasswordLenght();
+    }
+
+    public void UserAlreadyExist(User user)
+    {
+        if (user != null)
+        {
+            throw new ArgumentException("User already exists");
+        }
+    }
+    
+    public static void UsernameAlreadyExistUpdate(User user, User oldUser)
+    {
+        if (user != null && user.Id != oldUser.Id)
+        {
+            throw new ArgumentException("User with that username already exists");
+        }
+    }
+    
+    public static void EmailAlreadyExistUpdate(User user, User oldUser)
+    {
+        if (user != null && user.Id != oldUser.Id)
+        {
+            throw new ArgumentException("User with that email already exists");
+        }
+    }
+
+    public void ValidateNull(User user)
+    {
+        if (user == null)
+        {
+            throw new NotFoundException("The user was not found");
+        }
+    }
+    
+    public void ValidateListNull(IEnumerable<User> users)
+    {
+        if (users == null || !users.Any())
+        {
+            throw new NotFoundException("The are no users");
+        }
     }
 }

@@ -12,11 +12,13 @@ public class UserRepository: Repository<User>
 
     public override IEnumerable<User> GetAll()
     {
-        return _context.Set<User>().Include(u => u.Roles);
+        return _context.Set<User>().Include(u => u.Roles).Include(u => u.Comments);
     }
     
-    public override User? GetById(Expression<Func<User, bool>> expression)
+    public override User? GetBy(Expression<Func<User, bool>> expression)
     {
         return _context.Set<User>().Include(u => u.Roles).FirstOrDefault(expression);
     }
+    
+    
 }

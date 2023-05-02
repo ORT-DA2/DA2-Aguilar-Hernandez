@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers;
 
-[ServiceFilter(typeof(AuthorizationFilter))]
 [ApiController]
 [Route("api/comments")]
-public class CommentController : ControllerBase
-{
+[ExceptionFilter]
+[ServiceFilter(typeof(AuthorizationFilter))]
+public class CommentController : ControllerBase{
+
     private readonly ICommentLogic _commentLogic;
     private readonly INotificationLogic _notificationLogic;
     public CommentController(ICommentLogic commentLogic, INotificationLogic notificationLogic)
@@ -21,14 +22,15 @@ public class CommentController : ControllerBase
         _notificationLogic = notificationLogic;
     }
 
-        
+
     [HttpPost]
-    public IActionResult PostNewComment([FromForm] CommentInModel commentInModel, [FromHeader] Guid Authorization, [FromBody] Guid articleId)
+    public IActionResult PostNewComment([FromBody] CommentInModel commentInModel, [FromHeader] Guid Authorization)
     {
         Comment comment = commentInModel.ToEntity();
         Comment result = _commentLogic.AddNewComment(comment,Authorization,articleId);
         _notificationLogic.SendNotification(comment);
         return Created($"api/comments/{comment.Id}", new CommentOutModel(result));
+
     }
         
     [HttpDelete("{id}")]

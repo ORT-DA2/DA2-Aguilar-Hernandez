@@ -10,7 +10,7 @@ public class SessionRepository: Repository<Session>
     {
     }
     
-    public override Session? GetById(Expression<Func<Session,bool>> expression)
+    public override Session? GetBy(Expression<Func<Session,bool>> expression)
     {
         return _context.Set<Session>().Include(a => a.User).ThenInclude(u => u.Roles).FirstOrDefault(expression);
     }

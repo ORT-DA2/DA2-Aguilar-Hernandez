@@ -9,5 +9,5 @@ public interface IUserLogic
         public User CreateUser(User user);
         public User UpdateUser(Guid id, User user, Guid auth);
         public void DeleteUser(Guid id);
-
+        public Dictionary<string, int> UserActivityRanking(DateTime startDate, DateTime endDate);
 }

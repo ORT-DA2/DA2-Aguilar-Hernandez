@@ -1,13 +1,11 @@
 ﻿using System.Linq.Expressions;
-using Blog.BusinessLogic;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
-using Microsoft.AspNetCore.Http;
 using Moq;
 
-namespace Blog.Tests.BusinessLogicTests;
+namespace Blog.BusinessLogic.Test;
 
 [TestClass]
 public class ArticleLogicTests
@@ -277,7 +275,7 @@ public class ArticleLogicTests
     public void GetArticleByIdValidTest()
     {
         var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object);
-        _articleRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
+        _articleRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
         var result = logic.GetArticleById(_articleTest.Id);
         Assert.AreEqual(_articleTest, result);
     }
@@ -324,7 +322,7 @@ public class ArticleLogicTests
         };
         
         var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object);
-        _articleRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
+        _articleRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
         _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         _articleRepoMock.Setup(o => o.Update(It.IsAny<Article>()));
         _articleRepoMock.Setup(o => o.Save());
@@ -354,7 +352,7 @@ public class ArticleLogicTests
         };
         
         var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object);
-        _articleRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
+        _articleRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
         _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         _articleRepoMock.Setup(o => o.Delete(It.IsAny<Article>()));
         _articleRepoMock.Setup(o => o.Save());

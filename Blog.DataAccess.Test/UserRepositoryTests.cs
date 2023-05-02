@@ -1,14 +1,14 @@
-﻿using Blog.DataAccess;
-using Blog.Domain.Entities;
+﻿using Blog.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Tests.DataAccessTests;
+namespace Blog.DataAccess.Test;
 
 [TestClass]
 public class UserRepositoryTests
 {
     private readonly UserRepository _userRepository;
     private readonly BlogDbContext _blogContext;
+    private List<User> _elementsInDatabase;
 
     public UserRepositoryTests()
     {
@@ -21,18 +21,8 @@ public class UserRepositoryTests
     {
         _blogContext.Database.OpenConnection();
         _blogContext.Database.EnsureCreated();
-    }
-
-    [TestCleanup]
-    public void CleanUp()
-    {
-        _blogContext.Database.EnsureDeleted();
-    }
-
-    [TestMethod]
-    public void GetByIdUser()
-    {
-        var elementsInDatabase = new List<User>
+        
+        _elementsInDatabase = new List<User>
         {
             new User()
             {
@@ -56,12 +46,33 @@ public class UserRepositoryTests
                 Email = "Francisco@example.com"
             }
         };
-        _blogContext.AddRange(elementsInDatabase);
+        _blogContext.AddRange(_elementsInDatabase);
         _blogContext.SaveChanges();
-        var elementExpected = elementsInDatabase.Where(e => e.Id.ToString().Equals("b90af3a0-f9d9-436e-b0c5-52b1f78fc567")).FirstOrDefault();
+    }
 
-        var elementSaved = _userRepository.GetById(e => e.Id.Equals(elementExpected.Id));
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _blogContext.Database.EnsureDeleted();
+    }
+
+    [TestMethod]
+    public void GetByIdUser()
+    {
+        var elementExpected = _elementsInDatabase.Where(e => e.Id.ToString().Equals("b90af3a0-f9d9-436e-b0c5-52b1f78fc567")).FirstOrDefault();
+
+        var elementSaved = _userRepository.GetBy(e => e.Id.Equals(elementExpected.Id));
         
         Assert.AreEqual(elementExpected, elementSaved);
+    }
+
+    [TestMethod]
+    public void GetByAllUser()
+    {
+        var elementsExpected = _elementsInDatabase;
+
+        var elementsSaved = _userRepository.GetAll();
+        
+        Assert.AreEqual(elementsExpected.Count, elementsSaved.Count());
     }
 }

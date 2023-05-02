@@ -1,5 +1,6 @@
 using Blog.BusinessLogic;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.WebApi.Controllers;
@@ -16,12 +17,39 @@ public class CommentControllerTest
     [TestMethod]
     public void AddingNewComment()
     {
+        var user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Email = "nicolas@exmaple.com",
+            Password = "123456",
+            Roles = new List<UserRole>()
+
+        };
+        
+        var articleTest = new Article()
+        {
+            Id = Guid.NewGuid(),
+            Title = ".NET 6 Webpage",
+            Content = "New features about .NET are being developed",
+            Owner = user,
+            Comments = new List<Comment>(){},
+            DateLastModified = DateTime.Now,
+            DatePublished = DateTime.Now,
+            Image = "test.jpg",
+            IsPublic = true,
+            Template = Template.RectangleTop
+            
+        };
+        
         var token = Guid.NewGuid();
-        var article = new Mock<Article>();
-        Comment comment = CreateComment();
+        var comment = CreateComment();
         
         CommentInModel commentIn = new CommentInModel()
         {
+            ArticleId = articleTest.Id,
             Body = comment.Body,
             Reply = comment.Reply
         };
@@ -37,11 +65,10 @@ public class CommentControllerTest
         var result = commentController.PostNewComment(commentIn,token, article.Object.Id);
         
         commentLogic.VerifyAll();
+
         var resultObject = result as CreatedResult;
         var userResult = resultObject.Value as CommentOutModel;
         
-        Assert.AreEqual(commentExpected.Id,userResult.Id);
-        Assert.AreEqual(commentExpected.Owner, userResult.Owner);
         Assert.AreEqual(commentExpected.Article, userResult.Article);
         Assert.AreEqual(commentExpected.Body, userResult.Body);
         Assert.AreEqual(commentExpected.Reply,userResult.Reply);

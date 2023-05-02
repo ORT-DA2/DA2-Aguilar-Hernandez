@@ -1,14 +1,12 @@
 ﻿using System.Linq.Expressions;
-using Blog.BusinessLogic;
-using Blog.DataAccess;
-using Blog.IDataAccess;
 using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
+using Blog.IDataAccess;
 using Moq;
 
-namespace Blog.Tests.BusinessLogicTests;
+namespace Blog.BusinessLogic.Test;
 
 
 [TestClass]
@@ -16,12 +14,14 @@ public class UserLogicTests
 {
     private Mock<IRepository<User>> _userRepoMock;
     private Mock<ISessionLogic> _sessionLogicMock;
+    private Mock<IRepository<Article>> _articleRepositoryMock;
 
     [TestInitialize]
     public void Setup()
     {
         _userRepoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
         _sessionLogicMock = new Mock<ISessionLogic>(MockBehavior.Strict);
+        _articleRepositoryMock = new Mock<IRepository<Article>>(MockBehavior.Strict);
     }
 
     [TestCleanup]
@@ -42,7 +42,7 @@ public class UserLogicTests
             Username = "NicolasAHF",
             Password = "123456",
             Roles = new List<UserRole>{},
-            Email = "nicolas@example.com"
+            Email = "nicolastest@example.com"
         };
 
         UserRole role = new UserRole()
@@ -53,9 +53,10 @@ public class UserLogicTests
         };
         
         user.Roles.Add(role);
-        
+        var token = Guid.NewGuid();
 
-        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object);
+        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
+        _userRepoMock.Setup(s => s.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns((User)null);
         _userRepoMock.Setup(o => o.Insert(It.IsAny<User>()));
         _userRepoMock.Setup(o => o.Save());
         var result = logic.CreateUser(user);
@@ -89,7 +90,7 @@ public class UserLogicTests
         users.FirstOrDefault().Roles.Add(role);
         
 
-        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object);
+        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
         _userRepoMock.Setup(o => o.GetAll()).Returns(users);
         var result = logic.GetAllUsers();
         Assert.AreEqual(users.Count(), result.Count());
@@ -121,8 +122,8 @@ public class UserLogicTests
         var mock = new Mock<IRepository<User>>(MockBehavior.Loose);
         
 
-        var logic = new UserLogic(mock.Object, _sessionLogicMock.Object);
-        mock.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
+        var logic = new UserLogic(mock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
+        mock.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
         
         var result = logic.GetUserById(user.Id);
         mock.VerifyAll();
@@ -166,8 +167,8 @@ public class UserLogicTests
         };
 
 
-        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object);
-        _userRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
+        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
+        _userRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
         _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         _userRepoMock.Setup(o => o.Update(It.IsAny<User>()));
         _userRepoMock.Setup(o => o.Save());
@@ -218,8 +219,8 @@ public class UserLogicTests
         };
 
 
-        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object);
-        _userRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
+        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
+        _userRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
         _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         _userRepoMock.Setup(o => o.Update(It.IsAny<User>()));
         _userRepoMock.Setup(o => o.Save());
@@ -281,8 +282,8 @@ public class UserLogicTests
         };
 
 
-        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object);
-        _userRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
+        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
+        _userRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
         _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         logic.UpdateUser(user.Id, userUpdated, session.AuthToken);
     }
@@ -335,8 +336,8 @@ public class UserLogicTests
         user.Roles.Add(role);
         userUpdated.Roles.Add(role);
 
-        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object);
-        _userRepoMock.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>())).Returns((User)null);
+        var logic = new UserLogic(_userRepoMock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
+        _userRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns((User)null);
         logic.UpdateUser(user.Id, user, session.AuthToken);
     }
     
@@ -366,8 +367,8 @@ public class UserLogicTests
         var mock = new Mock<IRepository<User>>(MockBehavior.Loose);
         
 
-        var logic = new UserLogic(mock.Object, _sessionLogicMock.Object);
-        mock.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
+        var logic = new UserLogic(mock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
+        mock.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
         mock.Setup(o => o.Save());
         
         logic.DeleteUser(user.Id);
@@ -393,8 +394,8 @@ public class UserLogicTests
         var mock = new Mock<IRepository<User>>(MockBehavior.Loose);
         
 
-        var logic = new UserLogic(mock.Object, _sessionLogicMock.Object);
-        mock.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>()));
+        var logic = new UserLogic(mock.Object, _sessionLogicMock.Object, _articleRepositoryMock.Object);
+        mock.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>()));
         mock.Setup(o => o.Save());
         
         logic.DeleteUser(user.Id);

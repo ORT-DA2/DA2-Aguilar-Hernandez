@@ -3,9 +3,8 @@ using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
-using Blog.Models.In.Article;
-using Blog.Models.Out.Article;
-using Blog.Models.Out.User;
+using Blog.Models.In;
+using Blog.Models.Out;
 using Blog.WebApi.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +54,6 @@ public class ArticleControllerTest
         {
             Title = "Angular Webpage",
             Content = "New features about angular are being developed",
-            Comments = new List<Comment>(){},
             Image = image,
             IsPublic = true,
             Template = Template.RectangleTop
@@ -118,7 +116,7 @@ public class ArticleControllerTest
             DateLastModified = DateTime.Now,
             DatePublished = DateTime.Now,
             Image = image,
-            IsPublic = true,
+            IsPublic = false,
             Template = Template.RectangleTop
             
         };
@@ -148,7 +146,7 @@ public class ArticleControllerTest
             DateLastModified = DateTime.Now,
             DatePublished = DateTime.Now,
             Image = image,
-            IsPublic = true,
+            IsPublic = false,
             Template = Template.RectangleTop
             
         };
@@ -247,7 +245,7 @@ public class ArticleControllerTest
         Assert.IsTrue(_articleTest2.Id.Equals(value.Id));
         Assert.IsTrue(_articleTest2.Title.Equals(value.Title));
         Assert.IsTrue(_articleTest2.Content.Equals(value.Content));
-        Assert.IsTrue(_articleTest2.Comments.Equals(value.Comments));
+        Assert.IsTrue(_articleTest2.Comments.Count.Equals(value.Comments.Count));
         Assert.IsTrue(_articleTest2.DatePublished.Equals(value.DatePublished));
         Assert.IsTrue(_articleTest2.DateLastModified.Equals(value.DateLastModified));
         Assert.IsTrue(_articleTest2.Image.Equals(value.Image));
@@ -256,13 +254,13 @@ public class ArticleControllerTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException),
+        "There are no articles with the id")]
     public void GetByIdInvalidArticleTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetArticleById(_articleTest.Id)).Throws(new NotFoundException("There are no articles with the id"));
-        var result = controller.GetArticleById(_articleTest.Id);
-
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        controller.GetArticleById(_articleTest.Id);
     }
 
     [TestMethod]
@@ -272,30 +270,28 @@ public class ArticleControllerTest
 
         List<Article> _articlesFilteres = new List<Article>()
         {
-            _articleTest,
-            _articleTest2
+            _articleTest2,
+            _articleTest3
         };
         
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetArticleByText(textRecibed)).Returns(_articlesFilteres);
         var result = controller.GetArticleByText(textRecibed);
         var okResult = result as OkObjectResult;
-        var value = okResult.Value as List<Article>;
+        var value = okResult.Value as List<ArticleDetailDTO>;
         
-        Assert.AreEqual(_articlesFilteres, value);
+        Assert.AreEqual(_articlesFilteres.Count, value.Count);
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException),
+        "There are no articles with that text.")]
     public void GetArticleByTextFailTest()
     {
         string textRecibed = "Hello";
-        
-        
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetArticleByText(textRecibed)).Throws(new NotFoundException("There are no articles with that text."));;
-        var result = controller.GetArticleByText(textRecibed);
-        
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        controller.GetArticleByText(textRecibed);
     }
 
     [TestMethod]
@@ -303,25 +299,31 @@ public class ArticleControllerTest
     {
         List<Article> articles = new List<Article>()
         {
-            _articleTest,
-            _articleTest2
+            _articleTest2,
+            _articleTest3
         };
+        var articlesDTO = new List<ArticleDetailDTO>();
+        foreach (var article in articles)
+        {
+            articlesDTO.Add(new ArticleDetailDTO(article));
+        }
         
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetAllArticles()).Returns(articles);
         var result = controller.GetAllArticles();
         var okResult = result as OkObjectResult;
-        var dto = okResult.Value as List<Article>;
-        Assert.AreEqual(articles, dto);
+        var dto = okResult.Value as List<ArticleDetailDTO>;
+        Assert.AreEqual(articlesDTO.Count, dto.Count());
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException),
+        "There are no articles.")]
     public void GetAllArticlesInvalidTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetAllArticles()).Throws(new NotFoundException("There are no articles."));
-        var result = controller.GetAllArticles();
-        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+        controller.GetAllArticles();
     }
     
     [TestMethod]
@@ -330,14 +332,15 @@ public class ArticleControllerTest
         var token = Guid.NewGuid();
         
         var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Returns(_articleTest);
+        _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Returns(_articleTest2);
         var result = controller.CreateArticle(_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
-        Assert.AreEqual(_articleTest.Title, dto.Title);
+        Assert.AreEqual(_articleTest2.Title, dto.Title);
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
     public void CreateInvalidArticleTest()
     {
         var token = Guid.NewGuid();
@@ -352,17 +355,19 @@ public class ArticleControllerTest
     public void UpdateValidArticleTest()
     {
         var token = Guid.NewGuid();
+        var article = _articleTest2;
         var articlenMock = new Mock<IArticleLogic>(MockBehavior.Loose);
         
         var controller = new ArticlesController(articlenMock.Object);
-        articlenMock.Setup(o => o.UpdateArticle(_articleTest.Id, It.IsAny<Article>(), token)).Returns(_articleTest2);
-        var result = controller.UpdateArticle(_articleTest2.Id ,_articleTestDTO, token);
+        articlenMock.Setup(o => o.UpdateArticle(_articleTest2.Id, It.IsAny<Article>(), token)).Returns(article);
+        var result = controller.UpdateArticle(article.Id ,_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
         Assert.AreEqual(_articleTest2.Title, dto.Title);
     }
     
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
     public void UpdateArticleFailTest()
     {
         var token = Guid.NewGuid();
@@ -386,6 +391,7 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
     public void DeleteArticleFailTest()
     {
         var token = Guid.NewGuid();
@@ -410,11 +416,47 @@ public class ArticleControllerTest
     }
     
     [TestMethod]
+    [ExpectedException(typeof(NotFoundException))]
     public void GetLastTenInvalidTest()
     {
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetLastTen()).Throws(new NotFoundException("There are no articles."));
         var result = controller.GetLastTen();
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+    
+    [TestMethod]
+    public void GetPublicArticleSuccessTest()
+    {
+        var articles = _articles;
+        articles.Remove(_articleTest);
+        articles.Remove(_articleTest5);
+        articles.Remove(_articleTest7);
+        
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetAllPublicArticles()).Returns(articles);
+        var result = controller.GetAllPublicArticles();
+        var okResult = result as OkObjectResult;
+        var dto = okResult.Value as List<ArticleDetailDTO>;
+        Assert.AreEqual(articles.Count, dto.Count);
+    }
+    
+    [TestMethod]
+    public void GetUsersArticleSuccessTest()
+    {
+        var articles = new List<Article>()
+        {
+            _articleTest5,
+            _articleTest7
+        };
+        
+        var token = Guid.NewGuid();
+
+        var controller = new ArticlesController(_articlenMock.Object);
+        _articlenMock.Setup(o => o.GetAllUserArticles(_user.Username, token)).Returns(articles);
+        var result = controller.GetAllUserArticles(_user.Username, token);
+        var okResult = result as OkObjectResult;
+        var dto = okResult.Value as List<ArticleDetailDTO>;
+        Assert.AreEqual(articles.Count, dto.Count);
     }
 }

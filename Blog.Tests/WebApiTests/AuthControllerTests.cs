@@ -1,7 +1,8 @@
 ﻿using System.Security.Authentication;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
-using Blog.Models.In.Auth;
+using Blog.Models.In;
 using Blog.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -12,11 +13,13 @@ namespace Blog.Tests.WebApiTests;
 public class AuthControllerTests
 {
     private Mock<ISessionLogic> _sessionMock;
-    
+    private Mock<IUserLogic> _userMock;
+
     [TestInitialize]
     public void Setup()
     {
         _sessionMock = new Mock<ISessionLogic>();
+        _userMock = new Mock<IUserLogic>(MockBehavior.Strict);
     }
 
     [TestCleanup]
@@ -28,7 +31,7 @@ public class AuthControllerTests
     [TestMethod]
     public void SuccessfulLoginTest()
     {
-        LoginDTO session = new LoginDTO()
+        LoginDto session = new LoginDto()
         {
             Username = "NicolasAHF",
             Password = "123456"
@@ -37,7 +40,8 @@ public class AuthControllerTests
         Guid token = Guid.NewGuid();
 
         var notificationLogic = new Mock<INotificationLogic>();
-        var controller = new AuthController(_sessionMock.Object, notificationLogic.Object);
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
+        
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
         var result = controller.Login(session);
         var okResult = result as OkObjectResult;
@@ -49,19 +53,19 @@ public class AuthControllerTests
     }
     
     [TestMethod]
+    [ExpectedException(typeof(InvalidCredentialException))]
     public void LoginFailTest()
     {
-        LoginDTO session = new LoginDTO()
+        LoginDto session = new LoginDto()
         {
             Username = "NicolasAHF",
             Password = "123456"
         };
 
         var notificationLogic = new Mock<INotificationLogic>();
-        var controller = new AuthController(_sessionMock.Object, notificationLogic.Object);
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
-        var result = controller.Login(session);
-        Assert.IsInstanceOfType(result, typeof(UnauthorizedObjectResult));
+        controller.Login(session);
     }
     
     [TestMethod]
@@ -71,12 +75,48 @@ public class AuthControllerTests
         Guid token = Guid.NewGuid();
 
         var notificationLogic = new Mock<INotificationLogic>();
-        var controller = new AuthController(_sessionMock.Object, notificationLogic.Object);
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
+        
         _sessionMock.Setup(o => o.Logout(token));
         var result = controller.Logout(token);
-        
+        var okResult = result as OkObjectResult;
+        var value = okResult.Value.ToString();
         _sessionMock.VerifyAll();
         
-        Assert.IsInstanceOfType(result, typeof(OkResult));
+        Assert.AreEqual(value, "Logout successfuly");
+        
+    }
+    
+    [TestMethod]
+    public void SuccessfulRegisterTest()
+    {
+        RegisterDto session = new RegisterDto()
+        {
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Email = "nicolas@example.com"
+        };
+
+        var newUser = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Roles = new List<UserRole>{},
+            Email = "nicolas@example.com"
+        };
+        
+
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
+        _userMock.Setup(o => o.CreateUser(It.IsAny<User>())).Returns(newUser);
+        var result = controller.Register(session);
+        var okResult = result as OkObjectResult;
+        var userResult = okResult.Value;
+
+        Assert.AreEqual(newUser, userResult);
     }
 }

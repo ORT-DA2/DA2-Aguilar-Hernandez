@@ -1,24 +1,26 @@
-﻿using Blog.Models.In.UserRole;
+﻿using Blog.Domain.Enums;
 
-namespace Blog.Models.In.User;
+namespace Blog.Models.In;
 
-public class CreateUserDTO
+public class RegisterDto
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
-    public ICollection<UserRoleBasicInfoDTO> Roles { get; set; }
     public string Email { get; set; }
     
-    public Domain.Entities.User ToEntity(ICollection<UserRoleBasicInfoDTO> roles)
+    public Domain.Entities.User ToEntity()
     {
-        var rolList = new List<Domain.Entities.UserRole>();
-        foreach (var rol in roles)
+        var roles = new List<UserRoleBasicInfoDTO>()
         {
-            rolList.Add(rol.ToEntity());
-        }
-        
+            new UserRoleBasicInfoDTO()
+            {
+                Role = Role.Blogger
+            }
+        };
+        var rolList = roles.Select(rol => rol.ToEntity()).ToList();
+
         return new Domain.Entities.User()
         {
             FirstName = FirstName,
@@ -27,7 +29,6 @@ public class CreateUserDTO
             Password = Password,
             Email = Email,
             Roles = rolList
-            
         };
     }
 }

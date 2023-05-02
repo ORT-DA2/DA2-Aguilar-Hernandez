@@ -1,48 +1,56 @@
 using System.Security.Authentication;
 using Blog.Domain.Entities;
+
 using Blog.Filters;
 using Blog.IBusinessLogic;
-using Blog.Models.In.Auth;
+using Blog.Models.In;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers;
 
 [Route("api/auth")]
 [ApiController]
+[ExceptionFilter]
 public class AuthController : ControllerBase
 {
     private ISessionLogic _sessionService;
     private INotificationLogic _notificationLogic;
-    public AuthController(ISessionLogic sessionService, INotificationLogic notificationLogic)
+    private IUserLogic _userLogic;
+
+    public AuthController(ISessionLogic sessionService, IUserLogic userLogic, INotificationLogic notificationLogic)
     {
         _sessionService = sessionService;
+        _userLogic = userLogic;
         _notificationLogic = notificationLogic;
+    }
+    
+    [HttpPost]
+    [Route("register")]
+    public IActionResult Register([FromBody] RegisterDto register)
+    {
+        var user = register.ToEntity();
+        var newUser = _userLogic.CreateUser(user);
+        return Ok(newUser);
     }
         
     [HttpPost]
     [Route("login")]
-    public IActionResult Login([FromBody] LoginDTO login)
+    public IActionResult Login([FromBody] LoginDto login)
     {
-        try
-        {
-            Guid token = _sessionService.Login(login.Username, login.Password);
-            User? loggedUser = _sessionService.GetLoggedUser(token);
-            IEnumerable<Notification> notifications = _notificationLogic.GetUnreadNotificationsByUser(loggedUser);
-            return Ok(new{token = token, notifications = notifications});
-        }
-        catch (InvalidCredentialException ex)
-        {
-            return Unauthorized(ex.Message);
-        }
+        Guid token = _sessionService.Login(login.Username, login.Password);
+        User? loggedUser = _sessionService.GetLoggedUser(token);
+        IEnumerable<Notification> notifications = _notificationLogic.GetUnreadNotificationsByUser(loggedUser);
+        return Ok(new{token = token, notifications = notifications});
+
     }
         
     [HttpDelete]
     [Route("logout")]
     [ServiceFilter(typeof(AuthorizationFilter))]
-    public IActionResult Logout([FromHeader] Guid token)
+    public IActionResult Logout([FromHeader] Guid Authorization)
     {
-        _sessionService.Logout(token);
-        return Ok();
+        _sessionService.Logout(Authorization);
+        return Ok("Logout successfuly");
     }
         
 }

@@ -1,16 +1,13 @@
 ﻿using Blog.Domain.Entities;
 using Blog.Domain.Enums;
-using System.IO;
 
-namespace Blog.Models.In.Article;
+namespace Blog.Models.In;
 
 public class CreateArticleDTO
 {
     public string Title { get; set; }
     public string Content { get; set; }
     public bool IsPublic { get; set; }
-    public Guid OwnerId { get; set; }
-    public List<Comment>? Comments { get; set; }
     public string Image { get; set; }
     public Template Template { get; set; }
     
@@ -22,7 +19,6 @@ public class CreateArticleDTO
             Title = Title,
             Content = Content,
             IsPublic = IsPublic,
-            Comments = Comments,
             Image = Image,
             Template = Template
             

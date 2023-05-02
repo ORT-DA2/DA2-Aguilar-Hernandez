@@ -1,11 +1,10 @@
 ﻿using System.Linq.Expressions;
 using System.Security.Authentication;
-using Blog.BusinessLogic;
 using Blog.Domain.Entities;
 using Blog.IDataAccess;
 using Moq;
 
-namespace Blog.Tests.BusinessLogicTests;
+namespace Blog.BusinessLogic.Test;
 
 [TestClass]
 public class SessionLogicTests
@@ -30,7 +29,7 @@ public class SessionLogicTests
         var mockUser = new Mock<IRepository<User>>(MockBehavior.Strict);
 
         var logic = new SessionLogic(mockSession.Object, mockUser.Object);
-        mockUser.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
+        mockUser.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
         mockSession.Setup(o => o.Insert(It.IsAny<Session>()));
         mockSession.Setup(o => o.Save());
         var result = logic.Login(user.Email, user.Password);
@@ -60,7 +59,7 @@ public class SessionLogicTests
         var mockUser = new Mock<IRepository<User>>(MockBehavior.Strict);
 
         var logic = new SessionLogic(mockSession.Object, mockUser.Object);
-        mockUser.Setup(o => o.GetById(It.IsAny<Expression<Func<User, bool>>>())).Returns((User)null);
+        mockUser.Setup(o => o.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns((User)null);
         var result = logic.Login(user.Email, user.Password);
         mockSession.VerifyAll();
         mockUser.VerifyAll();
@@ -92,7 +91,7 @@ public class SessionLogicTests
         var mockUser = new Mock<IRepository<User>>(MockBehavior.Strict);
 
         var logic = new SessionLogic(mockSession.Object, mockUser.Object);
-        mockSession.Setup(o => o.GetById(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session);
+        mockSession.Setup(o => o.GetBy(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session);
         var result = logic.GetLoggedUser(session.AuthToken);
         mockSession.VerifyAll();
         Assert.AreEqual(user, result);
@@ -125,7 +124,7 @@ public class SessionLogicTests
         var mockUser = new Mock<IRepository<User>>(MockBehavior.Strict);
 
         var logic = new SessionLogic(mockSession.Object, mockUser.Object);
-        mockSession.Setup(o => o.GetById(It.IsAny<Expression<Func<Session, bool>>>())).Returns((Session)null);
+        mockSession.Setup(o => o.GetBy(It.IsAny<Expression<Func<Session, bool>>>())).Returns((Session)null);
         var result = logic.GetLoggedUser(session.AuthToken);
         mockSession.VerifyAll();
     }
@@ -156,7 +155,7 @@ public class SessionLogicTests
         var mockUser = new Mock<IRepository<User>>(MockBehavior.Strict);
 
         var logic = new SessionLogic(mockSession.Object, mockUser.Object);
-        mockSession.Setup(o => o.GetById(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session);
+        mockSession.Setup(o => o.GetBy(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session);
         mockSession.Setup(o => o.Delete(session));
         mockSession.Setup(o => o.Save());
         logic.Logout(session.AuthToken);

@@ -1,10 +1,8 @@
-﻿using Blog.DataAccess;
-using Blog.Domain;
-using Blog.Domain.Entities;
+﻿using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Tests.DataAccessTests;
+namespace Blog.DataAccess.Test;
 
 [TestClass]
 public class RepositoryTests
@@ -98,7 +96,7 @@ public class RepositoryTests
         _blogContext.SaveChanges();
         var elementExpected = elementsInDatabase.Where(e => e.Id.ToString().Equals("b90af3a0-f9d9-436e-b0c5-52b1f78fc567")).FirstOrDefault();
 
-        var elementSaved = _repository.GetById(e => e.Id.Equals(elementExpected.Id));
+        var elementSaved = _repository.GetBy(e => e.Id.Equals(elementExpected.Id));
         
         Assert.AreEqual(elementExpected, elementSaved);
     }
@@ -246,5 +244,11 @@ public class RepositoryTests
         var elementSaved = _blogContext.Users.FirstOrDefault(u => u.Id == elementExpected.Id);
         
         Assert.IsNull(elementSaved);
+    }
+
+    [TestMethod]
+    public void GetByText()
+    {
+        
     }
 }

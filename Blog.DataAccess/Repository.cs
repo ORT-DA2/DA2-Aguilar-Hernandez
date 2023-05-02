@@ -19,7 +19,7 @@ public class Repository<T> : IRepository<T> where T : class
         return _context.Set<T>();
     }
 
-    public virtual T? GetById(Expression<Func<T, bool>> expression)
+    public virtual T? GetBy(Expression<Func<T, bool>> expression)
     {
         return _context.Set<T>().FirstOrDefault(expression);
     }
@@ -54,9 +54,23 @@ public class Repository<T> : IRepository<T> where T : class
         return _context.Set<T>();
     }
 
-    public virtual IEnumerable<T> GetByUser(User user)
+     public virtual IEnumerable<T> GetByUser(User user)
     {
         return _context.Set<T>();
     }
-
+    
+    public virtual IEnumerable<T> GetPublicAll()
+    {
+        return _context.Set<T>();
+    }
+    public virtual IEnumerable<T> GetUserArticles(string username)
+    {
+        return _context.Set<T>();
+    }
+    
+    public virtual Dictionary<T, int> GetUserByActivity(DateTime startDate, DateTime endDate)
+    {
+        return _context.Set<T>().ToDictionary(group => group, group => group.GetHashCode());
+    }
+    
 }
