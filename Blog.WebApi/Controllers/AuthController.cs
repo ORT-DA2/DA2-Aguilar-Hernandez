@@ -1,3 +1,4 @@
+using Blog.Domain.Entities;
 using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
@@ -32,7 +33,7 @@ public class AuthController : ControllerBase
     [Route("login")]
     public IActionResult Login([FromBody] LoginDto login)
     {
-        var token = _sessionService.Login(login.Username, login.Password);
+        Guid token = _sessionService.Login(login.Username, login.Password);
         return Ok(new{token = token});
     }
         

@@ -294,38 +294,7 @@ public class ArticleControllerTest
         controller.GetArticleByText(textRecibed);
     }
 
-    [TestMethod]
-    public void GetAllArticlesValidTest()
-    {
-        List<Article> articles = new List<Article>()
-        {
-            _articleTest2,
-            _articleTest3
-        };
-        var articlesDTO = new List<ArticleDetailDTO>();
-        foreach (var article in articles)
-        {
-            articlesDTO.Add(new ArticleDetailDTO(article));
-        }
-        
-        var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.GetAllArticles()).Returns(articles);
-        var result = controller.GetAllArticles();
-        var okResult = result as OkObjectResult;
-        var dto = okResult.Value as List<ArticleDetailDTO>;
-        Assert.AreEqual(articlesDTO.Count, dto.Count());
-    }
-    
-    [TestMethod]
-    [ExpectedException(typeof(NotFoundException),
-        "There are no articles.")]
-    public void GetAllArticlesInvalidTest()
-    {
-        var controller = new ArticlesController(_articlenMock.Object);
-        _articlenMock.Setup(o => o.GetAllArticles()).Throws(new NotFoundException("There are no articles."));
-        controller.GetAllArticles();
-    }
-    
+
     [TestMethod]
     public void CreateValidArticleTest()
     {

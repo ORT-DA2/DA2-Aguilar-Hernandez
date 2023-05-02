@@ -20,7 +20,7 @@ namespace Blog.WebApi.Controllers
             _articleLogic = articleLogic;
         }
 
-        [HttpGet("id/{id}")]
+        [HttpGet("{id}")]
         [ServiceFilter(typeof(AuthorizationFilter))]
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetArticleById([FromRoute] Guid id)
@@ -29,17 +29,6 @@ namespace Blog.WebApi.Controllers
             return Ok(new ArticleDetailDTO(article));
         }
 
-        [HttpGet]
-        [ServiceFilter(typeof(AuthorizationFilter))]
-        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
-        public IActionResult GetAllArticles()
-        {
-            var articles = _articleLogic.GetAllArticles();
-            var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
-
-            return Ok(articlesDTO);
-        }
-        
         [HttpGet("public")]
         [ServiceFilter(typeof(AuthorizationFilter))]
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
@@ -51,10 +40,10 @@ namespace Blog.WebApi.Controllers
 
         }
         
-        [HttpGet("{username}")]
+        [HttpGet]
         [ServiceFilter(typeof(AuthorizationFilter))]
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
-        public IActionResult GetAllUserArticles([FromRoute] string username, [FromHeader] Guid authorization)
+        public IActionResult GetAllUserArticles([FromQuery] string username, [FromHeader] Guid authorization)
         {
             var articles = _articleLogic.GetAllUserArticles(username, authorization);
             var articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();

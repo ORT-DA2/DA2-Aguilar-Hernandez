@@ -87,13 +87,13 @@ public class UserLogic: IUserLogic
     public Dictionary<string, int> UserActivityRanking(DateTime startDate, DateTime endDate)
     {
         ValidateDates(startDate, endDate);
-        var users = _repository.GetAll();
-        var articles = _articleRepository.GetAll().Where(a => a.DatePublished >= startDate && a.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1));
-        var articleCounts = articles
+        IEnumerable<User> users = _repository.GetAll();
+        IEnumerable<Article> articles = _articleRepository.GetAll().Where(a => a.DatePublished >= startDate && a.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1));
+        Dictionary<string, int> articleCounts = articles
             .GroupBy(a => a.Owner.Username)
             .ToDictionary(g => g.Key, g => g.Count());
-        var commentCounts = users.ToDictionary(user => user.Username, user => user.Comments.Where(c => c.DatePublished >= startDate && c.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1)).Count());
-        var counts = articleCounts
+        Dictionary<string, int> commentCounts = users.ToDictionary(user => user.Username, user => user.Comments.Where(c => c.DatePublished >= startDate && c.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1)).Count());
+        Dictionary<string, int> counts = articleCounts
             .Concat(commentCounts)
             .GroupBy(d => d.Key)
             .ToDictionary(g => g.Key, g => g.Sum(d => d.Value));
