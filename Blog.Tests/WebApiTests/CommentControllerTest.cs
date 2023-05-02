@@ -60,11 +60,11 @@ public class CommentControllerTest
         commentLogic.Setup(c => c.AddNewComment(It.IsAny<Comment>(),commentIn.ArticleId, token)).Returns(comment);
         var result = commentController.PostNewComment(commentIn, token);
         var resultObject = result as CreatedResult;
-        var userResult = resultObject.Value as CommentOutModel;
+        var commentResult = resultObject.Value as CommentOutModel;
         commentLogic.VerifyAll();
-        Assert.AreEqual(commentExpected.Article, userResult.Article);
-        Assert.AreEqual(commentExpected.Body, userResult.Body);
-        Assert.AreEqual(commentExpected.Reply,userResult.Reply);
+        Assert.AreEqual(commentExpected.Article, commentResult.Article);
+        Assert.AreEqual(commentExpected.Body, commentResult.Body);
+        Assert.AreEqual(commentExpected.Reply,commentResult.Reply);
     }
 
     [TestMethod]
@@ -94,6 +94,31 @@ public class CommentControllerTest
         mock.VerifyAll();
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
+
+    [TestMethod]
+    public void ReplyValidComment()
+    {
+        Comment comment = new Comment()
+        {
+            Id = Guid.NewGuid(),
+            Owner = Mock.Of<User>(),
+            Article = Mock.Of<Article>(),
+            Body = "Buen post Maquinola"
+        };
+        Comment commentReplied = comment;
+        commentReplied.Reply = "Muchas gracias!";
+        var mock = new Mock<ICommentLogic>(MockBehavior.Strict);
+        var controller = new CommentController(mock.Object);
+        mock.Setup(c => c.GetBy(comment.Id)).Return(comment);
+        mock.Setup(c => c.ReplyComment(comment.Id, It.IsAny<string>())).Return(commentReplied);
+        var result = controller.ReplyComment(comment.Id, commentReplied.Reply);
+        var resultObject = result as OkObjectResult;
+        var commentResult = resultObject.Value as CommentOutModel;
+        mock.VerifyAll();
+        Assert.AreEqual(commentReplied.Body, commentResult.Body);
+        Assert.AreEqual(commentReplied.Reply,commentResult.Reply);
+    }
+    
     private Comment CreateComment()
     {
         return new Comment()

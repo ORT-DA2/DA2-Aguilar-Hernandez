@@ -29,7 +29,7 @@ public class CommentController : ControllerBase{
             CommentOutModel commentOut = new CommentOutModel(result);
             return Created("Comment created ",commentOut);
     }
-        
+
     [HttpDelete("{id}")]
     public IActionResult DeleteCommentById([FromRoute] Guid id)
     {
