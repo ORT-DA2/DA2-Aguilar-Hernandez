@@ -30,7 +30,13 @@ public class NotificationLogic : INotificationLogic
 
     public IEnumerable<Notification> GetUnreadNotificationsByUser(User user)
     {
-        return _repository.GetByUser(user);
+        IEnumerable<Notification> notifications = _repository.GetByUser(user);
+        foreach (Notification notification in notifications)
+        {
+            notification.IsRead = true;
+        }
+        _repository.Save();
+        return notifications;
     }
 
 }

@@ -84,16 +84,26 @@ public class NotificationLogicTest
     [TestMethod]
     public void TestGetUnreadNotifications()
     {
-        _repository.Setup(o => o.Insert(It.IsAny<Notification>()));
-        _repository.Setup(o => o.Save());
-        _repository.Setup(o => o.GetByUser(It.IsAny<User>()));
-        
-        var notification = _notificationLogic.SendNotification(_comment);
+        Notification notification = new Notification()
+        {
+            Comment = _comment,
+            Id = Guid.NewGuid(),
+            IsRead = false,
+            UserToNotify = _articleOwner
+        };
+
+        List<Notification> expectedNotification = new List<Notification>()
+        {
+            notification
+        };
+
+        _repository.Setup(o => o.GetByUser(It.IsAny<User>())).Returns(expectedNotification);
+
         var notifications = _notificationLogic.GetUnreadNotificationsByUser(_articleOwner);
-        
-        Assert.AreEqual(notification.Comment.Id, _comment.Id);
-        Assert.AreEqual(notification.UserToNotify.Id, _articleOwner.Id);
-        Assert.IsFalse(notifications.First().IsRead);
+
+        Assert.AreEqual(expectedNotification, notifications);
+        Assert.IsTrue(expectedNotification.First().IsRead);
         _repository.VerifyAll();
     }
 }
+   
