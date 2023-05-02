@@ -45,7 +45,7 @@ public class CommentController : ControllerBase{
     }
 
     [HttpPut]
-    public IActionResult ReplyComment([FromBody]Guid id, string reply)
+    public IActionResult ReplyComment([FromBody]Guid id, [FromBody]string reply)
     {
         Comment commentReplied = _commentLogic.ReplyComment(id, reply);
         return Ok(new CommentOutModel(commentReplied));
