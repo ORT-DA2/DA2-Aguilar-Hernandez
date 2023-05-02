@@ -18,7 +18,7 @@ public class AuthControllerTests
     [TestInitialize]
     public void Setup()
     {
-        _sessionMock = new Mock<ISessionLogic>(MockBehavior.Strict);
+        _sessionMock = new Mock<ISessionLogic>();
         _userMock = new Mock<IUserLogic>(MockBehavior.Strict);
     }
 
@@ -38,14 +38,16 @@ public class AuthControllerTests
         };
 
         Guid token = Guid.NewGuid();
-        
 
-        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
+        var notificationLogic = new Mock<INotificationLogic>();
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
+        
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
         var result = controller.Login(session);
         var okResult = result as OkObjectResult;
         var tokenResult = okResult.Value.ToString();
-        var expected = new { token = token };
+        Notification[] notifications = new Notification[1];
+        var expected = new { token = token, notifications = notifications };
         
         Assert.AreEqual(expected.ToString(), tokenResult);
     }
@@ -60,7 +62,8 @@ public class AuthControllerTests
             Password = "123456"
         };
 
-        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
+        var notificationLogic = new Mock<INotificationLogic>();
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
         controller.Login(session);
     }
@@ -71,7 +74,9 @@ public class AuthControllerTests
         
         Guid token = Guid.NewGuid();
 
-        var controller = new AuthController(_sessionMock.Object, _userMock.Object);
+        var notificationLogic = new Mock<INotificationLogic>();
+        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
+        
         _sessionMock.Setup(o => o.Logout(token));
         var result = controller.Logout(token);
         var okResult = result as OkObjectResult;
