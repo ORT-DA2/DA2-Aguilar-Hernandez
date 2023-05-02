@@ -7,12 +7,10 @@ namespace Blog.BusinessLogic;
 public class NotificationLogic : INotificationLogic
 {
     private readonly IRepository<Notification> _repository;
-    private readonly IUserLogic _userLogic;
 
-    public NotificationLogic(IRepository<Notification> repository, IUserLogic userLogic)
+    public NotificationLogic(IRepository<Notification> repository)
     {
         _repository = repository;
-        _userLogic = userLogic;
     }
     
     public Notification SendNotification(Comment comment)
@@ -30,10 +28,9 @@ public class NotificationLogic : INotificationLogic
         return notification;
     }
 
-    public IEnumerable<Notification> GetNotificationsByUser(User user)
+    public IEnumerable<Notification> GetUnreadNotificationsByUser(User user)
     {
-        // TODO
-        throw new NotImplementedException();
+        return _repository.GetByUser(user);
     }
 
 }

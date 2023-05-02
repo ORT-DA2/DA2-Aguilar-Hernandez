@@ -84,7 +84,7 @@ public class NotificationRepositoryTest
         _blogContext.SaveChanges();
 
         var elementExpected = notification;
-        var elementSaved = _notificationRepository.GetUnreadNotificationsByUser(nicolas.Id);
+        var elementSaved = _notificationRepository.GetByUser(nicolas);
         Assert.AreEqual(elementExpected, elementSaved.First());
     }
     

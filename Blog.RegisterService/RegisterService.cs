@@ -24,6 +24,7 @@ public class RegisterService
         serviceCollection.AddScoped<IArticleLogic, ArticleLogic>();
         serviceCollection.AddScoped<INotificationLogic, NotificationLogic>();
         serviceCollection.AddScoped<IRepository<Article>, ArticleRepository>();
-        
+        serviceCollection.AddScoped<IRepository<Notification>, NotificationRepository>();
+
     }
 }

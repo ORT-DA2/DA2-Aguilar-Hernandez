@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Blog.Domain.Entities;
 using Blog.IDataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,4 +53,10 @@ public class Repository<T> : IRepository<T> where T : class
     {
         return _context.Set<T>();
     }
+
+    public virtual IEnumerable<T> GetByUser(User user)
+    {
+        return _context.Set<T>();
+    }
+
 }

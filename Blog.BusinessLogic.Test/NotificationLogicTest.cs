@@ -8,10 +8,17 @@ namespace Blog.BusinessLogic.Test;
 [TestClass]
 public class NotificationLogicTest
 {
-    [TestMethod]
-    public void SendNotification()
+    private Article _article;
+    private User _articleOwner;
+    private User _commentator;
+    private Comment _comment;
+    private Mock<IRepository<Notification>> _repository;
+    private INotificationLogic _notificationLogic;
+
+    [TestInitialize]
+    public void SetUp()
     {
-        Article article = new Article()
+        _article = new Article()
         {
             Id = Guid.NewGuid(),
             Title = "title",
@@ -22,7 +29,7 @@ public class NotificationLogicTest
             Comments = new List<Comment>()
         };
         
-        User postOwner = new User()
+        _articleOwner = new User()
         {
             Id = Guid.NewGuid(),
             FirstName = "Nicolas",
@@ -32,9 +39,9 @@ public class NotificationLogicTest
             Password = "password"
         };
         
-        article.Owner = postOwner;
+        _article.Owner = _articleOwner;
 
-        User commentator = new User()
+        _commentator = new User()
         {
             Id = Guid.NewGuid(),
             FirstName = "Francisco",
@@ -44,32 +51,49 @@ public class NotificationLogicTest
             Password = "password"
         };
         
-        Comment comment = new Comment()
+        _comment = new Comment()
         {
             Id = Guid.NewGuid(),
-            Article = article,
+            Article = _article,
             Body = "Que bien me quedo este post",
             DatePublished = DateTime.Now,
-            Owner = commentator
+            Owner = _commentator
         };
+        _article.Comments.Add(_comment);
         
-        article.Comments.Add(comment);
-        var repositoryMock = new Mock<IRepository<Notification>>(MockBehavior.Strict);
-        var userLogicMock = new Mock<IUserLogic>();
-        var notificationLogic = new NotificationLogic(repositoryMock.Object,userLogicMock.Object);
-
-
-        repositoryMock.Setup(O => O.Insert(It.IsAny<Notification>()));
-        repositoryMock.Setup(O => O.Save());
+        _repository = new Mock<IRepository<Notification>>();
+        _notificationLogic = new NotificationLogic(_repository.Object);
         
-        var result = notificationLogic.SendNotification(comment);
+    }
+    
+    [TestMethod]
+    public void SendNotification()
+    {
+        _repository.Setup(o => o.Insert(It.IsAny<Notification>()));
+        _repository.Setup(o => o.Save());
         
-        Assert.AreEqual(result.Comment.Id, comment.Id);
-        Assert.AreEqual(result.UserToNotify.Id, postOwner.Id);
-        Assert.AreEqual(result.IsRead, false);
+        var result = _notificationLogic.SendNotification(_comment);
         
-        repositoryMock.VerifyAll();
-        userLogicMock.VerifyAll();
+        Assert.AreEqual(result.Comment.Id, _comment.Id);
+        Assert.AreEqual(result.UserToNotify.Id, _articleOwner.Id);
+        Assert.IsFalse(result.IsRead);
+        
+        _repository.VerifyAll();
     }
 
+    [TestMethod]
+    public void TestGetUnreadNotifications()
+    {
+        _repository.Setup(o => o.Insert(It.IsAny<Notification>()));
+        _repository.Setup(o => o.Save());
+        _repository.Setup(o => o.GetByUser(It.IsAny<User>()));
+        
+        var notification = _notificationLogic.SendNotification(_comment);
+        var notifications = _notificationLogic.GetUnreadNotificationsByUser(_articleOwner);
+        
+        Assert.AreEqual(notification.Comment.Id, _comment.Id);
+        Assert.AreEqual(notification.UserToNotify.Id, _articleOwner.Id);
+        Assert.IsFalse(notifications.First().IsRead);
+        _repository.VerifyAll();
+    }
 }

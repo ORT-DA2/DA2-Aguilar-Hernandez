@@ -14,4 +14,6 @@ public interface IRepository<T> where T : class
 
     IEnumerable<T> GetByText(string text);
     IEnumerable<T> GetLastTen();
+
+    IEnumerable<T> GetByUser(User user);
 }
