@@ -35,8 +35,8 @@ public class CommentController : ControllerBase{
 
     }
 
-    [HttpDelete]
-    public IActionResult DeleteCommentById([FromBody] Guid id)
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCommentById([FromRoute] Guid id)
     {
         _commentLogic.DeleteCommentById(id);
         return Ok($"Comment with the id {id} was deleted");
