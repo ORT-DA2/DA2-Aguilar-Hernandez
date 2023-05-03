@@ -1,0 +1,8 @@
+insert into dbo.Comments (Id, OwnerId, ArticleId, Body, DatePublished, Reply)
+values  (N'86792ee8-5b4c-4a61-47ac-08db4b60f242', N'57585b1d-e35e-4e3a-dde7-08db4b6097f5', N'6148fef7-9dd9-468f-5b84-08db4b60cc6a', N'Buen primer post!', N'2023-05-02 19:59:55.6409366', null),
+        (N'1e4c49e6-0630-4b45-9679-08db4b616cd2', N'6d1ac1e6-6c0e-47fe-0b2d-08db4b615657', N'6148fef7-9dd9-468f-5b84-08db4b60cc6a', N'Buen primer post!', N'2023-05-02 20:03:21.2694003', N'Gracias!'),
+        (N'2217f536-616f-4928-967a-08db4b616cd2', N'57585b1d-e35e-4e3a-dde7-08db4b6097f5', N'6148fef7-9dd9-468f-5b84-08db4b60cc6a', N'string', N'2023-05-02 20:06:57.4546563', null),
+        (N'ed3dd5b4-3780-46ca-7b3c-08db4b625a68', N'57585b1d-e35e-4e3a-dde7-08db4b6097f5', N'6148fef7-9dd9-468f-5b84-08db4b60cc6a', N'string', N'2023-05-02 20:09:59.8602357', null),
+        (N'6721d133-d8ed-4dbd-c55e-08db4bf1a7ff', N'20b0de82-920b-4140-15b4-08db4bef102b', N'6148fef7-9dd9-468f-5b84-08db4b60cc6a', N'Excelente posteo', N'2023-05-03 13:15:48.0799633', N'Gracias!'),
+        (N'b04ab026-3e98-498e-c55f-08db4bf1a7ff', N'20b0de82-920b-4140-15b4-08db4bef102b', N'6148fef7-9dd9-468f-5b84-08db4b60cc6a', N'Buen articulo', N'2023-05-03 13:17:43.3034423', N'Gracias!'),
+        (N'557970d2-b6e5-4aa5-52aa-08db4bf682f9', N'20b0de82-920b-4140-15b4-08db4bef102b', N'f09fd538-8991-4184-e79e-08db4bf631f9', N'Me gusto', N'2023-05-03 13:50:33.4459446', N'Gracias!');
