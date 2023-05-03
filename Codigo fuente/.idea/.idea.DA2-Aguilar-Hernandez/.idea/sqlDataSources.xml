@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="8dfb6d5f-4c87-4d0a-af8f-11bee3cab14a" name="Microsoft SQL Server LocalDB (JetBrains) Mapping">
+      <data-sources db="65f21e27-904f-4858-8e0d-c91b9ae4674e" ddl="a40f84d4-2270-4318-8bf2-a87f94fa0ec9" />
+      <scope>
+        <node kind="database" qname="BlogDB">
+          <node kind="schema" qname="dbo" />
+        </node>
+      </scope>
+    </mapping>
+  </component>
+</project>
