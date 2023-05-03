@@ -92,7 +92,7 @@ namespace Blog.WebApi.Controllers
             return Ok($"Article with the id {id} was deleted");
         }
 
-        [HttpGet("LastTenArticles")]
+        [HttpGet("last-articles")]
         public IActionResult GetLastTen()
         {
             return Ok(_articleLogic.GetLastTen());

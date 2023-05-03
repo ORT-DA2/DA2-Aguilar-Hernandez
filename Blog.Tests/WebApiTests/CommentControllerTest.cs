@@ -116,7 +116,7 @@ public class CommentControllerTest
         };
         ReplyCommentDto reply = new ReplyCommentDto()
         {
-            Id = comment.Id,
+            CommentId = comment.Id,
             Reply = "Gracias!"
         };
         Comment commentReplied = comment;

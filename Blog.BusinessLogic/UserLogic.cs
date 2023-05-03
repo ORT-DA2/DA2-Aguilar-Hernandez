@@ -89,15 +89,31 @@ public class UserLogic: IUserLogic
         ValidateDates(startDate, endDate);
         IEnumerable<User> users = _repository.GetAll();
         IEnumerable<Article> articles = _articleRepository.GetAll().Where(a => a.DatePublished >= startDate && a.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1));
-        Dictionary<string, int> articleCounts = articles
+        Dictionary<string, int> articleCounts = ArticlesPerUser(articles);
+        Dictionary<string, int> commentCounts = CommentsPerUser(startDate, endDate, users);
+        Dictionary<string, int> counts = ActivityPerUser(articleCounts, commentCounts);
+        return counts;
+    }
+
+    private Dictionary<string, int> ArticlesPerUser(IEnumerable<Article> articles)
+    {
+        return articles
             .GroupBy(a => a.Owner.Username)
             .ToDictionary(g => g.Key, g => g.Count());
-        Dictionary<string, int> commentCounts = users.ToDictionary(user => user.Username, user => user.Comments.Where(c => c.DatePublished >= startDate && c.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1)).Count());
-        Dictionary<string, int> counts = articleCounts
-            .Concat(commentCounts)
+    }
+
+    private Dictionary<string, int> CommentsPerUser(DateTime startDate, DateTime endDate, IEnumerable<User> users)
+    {
+        return users.ToDictionary(user => user.Username, user => user.Comments.Where(c => c.DatePublished >= startDate && c.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1)).Count());
+    }
+
+    private Dictionary<string, int> ActivityPerUser(Dictionary<string, int> articlesPerUser,
+        Dictionary<string, int> commentsPerUser)
+    {
+        return articlesPerUser
+            .Concat(commentsPerUser)
             .GroupBy(d => d.Key)
             .ToDictionary(g => g.Key, g => g.Sum(d => d.Value));
-        return counts;
     }
 
     private void ValidateDates(DateTime startDate, DateTime endDate)
