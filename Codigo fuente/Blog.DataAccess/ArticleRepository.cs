@@ -12,31 +12,51 @@ public class ArticleRepository: Repository<Article>
     
     public override IEnumerable<Article> GetAll()
     {
-        return _context.Set<Article>().Include(u => u.Owner).ThenInclude(ur => ur.Roles).Include(c => c.Comments);
+        return _context.Set<Article>()
+            .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
+            .Include(c => c.Comments)
+            .ToList();
     }
     
     public override Article? GetBy(Expression<Func<Article, bool>> expression)
     {
-        return _context.Set<Article>().Include(u => u.Owner).ThenInclude(ur => ur.Roles).Include(c => c.Comments).FirstOrDefault(expression);
+        return _context.Set<Article>()
+            .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
+            .Include(c => c.Comments)
+            .FirstOrDefault(expression);
     }
     public override  IEnumerable<Article> GetByText(string text)
     {
-        return _context.Set<Article>().Include(u => u.Owner).ThenInclude(ur => ur.Roles).Include(c => c.Comments).Where(a => a.Title.Contains(text) || a.Content.Contains(text) && a.IsPublic == true);
+        return _context.Set<Article>()
+            .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
+            .Include(c => c.Comments).ThenInclude(c => c.Owner)
+            .Where(a => (a.Title.Contains(text) || a.Content.Contains(text)) && a.IsPublic == true)
+            .ToList();
     }
     
     public override IEnumerable<Article> GetLastTen()
     {
-        return _context.Set<Article>().Include(u => u.Owner).ThenInclude(ur => ur.Roles).Include(c => c.Comments).OrderByDescending(a => a.DatePublished).Where(a => a.IsPublic == true).Take(10);
+        return _context.Set<Article>()
+            .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
+            .Include(c => c.Comments)
+            .OrderByDescending(a => a.DatePublished)
+            .Where(a => a.IsPublic == true).Take(10).ToList();
     }
     
     public override IEnumerable<Article> GetPublicAll()
     {
-        return _context.Set<Article>().Include(u => u.Owner).ThenInclude(ur => ur.Roles).Include(c => c.Comments).Where(a => a.IsPublic == true);
+        return _context.Set<Article>()
+            .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
+            .Include(c => c.Comments)
+            .Where(a => a.IsPublic == true).ToList();
     }
     
     public override IEnumerable<Article> GetUserArticles(string username)
     {
-        return _context.Set<Article>().Include(u => u.Owner).ThenInclude(ur => ur.Roles).Include(c => c.Comments).Where(a => a.Owner.Username == username);
+        return _context.Set<Article>()
+            .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
+            .Include(c => c.Comments)
+            .Where(a => a.Owner.Username == username).ToList();
     }
     
 }

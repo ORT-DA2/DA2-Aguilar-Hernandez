@@ -52,8 +52,8 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpGet("search")]
-        [ServiceFilter(typeof(AuthorizationFilter))]
-        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
+        //[ServiceFilter(typeof(AuthorizationFilter))]
+        //[AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult GetArticleByText([FromQuery] string text)
         {
             IEnumerable<Article> articles = _articleLogic.GetArticleByText(text);

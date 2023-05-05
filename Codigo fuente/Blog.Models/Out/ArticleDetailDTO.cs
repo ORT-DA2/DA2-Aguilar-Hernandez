@@ -21,11 +21,7 @@ public class ArticleDetailDTO
         List<CommentOutModel> comments = new List<CommentOutModel>();
         if (article.Comments != null)
         {
-            foreach (var comment in article.Comments)
-            {
-                CommentOutModel commentOut = new CommentOutModel(comment);
-                comments.Add(commentOut);
-            }
+            comments.AddRange(article.Comments.Select(comment => new CommentOutModel(comment)));
         }
         
         Id = article.Id;

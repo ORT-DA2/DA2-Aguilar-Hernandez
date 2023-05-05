@@ -1,3 +1,0 @@
-insert into dbo.Articles (Id, Title, Content, IsPublic, OwnerId, DatePublished, DateLastModified, Image, Template)
-values  (N'6148fef7-9dd9-468f-5b84-08db4b60cc6a', N'Mi primer post', N'Este es mi primer articulo creado en esta api', 1, N'57585b1d-e35e-4e3a-dde7-08db4b6097f5', N'2023-05-02 19:58:52.1493969', N'2023-05-02 19:58:52.1495222', N'test.jpg', 3),
-        (N'f09fd538-8991-4184-e79e-08db4bf631f9', N'Este es un articulo de prueba para el obligatorio', N'Prueba', 1, N'b75bdc5e-5bbe-4def-7100-08db4bf52f41', N'2023-05-03 13:48:17.5526779', N'2023-05-03 13:48:17.5528494', N'string.jpg', 0);

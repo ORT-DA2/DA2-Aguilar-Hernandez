@@ -12,8 +12,8 @@ namespace Blog.WebApi.Controllers;
 [ApiController]
 [Route("api/comments")]
 [ExceptionFilter]
-[ServiceFilter(typeof(AuthorizationFilter))]
-[AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
+//[ServiceFilter(typeof(AuthorizationFilter))]
+//[AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
 public class CommentController : ControllerBase{
 
     private readonly ICommentLogic _commentLogic;
