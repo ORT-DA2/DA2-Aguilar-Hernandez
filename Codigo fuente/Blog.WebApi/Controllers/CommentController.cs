@@ -17,11 +17,9 @@ namespace Blog.WebApi.Controllers;
 public class CommentController : ControllerBase{
 
     private readonly ICommentLogic _commentLogic;
-    private readonly INotificationLogic _notificationLogic;
     public CommentController(ICommentLogic commentLogic, INotificationLogic notificationLogic)
     {
         _commentLogic = commentLogic;
-        _notificationLogic = notificationLogic;
     }
 
 
@@ -30,7 +28,7 @@ public class CommentController : ControllerBase{
     {
         Comment comment = commentInModel.ToEntity();
         Comment result = _commentLogic.AddNewComment(comment, commentInModel.ArticleId, Authorization);
-        _notificationLogic.SendNotification(comment);
+        
         return Created($"api/comments/{comment.Id}", new CommentOutModel(result));
 
     }

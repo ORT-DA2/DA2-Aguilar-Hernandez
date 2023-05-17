@@ -14,4 +14,5 @@ public class CommentRepository: Repository<Comment>
     {
         return _context.Set<Comment>().Include(c => c.Article).Include(c=>c.Owner).FirstOrDefault(expression);
     }
+    
 }

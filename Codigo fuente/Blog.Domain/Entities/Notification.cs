@@ -4,6 +4,7 @@ public class Notification
 {
     public Guid Id { get; set; }
     public User UserToNotify { get; set; }
-    public Comment Comment { get; set; }
+    public Comment? Comment { get; set; }
+    public Article? Article { get; set; }
     public bool IsRead { get; set; }
 }

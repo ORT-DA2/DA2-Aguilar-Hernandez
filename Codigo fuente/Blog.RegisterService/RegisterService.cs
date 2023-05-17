@@ -25,6 +25,10 @@ public class RegisterService
         serviceCollection.AddScoped<INotificationLogic, NotificationLogic>();
         serviceCollection.AddScoped<IRepository<Article>, ArticleRepository>();
         serviceCollection.AddScoped<IRepository<Notification>, NotificationRepository>();
+        serviceCollection.AddScoped<IOffensiveWordLogic, OffensiveWordLogic>();
+        serviceCollection.AddScoped<IRepository<OffensiveWord>, Repository<OffensiveWord>>();
+        serviceCollection.AddScoped<INotificationStrategy, ArticleNotificationStrategy>();
+        serviceCollection.AddScoped<INotificationStrategy, CommentNotificationStrategy>();
 
     }
 }

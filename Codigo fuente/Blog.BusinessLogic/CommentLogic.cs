@@ -10,12 +10,14 @@ public class CommentLogic: ICommentLogic
     private readonly IRepository<Comment> _repository;
     private readonly IArticleLogic _articleLogic;
     private readonly ISessionLogic _sessionLogic;
+    private static IOffensiveWordLogic _offensiveWordLogic;
 
-    public CommentLogic(IRepository<Comment> repository, IArticleLogic articleLogic, ISessionLogic sessionLogic)
+    public CommentLogic(IRepository<Comment> repository, IArticleLogic articleLogic, ISessionLogic sessionLogic, IOffensiveWordLogic offensiveWordLogic)
     {
         _repository = repository;
         _articleLogic = articleLogic;
         _sessionLogic = sessionLogic;
+        _offensiveWordLogic = offensiveWordLogic;
     }
 
 
@@ -26,6 +28,7 @@ public class CommentLogic: ICommentLogic
         comment.Owner = _sessionLogic.GetLoggedUser(authorization);
         comment.Article = article;
         comment.DatePublished = DateTime.Now;
+        _offensiveWordLogic.ValidateCommentOffensiveWords(comment);
         _repository.Insert(comment);
         _repository.Save();
         return comment;

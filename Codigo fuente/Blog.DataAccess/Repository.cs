@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Blog.Domain.Entities;
 using Blog.IDataAccess;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.DataAccess;
 
@@ -24,12 +23,12 @@ public class Repository<T> : IRepository<T> where T : class
         return _context.Set<T>().FirstOrDefault(expression);
     }
 
-    public void Insert(T elem)
+    public virtual void Insert(T elem)
     {
         _context.Set<T>().Add(elem);
     }
 
-    public void Delete(T elem)
+    public virtual void Delete(T elem)
     {
         _context.Set<T>().Remove(elem);
     }

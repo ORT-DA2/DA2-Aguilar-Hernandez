@@ -15,8 +15,11 @@ public class ArticleDetailDTO
     public List<CommentOutModel>? Comments { get; set; }
     public string Image { get; set; }
     public Template Template { get; set; }
+    public bool IsApproved { get; set; }
+    public bool IsEdited { get; set; }
+    public IEnumerable<OffensiveWord> OffensiveContent { get; set; }
 
-    public ArticleDetailDTO(Domain.Entities.Article article)
+    public ArticleDetailDTO(Article article)
     {
         List<CommentOutModel> comments = new List<CommentOutModel>();
         if (article.Comments != null)
@@ -34,5 +37,8 @@ public class ArticleDetailDTO
         Comments = comments;
         Image = article.Image;
         Template = article.Template;
+        IsApproved = article.IsApproved;
+        IsEdited = article.IsEdited;
+        OffensiveContent = article.OffensiveContent;
     }
 }
