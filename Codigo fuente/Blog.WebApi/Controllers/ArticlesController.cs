@@ -82,6 +82,16 @@ namespace Blog.WebApi.Controllers
             Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
             return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
         }
+        
+        [HttpPut("approve/{id}")]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
+        public IActionResult ApproveArticle([FromRoute] Guid id,[FromBody] CreateArticleDTO articleDto)
+        {
+            Article article = articleDto.ToEntity();
+            Article newArticle = _articleLogic.ApproveArticle(id, article);
+            return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
+        }
 
         [HttpDelete("{id}")]
         [ServiceFilter(typeof(AuthorizationFilter))]

@@ -41,12 +41,14 @@ public class CommentLogicTest
         };
         var comment = CreateComment();
         var repositoryMock = new Mock<IRepository<Comment>>(MockBehavior.Loose);
-        var sessionMock = new Mock<ISessionLogic>();
-        var articleMock = new Mock<IArticleLogic>();
+        var sessionMock = new Mock<ISessionLogic>(MockBehavior.Strict);
+        var articleMock = new Mock<IArticleLogic>(MockBehavior.Strict);
+        var offensiveLogicMock = new Mock<IOffensiveWordLogic>(MockBehavior.Strict);
         var token = Guid.NewGuid();
-        var logic = new CommentLogic(repositoryMock.Object,articleMock.Object, sessionMock.Object);
+        var logic = new CommentLogic(repositoryMock.Object,articleMock.Object, sessionMock.Object, offensiveLogicMock.Object);
         articleMock.Setup(a => a.GetArticleById(articleTest.Id)).Returns(articleTest);
         sessionMock.Setup(s => s.GetLoggedUser(token)).Returns(user);
+        offensiveLogicMock.Setup(o => o.ValidateCommentOffensiveWords(It.IsAny<Comment>()));
         repositoryMock.Setup(c => c.Insert(It.IsAny<Comment>()));
         repositoryMock.Setup(c => c.Save());
         
@@ -62,7 +64,8 @@ public class CommentLogicTest
         var mockRepository = new Mock<IRepository<Comment>>();
         var sessionLogic = new Mock<ISessionLogic>();
         var articleLogic = new Mock<IArticleLogic>();
-        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object);
+        var offensiveLogic = new Mock<IOffensiveWordLogic>();
+        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object, offensiveLogic.Object);
         mockRepository.Setup(o => o.GetBy(It.IsAny<Expression<Func<Comment, bool>>>())).Returns(comment);
         mockRepository.Setup(o => o.Save());
         
@@ -80,7 +83,8 @@ public class CommentLogicTest
         var mockRepository = new Mock<IRepository<Comment>>();
         var sessionLogic = new Mock<ISessionLogic>();
         var articleLogic = new Mock<IArticleLogic>();
-        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object);
+        var offensiveLogic = new Mock<IOffensiveWordLogic>();
+        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object, offensiveLogic.Object);
         mockRepository.Setup(o => o.GetBy(It.IsAny<Expression<Func<Comment, bool>>>())).Returns((Comment)null);
         mockRepository.Setup(o => o.Save());
         
@@ -98,7 +102,8 @@ public class CommentLogicTest
         var mockRepository = new Mock<IRepository<Comment>>();
         var sessionLogic = new Mock<ISessionLogic>();
         var articleLogic = new Mock<IArticleLogic>();
-        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object);
+        var offensiveLogic = new Mock<IOffensiveWordLogic>();
+        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object, offensiveLogic.Object);
         mockRepository.Setup(o => o.GetBy(It.IsAny<Expression<Func<Comment, bool>>>())).Returns(comment);
         mockRepository.Setup(o => o.Update(comment));
         mockRepository.Setup(o => o.Save());
@@ -118,7 +123,8 @@ public class CommentLogicTest
         var mockRepository = new Mock<IRepository<Comment>>();
         var sessionLogic = new Mock<ISessionLogic>();
         var articleLogic = new Mock<IArticleLogic>();
-        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object);
+        var offensiveLogic = new Mock<IOffensiveWordLogic>();
+        var commentLogic = new CommentLogic(mockRepository.Object, articleLogic.Object, sessionLogic.Object, offensiveLogic.Object);
         mockRepository.Setup(o => o.GetBy(It.IsAny<Expression<Func<Comment, bool>>>())).Returns((Comment)null);
 
         commentLogic.ReplyComment(comment.Id, "gracias");

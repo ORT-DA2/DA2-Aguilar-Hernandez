@@ -15,6 +15,7 @@ public class ArticleRepository: Repository<Article>
         return _context.Set<Article>()
             .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
             .Include(c => c.Comments)
+            .Include(a => a.OffensiveContent)
             .ToList();
     }
     
@@ -23,6 +24,7 @@ public class ArticleRepository: Repository<Article>
         return _context.Set<Article>()
             .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
             .Include(c => c.Comments)
+            .Include(a => a.OffensiveContent)
             .FirstOrDefault(expression);
     }
     public override  IEnumerable<Article> GetByText(string text)
@@ -30,6 +32,7 @@ public class ArticleRepository: Repository<Article>
         return _context.Set<Article>()
             .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
             .Include(c => c.Comments).ThenInclude(c => c.Owner)
+            .Include(a => a.OffensiveContent)
             .Where(a => (a.Title.Contains(text) || a.Content.Contains(text)) && a.IsPublic == true)
             .ToList();
     }
@@ -39,6 +42,7 @@ public class ArticleRepository: Repository<Article>
         return _context.Set<Article>()
             .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
             .Include(c => c.Comments)
+            .Include(a => a.OffensiveContent)
             .OrderByDescending(a => a.DatePublished)
             .Where(a => a.IsPublic == true).Take(10).ToList();
     }
@@ -48,6 +52,7 @@ public class ArticleRepository: Repository<Article>
         return _context.Set<Article>()
             .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
             .Include(c => c.Comments)
+            .Include(a => a.OffensiveContent)
             .Where(a => a.IsPublic == true).ToList();
     }
     
@@ -56,6 +61,7 @@ public class ArticleRepository: Repository<Article>
         return _context.Set<Article>()
             .Include(u => u.Owner).ThenInclude(ur => ur.Roles)
             .Include(c => c.Comments)
+            .Include(a => a.OffensiveContent)
             .Where(a => a.Owner.Username == username).ToList();
     }
     

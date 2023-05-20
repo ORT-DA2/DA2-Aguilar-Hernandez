@@ -12,6 +12,18 @@ public class RegisterService
 {
     public void ServiceRegistrator(IServiceCollection serviceCollection)
     {
+        serviceCollection.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin",
+                builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+        });
+        
         serviceCollection.AddScoped<AuthorizationFilter>();
         serviceCollection.AddScoped<AuthenticationRoleFilter>();
         serviceCollection.AddDbContext<BlogDbContext>();

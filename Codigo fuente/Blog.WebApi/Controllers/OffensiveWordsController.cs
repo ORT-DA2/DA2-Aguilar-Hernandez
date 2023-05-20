@@ -40,5 +40,6 @@ namespace Blog.WebApi.Controllers
             _offensiveLogic.DeleteOffensiveWord(offensiveWord);
             return Ok($"{offensiveWord} was deleted");
         }
+        
     }
 }

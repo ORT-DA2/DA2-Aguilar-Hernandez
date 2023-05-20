@@ -99,6 +99,27 @@ public class ArticleLogic: IArticleLogic
         return oldArticle;
     }
 
+    public Article ApproveArticle(Guid id, Article article)
+    {
+        Article? oldArticle = _repository.GetBy(a => a.Id == id);
+
+        ValidateNull(oldArticle);
+
+        article.DateLastModified = DateTime.Now;
+        article.DatePublished = oldArticle.DatePublished;
+        article.Owner = oldArticle.Owner;
+        article.IsPublic = true;
+        article.IsApproved = true;
+        article.IsEdited = true;
+        article.OffensiveContent = _offensiveWordLogic.GetOffensiveWords(article.Content).Concat(_offensiveWordLogic.GetOffensiveWords(article.Title)).ToList();
+        
+        oldArticle.UpdateAttributes(article);
+        _repository.Update(oldArticle);
+        _repository.Save();
+
+        return oldArticle;
+    }
+
     public void DeleteArticle(Guid articleId, Guid authorization)
     {
         Article? article = _repository.GetBy(a => a.Id == articleId);

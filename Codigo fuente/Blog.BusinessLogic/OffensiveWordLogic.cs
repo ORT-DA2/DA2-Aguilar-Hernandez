@@ -87,10 +87,11 @@ public class OffensiveWordLogic: IOffensiveWordLogic
 
    public void ValidateArticleOffensiveWords(Article article)
    {
-       if(this.HasOffensiveWord(article.Content) || this.HasOffensiveWord(article.Title))
+       if (this.HasOffensiveWord(article.Content) || this.HasOffensiveWord(article.Title))
        {
            article.IsPublic = false;
-           article.OffensiveContent = this.GetOffensiveWords(article.Content).Concat(this.GetOffensiveWords(article.Title)).ToList();
+           article.OffensiveContent = this.GetOffensiveWords(article.Content)
+               .Concat(this.GetOffensiveWords(article.Title)).ToList();
            _notificationLogic.SendNotification(_notificationArticleStrategy.CreateNotification(article));
            foreach (var notification in _notificationArticleStrategy.CreateAdminNotification(article))
            {
