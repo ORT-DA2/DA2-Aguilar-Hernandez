@@ -9,6 +9,10 @@ export class HeaderComponent {
   isLoggedIn = false;
   notifications: any[] = [];
 
+  onSearch(event: Event) {
+    event.preventDefault();
+  }
+
   onLogin() {
     this.isLoggedIn = true;
   }
