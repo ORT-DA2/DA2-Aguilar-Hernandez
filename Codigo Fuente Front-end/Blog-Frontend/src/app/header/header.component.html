@@ -1,48 +1,45 @@
-<!-- header.component.html -->
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="#">ORT Blog</a>
-      
-      <div class="mx-auto">
-        <form class="form-inline" *ngIf="isLoggedIn" (ngSubmit)="onSearch($event)">
-          <div class="input-group">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-              <button class="btn btn-outline-primary" type="submit">Search</button>
-            </div>
+  <div class="container">
+    <a class="navbar-brand" href="#">ORT Blog</a>
+
+    <div class="mx-auto">
+      <form class="form-inline my-2 my-lg-0" *ngIf="isLoggedIn" (ngSubmit)="onSearch($event)">
+        <div class="input-group">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
           </div>
-        </form>
-      </div>
-  
-      <div>
-        <ul class="navbar-nav">
-          <li class="nav-item" *ngIf="!isLoggedIn">
-            <button class="btn btn-outline-primary mr-2" (click)="onLogin()">Login</button>
-          </li>
-          <li class="nav-item" *ngIf="!isLoggedIn">
-            <button class="btn btn-outline-primary" (click)="onRegister()">Register</button>
-          </li>
-          <li class="nav-item dropdown" *ngIf="isLoggedIn">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-bell"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-              <ng-container *ngIf="hasNotifications; else noNotifications">
-                <a class="dropdown-item" *ngFor="let notification of notifications">{{ notification }}</a>
-              </ng-container>
-              <ng-template #noNotifications>
-                <a class="dropdown-item">
-                  <i class="fas fa-exclamation-circle"></i> No notifications available
-                </a>
-              </ng-template>
-            </div>
-          </li>
-          <li class="nav-item" *ngIf="isLoggedIn">
-            <button class="btn btn-outline-primary" (click)="onLogout()">Logout</button>
-          </li>
-        </ul>
-      </div>
+        </div>
+      </form>
     </div>
-  </nav>
-  
+
+    <div>
+      <ul class="navbar-nav">
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <button class="btn btn-outline-primary mr-2" (click)="onLogin()">Login</button>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <button class="btn btn-outline-primary" (click)="onRegister()">Register</button>
+        </li>
+        <li class="nav-item dropdown" *ngIf="isLoggedIn">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-bell"></i> {{ username }}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <ng-container *ngIf="hasNotifications; else noNotifications">
+              <a class="dropdown-item" *ngFor="let notification of notifications">{{ notification }}</a>
+            </ng-container>
+            <ng-template #noNotifications>
+              <a class="dropdown-item">
+                <i class="fas fa-exclamation-circle"></i> No notifications available
+              </a>
+            </ng-template>
+          </div>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <button class="btn btn-outline-primary" (click)="onLogout()">Logout</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

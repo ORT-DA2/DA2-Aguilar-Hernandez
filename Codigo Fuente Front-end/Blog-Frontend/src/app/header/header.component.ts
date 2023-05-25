@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../../_services/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -9,9 +11,19 @@ export class HeaderComponent implements OnInit {
   isLoggedIn = false;
   notifications: any[] = [];
   hasNotifications = false;
+  username: string = '';
+
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.checkNotifications();
+    this.authService.authStateChanged.subscribe((loggedIn: boolean) => {
+      this.isLoggedIn = loggedIn;
+      this.username = this.authService.username;
+    });
   }
 
   checkNotifications() {
@@ -23,12 +35,16 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogin() {
-    this.isLoggedIn = true;
+    this.router.navigate(['/login']);
+  }
+
+  getUsername(): string {
+    return this.authService.username;
   }
 
   onRegister() {}
 
   onLogout() {
-    this.isLoggedIn = false;
+    this.authService.logout();
   }
 }
