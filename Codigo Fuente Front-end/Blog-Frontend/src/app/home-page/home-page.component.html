@@ -1,0 +1,19 @@
+<div class="container">
+    <h2>Last Articles</h2>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let article of lastArticles">
+        <div class="card mb-3">
+          <img class="card-img-top" src="{{ article.image }}" alt="Article Image">
+          <div class="card-body">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <p class="card-text">{{ article.content }}</p>
+            <p class="card-text">Author: {{ article.owner.username }}</p>
+            <p class="card-text">Published: {{ article.datePublished | date }}</p>
+            <p class="card-text">Last Modified: {{ article.dateLastModified | date }}</p>
+            <a [routerLink]="['/articles', article.id]" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+  

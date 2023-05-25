@@ -42,7 +42,9 @@ export class HeaderComponent implements OnInit {
     return this.authService.username;
   }
 
-  onRegister() {}
+  onRegister() {
+    this.router.navigate(['/register']);
+  }
 
   onLogout() {
     this.authService.logout();

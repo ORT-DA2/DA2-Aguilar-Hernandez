@@ -8,9 +8,11 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { AuthenticationService } from '../_services/authentication.service';
+import { RegisterPageComponent } from './register-page/register-page.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, LoginPageComponent],
+  declarations: [AppComponent, HeaderComponent, LoginPageComponent, RegisterPageComponent, HomePageComponent],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [AuthenticationService],
   bootstrap: [AppComponent],

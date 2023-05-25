@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AuthEndpoints } from '../_services/endpoints';
 import { Credentials } from '../_type/credentialsLogin';
+import { RegistrationCredentials } from '../_type/credentialsRegister';
 import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -19,7 +20,10 @@ export class AuthenticationService {
 
   public login(credentials: Credentials): Observable<any> {
     return this.http
-      .post<any>(`${environment.BASE_URL}${AuthEndpoints.LOGIN}`, credentials)
+      .post<Credentials>(
+        `${environment.BASE_URL}${AuthEndpoints.LOGIN}`,
+        credentials
+      )
       .pipe(
         catchError((error) => {
           return throwError(error);
@@ -28,6 +32,19 @@ export class AuthenticationService {
           this.isLoggedIn.next(true);
           this.username = credentials.username;
           this.authStateChanged.next(true);
+        })
+      );
+  }
+
+  public register(credentials: RegistrationCredentials): Observable<any> {
+    return this.http
+      .post<RegistrationCredentials>(
+        `${environment.BASE_URL}${AuthEndpoints.REGISTER}`,
+        credentials
+      )
+      .pipe(
+        catchError((error) => {
+          return throwError(error.error);
         })
       );
   }
