@@ -23,7 +23,7 @@
         </li>
         <li class="nav-item dropdown" *ngIf="isLoggedIn">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-bell"></i> {{ username }}
+            <i class="fas fa-bell"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right">
             <ng-container *ngIf="hasNotifications; else noNotifications">
@@ -35,6 +35,15 @@
               </a>
             </ng-template>
           </div>
+        </li>
+        <li class="nav-item dropdown" *ngIf="isLoggedIn">
+          <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="#">View Profile</a>
+              <a class="dropdown-item" href="#">Create Article</a>
+          </div>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa-regular fa-user"></i> {{username}}
+          </a>         
         </li>
         <li class="nav-item" *ngIf="isLoggedIn">
           <button class="btn btn-outline-primary" (click)="onLogout()">Logout</button>

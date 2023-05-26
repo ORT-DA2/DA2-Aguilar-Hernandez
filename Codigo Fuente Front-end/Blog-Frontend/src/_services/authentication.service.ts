@@ -15,22 +15,32 @@ export class AuthenticationService {
   isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public username: string = '';
   public authStateChanged: Subject<boolean> = new Subject<boolean>();
+  private token: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    const storedToken = localStorage.getItem('token') || null;
+    this.username = localStorage.getItem('username') || '';
+    if (storedToken) {
+      this.token = storedToken;
+      this.isLoggedIn.next(true);
+      this.authStateChanged.next(true);
+    }
+  }
 
   public login(credentials: Credentials): Observable<any> {
     return this.http
-      .post<Credentials>(
-        `${environment.BASE_URL}${AuthEndpoints.LOGIN}`,
-        credentials
-      )
+      .post<any>(`${environment.BASE_URL}${AuthEndpoints.LOGIN}`, credentials)
       .pipe(
         catchError((error) => {
           return throwError(error);
         }),
-        tap(() => {
+        tap((response) => {
+          const token = response.token;
+          this.token = token;
+          localStorage.setItem('token', token);
           this.isLoggedIn.next(true);
-          this.username = credentials.username;
+          this.username = response.user.username;
+          localStorage.setItem('username', this.username);
           this.authStateChanged.next(true);
         })
       );
@@ -53,9 +63,17 @@ export class AuthenticationService {
     this.isLoggedIn.next(false);
     this.username = '';
     this.authStateChanged.next(false);
+    this.token = null;
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
   }
 
   isAuthenticated(): boolean {
     return this.isLoggedIn.getValue();
+  }
+
+  getUsername(): string {
+    return this.username;
   }
 }
