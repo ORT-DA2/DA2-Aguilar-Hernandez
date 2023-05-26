@@ -8,7 +8,6 @@ public class UserDetailDTO
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Username { get; set; }
-    public string Password { get; set; }
     public ICollection<UserRoleBasicInfoDTO> Roles { get; set; } = new List<UserRoleBasicInfoDTO>();
     public string Email { get; set; }
 
@@ -18,7 +17,6 @@ public class UserDetailDTO
         FirstName = user.FirstName;
         LastName = user.LastName;
         Username = user.Username;
-        Password = user.Password;
         Email = user.Email;
         if (user.Roles != null)
         {
