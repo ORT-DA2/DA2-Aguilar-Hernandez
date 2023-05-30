@@ -9,9 +9,11 @@ import { AuthenticationService } from '../../_services/authentication.service';
 })
 export class HeaderComponent implements OnInit {
   isLoggedIn = false;
+  isAdmin: boolean | undefined = false;
   notifications: any[] = [];
   hasNotifications = false;
   username: string = '';
+  roles: string | null = '';
 
   constructor(
     private authService: AuthenticationService,
@@ -21,11 +23,13 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.checkNotifications();
     this.isLoggedIn = this.authService.isAuthenticated();
-    this.username = this.authService.getUsername();
     this.authService.authStateChanged.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
-      this.username = this.authService.username;
+      this.username = localStorage.getItem('username') || '';
+      this.isAdmin = localStorage.getItem('isAdmin') === 'true';
     });
+    this.username = localStorage.getItem('username') || '';
+    this.isAdmin = localStorage.getItem('isAdmin') === 'true';
   }
 
   checkNotifications() {
@@ -38,10 +42,6 @@ export class HeaderComponent implements OnInit {
 
   onLogin() {
     this.router.navigate(['/login']);
-  }
-
-  getUsername(): string {
-    return this.authService.username;
   }
 
   onRegister() {

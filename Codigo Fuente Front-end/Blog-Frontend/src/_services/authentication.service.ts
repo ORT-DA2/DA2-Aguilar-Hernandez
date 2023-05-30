@@ -14,6 +14,7 @@ import { catchError, tap } from 'rxjs/operators';
 export class AuthenticationService {
   isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public username: string = '';
+  public roles: string | null = '';
   public authStateChanged: Subject<boolean> = new Subject<boolean>();
   private token: string | null = null;
 
@@ -39,8 +40,13 @@ export class AuthenticationService {
           this.token = token;
           localStorage.setItem('token', token);
           this.isLoggedIn.next(true);
+          localStorage.setItem('username', response.user.username);
           this.username = response.user.username;
-          localStorage.setItem('username', this.username);
+          this.roles = JSON.stringify(response.user.roles);
+          localStorage.setItem(
+            'isAdmin',
+            this.isAdmin()?.toString() ?? 'false'
+          );
           this.authStateChanged.next(true);
         })
       );
@@ -61,19 +67,25 @@ export class AuthenticationService {
 
   logout() {
     this.isLoggedIn.next(false);
-    this.username = '';
     this.authStateChanged.next(false);
     this.token = null;
+    this.username = '';
+    this.roles = '';
 
+    this.cleanLocalStorage();
+  }
+
+  cleanLocalStorage() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('isAdmin');
   }
 
   isAuthenticated(): boolean {
     return this.isLoggedIn.getValue();
   }
 
-  getUsername(): string {
-    return this.username;
+  isAdmin(): boolean | undefined {
+    return this.roles?.includes('1');
   }
 }
