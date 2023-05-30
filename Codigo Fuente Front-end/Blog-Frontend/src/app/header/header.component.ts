@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services/authentication.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,6 @@ export class HeaderComponent implements OnInit {
   hasNotifications = false;
   username: string = '';
   roles: string | null = '';
-  subscription: Subscription | undefined;
 
   constructor(
     private authService: AuthenticationService,
@@ -46,12 +45,6 @@ export class HeaderComponent implements OnInit {
       });
     } else {
       this.isAdmin = false;
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
     }
   }
 
