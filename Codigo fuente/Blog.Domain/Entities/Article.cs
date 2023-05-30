@@ -13,6 +13,7 @@ public class Article
     public DateTime DateLastModified { get; set; }
     public List<Comment>? Comments { get; set; }
     public string Image { get; set; }
+    public string? Image2 { get; set; }
     public Template Template { get; set; }
     public bool IsApproved { get; set; }
     public bool IsEdited { get; set; }
@@ -28,6 +29,7 @@ public class Article
         DateLastModified = article.DateLastModified;
         Comments = article.Comments;
         Image = article.Image;
+        Image2 = article.Image2;
         Template = article.Template;
         IsApproved = article.IsApproved;
         IsEdited = article.IsEdited;

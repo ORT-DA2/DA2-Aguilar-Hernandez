@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Blog.DataAccess.Migrations
 {
-    public partial class Final : Migration
+    public partial class imagenesFix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,7 +37,10 @@ namespace Blog.DataAccess.Migrations
                     DatePublished = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateLastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Template = table.Column<int>(type: "int", nullable: false)
+                    Image2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Template = table.Column<int>(type: "int", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    IsEdited = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +99,10 @@ namespace Blog.DataAccess.Migrations
                     ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DatePublished = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Reply = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Reply = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    IsEdited = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,12 +126,18 @@ namespace Blog.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserToNotifyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsRead = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Articles_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Articles",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Notifications_Comments_CommentId",
                         column: x => x.CommentId,
@@ -135,6 +147,31 @@ namespace Blog.DataAccess.Migrations
                         name: "FK_Notifications_Users_UserToNotifyId",
                         column: x => x.UserToNotifyId,
                         principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OffensiveWords",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Word = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OffensiveWords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OffensiveWords_Articles_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Articles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OffensiveWords_Comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comments",
                         principalColumn: "Id");
                 });
 
@@ -154,6 +191,11 @@ namespace Blog.DataAccess.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notifications_ArticleId",
+                table: "Notifications",
+                column: "ArticleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Notifications_CommentId",
                 table: "Notifications",
                 column: "CommentId");
@@ -162,6 +204,16 @@ namespace Blog.DataAccess.Migrations
                 name: "IX_Notifications_UserToNotifyId",
                 table: "Notifications",
                 column: "UserToNotifyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OffensiveWords_ArticleId",
+                table: "OffensiveWords",
+                column: "ArticleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OffensiveWords_CommentId",
+                table: "OffensiveWords",
+                column: "CommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sessions_UserId",
@@ -185,6 +237,9 @@ namespace Blog.DataAccess.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "OffensiveWords");
 
             migrationBuilder.DropTable(
                 name: "Roles");

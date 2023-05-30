@@ -302,6 +302,7 @@ public class ArticleControllerTest
         
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Returns(_articleTest2);
+        _articlenMock.Setup(o => o.SaveImage(It.IsAny<string>())).Returns("string.jpg");
         var result = controller.CreateArticle(_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
@@ -316,6 +317,7 @@ public class ArticleControllerTest
         
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Throws(new ArgumentException());
+        _articlenMock.Setup(o => o.SaveImage(It.IsAny<string>())).Returns("string.jpg");
         var result = controller.CreateArticle(_articleTestDTO, token);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }

@@ -2,6 +2,7 @@
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
+using Microsoft.AspNetCore.Http;
 
 namespace Blog.BusinessLogic;
 
@@ -57,6 +58,28 @@ public class ArticleLogic: IArticleLogic
         }
 
         return articles;
+    }
+
+    public string SaveImage(string image)
+    {
+        byte[] imageBytes = Convert.FromBase64String(image);
+        var imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "images");
+
+        if (!Directory.Exists(imageFolderPath))
+        {
+            Directory.CreateDirectory(imageFolderPath);
+        }
+
+        var imagePath = string.Empty;
+
+        var imageName = Guid.NewGuid().ToString();
+        var fullImagePath = Path.Combine(imageFolderPath, imageName);
+
+        System.IO.File.WriteAllBytesAsync(fullImagePath, imageBytes);
+
+        imagePath = fullImagePath;
+
+        return imagePath;
     }
 
     public Article CreateArticle(Article article, Guid authorization)
