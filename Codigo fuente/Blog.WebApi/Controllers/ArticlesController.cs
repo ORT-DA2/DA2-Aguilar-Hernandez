@@ -66,7 +66,16 @@ namespace Blog.WebApi.Controllers
         [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
         public IActionResult CreateArticle([FromBody] CreateArticleDTO articleDto, [FromHeader] Guid Authorization)
         {
+            var imagePath = _articleLogic.SaveImage(articleDto.Image);
+
             Article article = articleDto.ToEntity();
+            article.Image = imagePath;
+            if (articleDto.Image2 != null)
+            {
+                var imagePath2 = _articleLogic.SaveImage(articleDto.Image2);
+                article.Image2 = imagePath2;
+            }
+            
             Article newArticle = _articleLogic.CreateArticle(article, Authorization);
             return Created($"api/articles/{article.Id}", new ArticleDetailDTO(newArticle));
 
