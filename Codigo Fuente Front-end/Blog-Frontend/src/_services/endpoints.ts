@@ -1,6 +1,7 @@
 export enum AuthEndpoints {
   LOGIN = '/auth/login',
   REGISTER = '/auth/register',
+  ADMIN = '/auth/admin',
 }
 
 export enum ArticleEndpoints {

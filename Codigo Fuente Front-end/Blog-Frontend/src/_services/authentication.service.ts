@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AuthEndpoints } from '../_services/endpoints';
@@ -43,10 +47,6 @@ export class AuthenticationService {
           localStorage.setItem('username', response.user.username);
           this.username = response.user.username;
           this.roles = JSON.stringify(response.user.roles);
-          localStorage.setItem(
-            'isAdmin',
-            this.isAdmin()?.toString() ?? 'false'
-          );
           this.authStateChanged.next(true);
         })
       );
@@ -78,14 +78,17 @@ export class AuthenticationService {
   cleanLocalStorage() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    localStorage.removeItem('isAdmin');
   }
 
   isAuthenticated(): boolean {
     return this.isLoggedIn.getValue();
   }
 
-  isAdmin(): boolean | undefined {
-    return this.roles?.includes('1');
+  public isAdmin(authorization: string): Observable<boolean> {
+    const headers = new HttpHeaders().set('Authorization', authorization);
+    return this.http.get<boolean>(
+      `${environment.BASE_URL}${AuthEndpoints.ADMIN}`,
+      { headers }
+    );
   }
 }
