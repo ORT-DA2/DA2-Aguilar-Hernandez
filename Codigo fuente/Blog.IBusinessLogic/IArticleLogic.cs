@@ -1,4 +1,5 @@
 ﻿using Blog.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Blog.IBusinessLogic;
 
@@ -14,4 +15,5 @@ public interface IArticleLogic
     public void DeleteArticle(Guid articleId, Guid authorization);
     public IEnumerable<Article> GetLastTen();
     public IEnumerable<Article> GetAllUserArticles(string username, Guid auth);
+    string SaveImage(string imageFile);
 }
