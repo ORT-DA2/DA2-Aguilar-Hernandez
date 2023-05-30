@@ -10,9 +10,10 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { AuthenticationService } from '../_services/authentication.service';
 import { RegisterPageComponent } from './register-page/register-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { CreateArticleComponent } from './create-article/create-article.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, LoginPageComponent, RegisterPageComponent, HomePageComponent],
+  declarations: [AppComponent, HeaderComponent, LoginPageComponent, RegisterPageComponent, HomePageComponent, CreateArticleComponent],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [AuthenticationService],
   bootstrap: [AppComponent],

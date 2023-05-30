@@ -5,4 +5,5 @@ export enum AuthEndpoints {
 
 export enum ArticleEndpoints {
   LAST_ARTICLES = '/articles/last-articles',
+  CREATE_ARTICLE = '/articles'
 }

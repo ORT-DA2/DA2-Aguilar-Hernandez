@@ -5,9 +5,9 @@ export interface Article {
   title: string;
   content: string;
   isPublic: boolean;
-  owner: User;
-  datePublished: Date;
-  dateLastModified: Date;
+  owner: string;
+  datePublished: number;
+  dateLastModified: number;
   comments?: string[];
   image: string;
   template: string;
