@@ -40,6 +40,15 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
     
+    [HttpGet("rankingOffensive")]
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
+    public IActionResult GetUserOffensiveRanking([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+    {
+        var result = _userLogic.UserOffensiveRanking(startDate, endDate);
+        return Ok(result);
+    }
+    
     [ServiceFilter(typeof(AuthorizationFilter))]
     [HttpGet]
     public IActionResult GetAllUsers()
