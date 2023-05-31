@@ -5,7 +5,7 @@ export interface Article {
   title: string;
   content: string;
   isPublic: boolean;
-  owner: User;
+  owner: string;
   datePublished: Date;
   dateLastModified: Date;
   comments?: string[];
