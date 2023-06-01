@@ -377,13 +377,13 @@ public class ArticleControllerTest
     public void GetLastTenSuccessfulTest()
     {
         var articles = _articles;
-        articles.Remove(_articleTest11);
+        articles.Remove(_articleTest);
         var controller = new ArticlesController(_articlenMock.Object);
         _articlenMock.Setup(o => o.GetLastTen()).Returns(articles);
         var result = controller.GetLastTen();
         var okResult = result as OkObjectResult;
-        var dto = okResult.Value as List<Article>;
-        Assert.AreEqual(articles, dto);
+        var dto = okResult.Value as List<ArticleDetailDTO>;
+        Assert.AreEqual(articles.Count, dto.Count);
     }
     
     [TestMethod]

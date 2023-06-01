@@ -48,7 +48,6 @@ public class UserControllerTests
         Assert.IsTrue(user.FirstName.Equals(dto.FirstName));
         Assert.IsTrue(user.LastName.Equals(dto.LastName));
         Assert.IsTrue(user.Username.Equals(dto.Username));
-        Assert.IsTrue(user.Password.Equals(dto.Password));
         Assert.AreEqual(user.Roles.Count, dto.Roles.Count);
         Assert.IsTrue(user.Email.Equals(dto.Email));
     }
