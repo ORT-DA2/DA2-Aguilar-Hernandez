@@ -9,12 +9,11 @@ import { Observable } from 'rxjs';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  user: any;
   isLoggedIn = false;
-  isAdmin: boolean = false;
+  isAdmin = false;
   notifications: any[] = [];
   hasNotifications = false;
-  username: string = '';
-  roles: string | null = '';
 
   constructor(
     private authService: AuthenticationService,
@@ -24,13 +23,13 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.checkNotifications();
     this.isLoggedIn = this.authService.isAuthenticated();
+    this.authService.user$.subscribe((user: any) => {
+      this.user = user;
+    });
     this.authService.authStateChanged.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
-      this.username = localStorage.getItem('username') || '';
       this.refreshAdminStatus();
     });
-    this.username = localStorage.getItem('username') || '';
-    this.refreshAdminStatus();
   }
 
   checkNotifications() {
@@ -40,6 +39,9 @@ export class HeaderComponent implements OnInit {
   refreshAdminStatus() {
     if (this.isLoggedIn) {
       const authorization = localStorage.getItem('token') || '';
+      this.authService.user$.subscribe((user: any) => {
+        this.user = user;
+      });
       this.authService.isAdmin(authorization).subscribe((isAdmin: boolean) => {
         this.isAdmin = isAdmin;
       });
@@ -50,6 +52,10 @@ export class HeaderComponent implements OnInit {
 
   onSearch(event: Event) {
     event.preventDefault();
+  }
+
+  onViewProfile() {
+    this.router.navigate(['/profile', this.user?.id]);
   }
 
   onLogin() {

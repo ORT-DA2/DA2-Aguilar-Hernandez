@@ -1,0 +1,24 @@
+<div class="container">
+    
+    <h1>Perfil de Usuario</h1>
+  
+    
+    <div *ngIf="user" class="card">
+      <div class="card-body">
+        <h2 class="card-title">{{ user.firstName }} {{ user.lastName }}</h2>
+        <p class="card-text">Email: {{ user.email }}</p>
+        <p class="card-text">Username: {{ user.username }}</p>
+  
+        
+        <button class="btn btn-primary" (click)="onEdit()">Editar</button>
+      </div>
+    </div>
+  
+    
+    <div *ngIf="!user" class="alert alert-info">
+      Cargando usuario...
+    </div>
+  </div>
+  
+  
+  

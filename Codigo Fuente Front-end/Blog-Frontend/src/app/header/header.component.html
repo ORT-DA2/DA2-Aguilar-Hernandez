@@ -38,14 +38,14 @@
         </li>
         <li class="nav-item dropdown" *ngIf="isLoggedIn">
           <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="#">View Profile</a>
+              <a class="dropdown-item" (click)="onViewProfile()">View Profile</a>
               <a class="dropdown-item" href="#">Create Article</a>
               <a class="dropdown-item" href="#" *ngIf="isAdmin">Moderate Articles</a>
               <a class="dropdown-item" href="#" *ngIf="isAdmin">Activity Ranking</a>
               <a class="dropdown-item" href="#" *ngIf="isAdmin">Offensive Ranking</a>
           </div>
           <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa-regular fa-user"></i> {{username}}
+            <i class="fa-regular fa-user"></i> {{ user?.username }}
           </a>         
         </li>
         <li class="nav-item" *ngIf="isLoggedIn">
