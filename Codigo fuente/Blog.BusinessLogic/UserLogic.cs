@@ -41,7 +41,7 @@ public class UserLogic: IUserLogic
         User? userExist = _repository.GetBy(u => u.Username == user.Username);
         UserAlreadyExist(userExist);
         ValidateNull(user);
-        GeneralValidation(user);
+        GeneralValidation(user, false);
         _repository.Insert(user);
         _repository.Save();
         return user;
@@ -49,7 +49,7 @@ public class UserLogic: IUserLogic
 
     public User UpdateUser(Guid id, User userUpdated, Guid auth)
     {
-        GeneralValidation(userUpdated);
+        GeneralValidation(userUpdated, true);
         
         User? oldUser = _repository.GetBy(u => u.Id == id);
 
@@ -124,17 +124,21 @@ public class UserLogic: IUserLogic
         }
     }
 
-    public void GeneralValidation(User user)
+    public void GeneralValidation(User user, bool update)
     {
         user.FirstNameValidation();
         user.UsernameValidation();
         user.LastNameValidation();
-        user.PasswordValidation();
         user.EmailValidation();
         user.ValidateEmail();
         user.ValidateAlfanumericUsername();
         user.ValidateUsernameLenght();
-        user.ValidatePasswordLenght();
+        if (!update)
+        {
+            user.ValidatePasswordLenght();
+            user.PasswordValidation();
+        }
+        
     }
 
     public void UserAlreadyExist(User user)

@@ -12,6 +12,8 @@ export class ProfilePageComponent implements OnInit {
   user: any;
   userId: string | null = null;
   token: string | null = null;
+  editable: boolean = false;
+  showPassword: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,5 +28,35 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
-  onEdit() {}
+  onEdit() {
+    this.editable = true;
+  }
+
+  onSave() {
+    this.userService.editProfile(this.user, this.token).subscribe(
+      (updatedUser: User[]) => {
+        this.user = updatedUser;
+      },
+      (error: any) => {
+        console.error('An error occurred while editing the profile', error);
+      },
+      () => {
+        console.log('Profile updated successfully');
+      }
+    );
+
+    this.editable = false;
+  }
+
+  onChangePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  onCancelChangePassword() {
+    this.showPassword = false;
+  }
+
+  onCancelEdit() {
+    this.editable = false;
+  }
 }

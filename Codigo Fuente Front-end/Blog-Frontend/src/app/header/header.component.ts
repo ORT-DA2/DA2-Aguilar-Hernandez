@@ -28,8 +28,8 @@ export class HeaderComponent implements OnInit {
     });
     this.authService.authStateChanged.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
-      this.refreshAdminStatus();
     });
+    this.refreshAdminStatus();
   }
 
   checkNotifications() {
@@ -67,6 +67,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
+    this.router.navigate(['/']);
     this.authService.logout();
   }
 }
