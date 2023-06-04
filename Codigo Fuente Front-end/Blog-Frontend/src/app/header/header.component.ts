@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class HeaderComponent implements OnInit {
   user: any;
   isLoggedIn = false;
-  isAdmin = false;
+  isAdmin: boolean | undefined = false;
   notifications: any[] = [];
   hasNotifications = false;
 
@@ -25,29 +25,15 @@ export class HeaderComponent implements OnInit {
     this.isLoggedIn = this.authService.isAuthenticated();
     this.authService.user$.subscribe((user: any) => {
       this.user = user;
+      this.isAdmin = this.user?.roles.some((role: any) => role.role === 1);
     });
     this.authService.authStateChanged.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
     });
-    this.refreshAdminStatus();
   }
 
   checkNotifications() {
     this.hasNotifications = this.notifications.length > 0;
-  }
-
-  refreshAdminStatus() {
-    if (this.isLoggedIn) {
-      const authorization = localStorage.getItem('token') || '';
-      this.authService.user$.subscribe((user: any) => {
-        this.user = user;
-      });
-      this.authService.isAdmin(authorization).subscribe((isAdmin: boolean) => {
-        this.isAdmin = isAdmin;
-      });
-    } else {
-      this.isAdmin = false;
-    }
   }
 
   onSearch(event: Event) {

@@ -12,6 +12,7 @@ import { RegistrationCredentials } from '../_type/credentialsRegister';
 import { catchError, tap } from 'rxjs/operators';
 import { UserEndpoints } from '../_services/endpoints';
 import { User } from '../_type/user';
+import { Role } from '../_type/role';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,7 @@ export class AuthenticationService {
   user$ = new BehaviorSubject<User | null>(null);
   public authStateChanged: Subject<boolean> = new Subject<boolean>();
   private token: string | null = null;
+  admin: boolean | undefined = false;
 
   constructor(private http: HttpClient) {
     const storedToken = localStorage.getItem('token') || null;
@@ -48,6 +50,9 @@ export class AuthenticationService {
           this.getUser();
           this.isLoggedIn$.next(true);
           this.authStateChanged.next(true);
+          this.admin = this.user$
+            .getValue()
+            ?.roles.some((role) => role.role === 1);
         })
       );
   }
@@ -77,14 +82,6 @@ export class AuthenticationService {
 
   isAuthenticated(): boolean {
     return this.isLoggedIn$.getValue();
-  }
-
-  public isAdmin(authorization: string): Observable<boolean> {
-    const headers = new HttpHeaders().set('Authorization', authorization);
-    return this.http.get<boolean>(
-      `${environment.BASE_URL}${AuthEndpoints.ADMIN}`,
-      { headers }
-    );
   }
 
   public getUser() {

@@ -54,16 +54,6 @@ public class AuthController : ControllerBase
         _sessionService.Logout(Authorization);
         return Ok("Logout successfuly");
     }
-    
-    [HttpGet]
-    [Route("admin")]
-    [ServiceFilter(typeof(AuthorizationFilter))]
-    [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
-    public IActionResult GetAdmin([FromHeader] Guid Authorization)
-    {
-        bool isAdmin = _sessionService.GetLoggedUser(Authorization)?.IsInRole(Role.Admin) ?? false;
-        return Ok(isAdmin);
-    }
-    
-        
+
+
 }
