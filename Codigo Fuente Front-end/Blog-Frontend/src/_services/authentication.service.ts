@@ -77,7 +77,4 @@ export class AuthenticationService {
     return this.username;
   }
 
-  getToken(): string | null{
-    return this.token;
-  }
 }

@@ -13,7 +13,7 @@ export class CreateArticleComponent {
   title: string = '';
   content: string = '';
   isPublic: boolean = true;
-  owner: string | null = this.authService.getToken();
+  ownerId: string = this.getLoggedUser() || '';
   datePublished: number = Date.now();
   dateLastModified: number = Date.now();
   template: string = '';
@@ -29,8 +29,15 @@ export class CreateArticleComponent {
   ){}
 
   onCreateArticle() {
-    const article : Article = {
+    let article: Article = {
+      dateLastModified: 0,
+      datePublished: 0,
+      id: "",
+      isApproved: false,
+      isEdited: false,
+      offensiveContent: [],
       title: this.title,
+      ownerId: this.getLoggedUser() || '',
       content: this.content,
       isPublic: this.isPublic,
       template: this.template,
@@ -39,5 +46,9 @@ export class CreateArticleComponent {
 
     this.ArticleService.createArticle(article);
 
+  }
+
+  private getLoggedUser(){
+    return localStorage.getItem('token');
   }
 }

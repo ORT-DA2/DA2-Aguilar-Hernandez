@@ -1,11 +1,9 @@
-import { User } from './user';
-
 export interface Article {
   id: string;
   title: string;
   content: string;
   isPublic: boolean;
-  owner: string;
+  ownerId: string;
   datePublished: number;
   dateLastModified: number;
   comments?: string[];
