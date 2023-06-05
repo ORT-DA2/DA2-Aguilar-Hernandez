@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services/authentication.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -8,10 +9,11 @@ import { AuthenticationService } from '../../_services/authentication.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  user: any;
   isLoggedIn = false;
+  isAdmin: boolean | undefined = false;
   notifications: any[] = [];
   hasNotifications = false;
-  username: string = '';
 
   constructor(
     private authService: AuthenticationService,
@@ -21,10 +23,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.checkNotifications();
     this.isLoggedIn = this.authService.isAuthenticated();
-    this.username = this.authService.getUsername();
+    this.authService.user$.subscribe((user: any) => {
+      this.user = user;
+      this.isAdmin = this.user?.roles.some((role: any) => role.role === 1);
+    });
     this.authService.authStateChanged.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
-      this.username = this.authService.username;
     });
   }
 
@@ -36,12 +40,12 @@ export class HeaderComponent implements OnInit {
     event.preventDefault();
   }
 
-  onLogin() {
-    this.router.navigate(['/login']);
+  onViewProfile() {
+    this.router.navigate(['/profile', this.user?.id]);
   }
 
-  getUsername(): string {
-    return this.authService.username;
+  onLogin() {
+    this.router.navigate(['/login']);
   }
 
   onRegister() {
@@ -49,6 +53,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
+    this.router.navigate(['/']);
     this.authService.logout();
   }
 }

@@ -1,6 +1,6 @@
 
 using Blog.Domain.Entities;
-
+using Blog.Domain.Enums;
 using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
@@ -54,5 +54,6 @@ public class AuthController : ControllerBase
         _sessionService.Logout(Authorization);
         return Ok("Logout successfuly");
     }
-        
+
+
 }

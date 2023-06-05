@@ -100,10 +100,13 @@ public class User
         FirstName = user.FirstName;
         LastName = user.LastName;
         Username = user.Username;
-        Password = user.Password;
         Roles = user.Roles;
         Email = user.Email;
         Comments = user.Comments;
+        if (user.Password != null)
+        {
+            Password = user.Password;
+        }
     }
 
     public bool IsInRole(Role role)

@@ -8,6 +8,7 @@ import { ArticleService } from '../../_services/article.service';
   styleUrls: ['./home-page.component.css'],
 })
 export class HomePageComponent {
+  imgPath: string = '';
   lastArticles: Article[] = [];
 
   constructor(private articleService: ArticleService) {}

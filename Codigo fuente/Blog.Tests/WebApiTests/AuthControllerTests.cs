@@ -3,6 +3,7 @@ using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
+using Blog.Models.Out;
 using Blog.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -31,6 +32,8 @@ public class AuthControllerTests
     [TestMethod]
     public void SuccessfulLoginTest()
     {
+        User? loggedUser = new User();
+        
         LoginDto session = new LoginDto()
         {
             Username = "NicolasAHF",
@@ -43,11 +46,12 @@ public class AuthControllerTests
         var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
         
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
+        _sessionMock.Setup(o => o.GetLoggedUser(token)).Returns(loggedUser);
         var result = controller.Login(session);
         var okResult = result as OkObjectResult;
         var tokenResult = okResult.Value.ToString();
         Notification[] notifications = new Notification[1];
-        var expected = new { token = token, notifications = notifications };
+        var expected = new { token = token, notifications = notifications, user = new UserDetailDTO(loggedUser) };
         
         Assert.AreEqual(expected.ToString(), tokenResult);
     }

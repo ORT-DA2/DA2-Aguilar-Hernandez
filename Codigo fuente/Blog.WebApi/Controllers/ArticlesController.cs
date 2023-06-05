@@ -114,7 +114,9 @@ namespace Blog.WebApi.Controllers
         [HttpGet("last-articles")]
         public IActionResult GetLastTen()
         {
-            return Ok(_articleLogic.GetLastTen());
+            IEnumerable<Article> articles = _articleLogic.GetLastTen();
+            List<ArticleDetailDTO> articlesDTO = articles.Select(article => new ArticleDetailDTO(article)).ToList();
+            return Ok(articlesDTO);
         }
     }
 }

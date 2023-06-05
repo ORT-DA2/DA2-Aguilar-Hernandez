@@ -3,6 +3,7 @@ using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
+using Microsoft.AspNetCore.Hosting;
 using Moq;
 
 namespace Blog.BusinessLogic.Test;
@@ -13,6 +14,7 @@ public class ArticleLogicTests
     private Mock<IRepository<Article>> _articleRepoMock;
     private Mock<ISessionLogic> _sessionLogicMock;
     private Mock<IOffensiveWordLogic> _offensiveLogicMock;
+    private Mock<IWebHostEnvironment> _hostEnvironmentMock;
     private Article _articleTest;
     private List<Article> _articles;
     private Article _articleTest2;
@@ -32,6 +34,7 @@ public class ArticleLogicTests
         _articleRepoMock = new Mock<IRepository<Article>>(MockBehavior.Strict);
         _sessionLogicMock = new Mock<ISessionLogic>(MockBehavior.Strict);
         _offensiveLogicMock = new Mock<IOffensiveWordLogic>(MockBehavior.Strict);
+        _hostEnvironmentMock = new Mock<IWebHostEnvironment>(MockBehavior.Strict);
         
         var user = new User()
         {
@@ -256,7 +259,7 @@ public class ArticleLogicTests
             AuthToken = Guid.NewGuid()
         };
         
-        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object);
+        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object, _hostEnvironmentMock.Object);
         _articleRepoMock.Setup(o => o.Insert(It.IsAny<Article>()));
         _articleRepoMock.Setup(o => o.Save());
         _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
@@ -268,7 +271,7 @@ public class ArticleLogicTests
     [TestMethod]
     public void GetAllArticlesValidTest()
     {
-        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object);
+        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object, _hostEnvironmentMock.Object);
         _articleRepoMock.Setup(o => o.GetAll()).Returns(_articles);
         var result = logic.GetAllArticles();
         Assert.AreEqual(_articles.Count(), result.Count());
@@ -277,7 +280,7 @@ public class ArticleLogicTests
     [TestMethod]
     public void GetArticleByIdValidTest()
     {
-        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object);
+        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object, _hostEnvironmentMock.Object);
         _articleRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
         var result = logic.GetArticleById(_articleTest.Id);
         Assert.AreEqual(_articleTest, result);
@@ -291,7 +294,7 @@ public class ArticleLogicTests
         {
             _articleTest
         };
-        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object);
+        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object, _hostEnvironmentMock.Object);
         _articleRepoMock.Setup(o => o.GetByText(text)).Returns(articles);
         var result = logic.GetArticleByText(text);
         Assert.AreEqual(articles, result);
@@ -303,7 +306,7 @@ public class ArticleLogicTests
         var articles = _articles;
         articles.Remove(_articleTest11);
         
-        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object);
+        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object, _hostEnvironmentMock.Object);
         _articleRepoMock.Setup(o => o.GetLastTen()).Returns(articles);
         var result = logic.GetLastTen();
         Assert.AreEqual(articles, result);
@@ -324,7 +327,7 @@ public class ArticleLogicTests
             AuthToken = Guid.NewGuid()
         };
         
-        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object);
+        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object, _hostEnvironmentMock.Object);
         _articleRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
         _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         _articleRepoMock.Setup(o => o.Update(It.IsAny<Article>()));
@@ -355,7 +358,7 @@ public class ArticleLogicTests
             AuthToken = Guid.NewGuid()
         };
         
-        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object);
+        var logic = new ArticleLogic(_articleRepoMock.Object, _sessionLogicMock.Object, _offensiveLogicMock.Object, _hostEnvironmentMock.Object);
         _articleRepoMock.Setup(o => o.GetBy(It.IsAny<Expression<Func<Article, bool>>>())).Returns(_articleTest);
         _sessionLogicMock.Setup(o => o.GetLoggedUser(session.AuthToken)).Returns(userLogged);
         _articleRepoMock.Setup(o => o.Delete(It.IsAny<Article>()));

@@ -2,7 +2,7 @@
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Blog.BusinessLogic;
 
@@ -11,12 +11,14 @@ public class ArticleLogic: IArticleLogic
     private readonly IRepository<Article> _repository;
     private static ISessionLogic _sessionLogic;
     private static IOffensiveWordLogic _offensiveWordLogic;
+    private readonly IWebHostEnvironment _hostEnvironment;
 
-    public ArticleLogic(IRepository<Article> articleRepository, ISessionLogic sessionLogic, IOffensiveWordLogic offensiveWordLogic)
+    public ArticleLogic(IRepository<Article> articleRepository, ISessionLogic sessionLogic, IOffensiveWordLogic offensiveWordLogic, IWebHostEnvironment hostEnvironment)
     {
         _repository = articleRepository;
         _sessionLogic = sessionLogic;
         _offensiveWordLogic = offensiveWordLogic;
+        _hostEnvironment = hostEnvironment;
     }
 
     public Article GetArticleById(Guid articleId)
@@ -63,23 +65,19 @@ public class ArticleLogic: IArticleLogic
     public string SaveImage(string image)
     {
         byte[] imageBytes = Convert.FromBase64String(image);
-        var imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "images");
+        var imageFolderPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
 
         if (!Directory.Exists(imageFolderPath))
         {
             Directory.CreateDirectory(imageFolderPath);
         }
 
-        var imagePath = string.Empty;
-
-        var imageName = Guid.NewGuid().ToString();
+        var imageName = $"{Guid.NewGuid().ToString()}.jpg";
         var fullImagePath = Path.Combine(imageFolderPath, imageName);
 
         System.IO.File.WriteAllBytesAsync(fullImagePath, imageBytes);
 
-        imagePath = fullImagePath;
-
-        return imagePath;
+        return $"images/{imageName}";
     }
 
     public Article CreateArticle(Article article, Guid authorization)

@@ -1,0 +1,65 @@
+<div class="container">
+  <h1>Perfil de Usuario</h1>
+
+  <div *ngIf="user" class="card">
+    <div class="card-body">
+      <div *ngIf="!editable" class="user-profile">
+        <h2 class="user-profile__name">{{ user.firstName }} {{ user.lastName }}</h2>
+        <div class="user-profile__info">
+          <div class="user-profile__item">
+            <span class="user-profile__label">Email:</span>
+            <span class="user-profile__value">{{ user.email }}</span>
+          </div>
+          <div class="user-profile__item">
+            <span class="user-profile__label">Username:</span>
+            <span class="user-profile__value">{{ user.username }}</span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="editable">
+        <h2 class="card-title">Edit Profile</h2>
+        <div class="form-group">
+          <label for="firstNameInput">First Name:</label>
+          <input id="firstNameInput" type="text" class="form-control" [(ngModel)]="user.firstName" placeholder="First Name">
+        </div>
+        <div class="form-group">
+          <label for="lastNameInput">Last Name:</label>
+          <input id="lastNameInput" type="text" class="form-control" [(ngModel)]="user.lastName" placeholder="Last Name">
+        </div>
+        <div class="form-group">
+          <label for="emailInput">Email:</label>
+          <input id="emailInput" type="email" class="form-control" [(ngModel)]="user.email" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <label for="usernameInput">Username:</label>
+          <input id="usernameInput" type="text" class="form-control" [(ngModel)]="user.username" placeholder="Username">
+        </div>
+        <div class="form-group" *ngIf="showPassword">
+          <label for="passwordInput">Password:</label>
+          <input id="passwordInput" type="password" class="form-control" [(ngModel)]="user.password" placeholder="Password">
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button *ngIf="!editable" class="btn btn-primary" (click)="onEdit()">Edit</button>
+        <div class="mt-2">
+          <button *ngIf="editable && !showPassword" class="btn btn-success" (click)="onChangePassword()">Change Password</button>
+        </div>
+        <div class="mt-2">
+          <button *ngIf="editable && showPassword" class="btn btn-danger" (click)="onCancelChangePassword()">Cancel</button>
+        </div>
+        <div class="mt-2">
+          <button *ngIf="editable" class="btn btn-success" (click)="onSave()">Save</button>
+        </div>
+        <div class="mt-2">
+          <button *ngIf="editable && !showPassword" class="btn btn-danger" (click)="onCancelEdit()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!user" class="alert alert-info">
+    Cargando usuario...
+  </div>
+</div>
+

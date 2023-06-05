@@ -1,0 +1,33 @@
+.user-profile {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .user-profile__name {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .user-profile__info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-profile__item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .user-profile__label {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  
+  .user-profile__value {
+    color: #6c757d;
+  }
+  
