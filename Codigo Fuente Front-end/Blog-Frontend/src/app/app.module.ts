@@ -9,6 +9,7 @@ import { HeaderComponent } from './header/header.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { RegisterPageComponent } from './register-page/register-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { CreateArticleComponent } from './create-article/create-article.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 
 import { AuthenticationService } from '../_services/authentication.service';
@@ -22,7 +23,9 @@ import { UserService } from '../_services/user.service';
     RegisterPageComponent,
     HomePageComponent,
     ProfilePageComponent,
+    CreateArticleComponent
   ],
+
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [AuthenticationService, UserService],
   bootstrap: [AppComponent],

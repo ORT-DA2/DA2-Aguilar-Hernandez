@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 import { Article } from '../_type/article';
 import { environment } from '../environments/environment';
 import { ArticleEndpoints } from '../_services/endpoints';
@@ -26,5 +26,15 @@ export class ArticleService {
           return throwError(error);
         })
       );
+  }
+
+  createArticle(article : Article): Observable<Article> {
+    return this.http
+      .post<Article>(`${environment.BASE_URL}${ArticleEndpoints.ARTICLES}`, article)
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse){
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 }
