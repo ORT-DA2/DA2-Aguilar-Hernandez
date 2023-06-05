@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { Observable } from 'rxjs';
+import { ArticleService } from '../../_services/article.service';
+import { Article } from '../../_type/article';
 
 @Component({
   selector: 'app-header',
@@ -14,9 +16,14 @@ export class HeaderComponent implements OnInit {
   isAdmin: boolean | undefined = false;
   notifications: any[] = [];
   hasNotifications = false;
+  searchTerm = '';
+  token: string | null = null;
+  searchResults: Article[] = [];
+  searchError = '';
 
   constructor(
     private authService: AuthenticationService,
+    private articleService: ArticleService,
     private router: Router
   ) {}
 
@@ -36,12 +43,37 @@ export class HeaderComponent implements OnInit {
     this.hasNotifications = this.notifications.length > 0;
   }
 
-  onSearch(event: Event) {
+  public onSearch(event: Event): void {
     event.preventDefault();
+
+    this.token = localStorage.getItem('token');
+
+    if (this.searchTerm.length > 0) {
+      this.articleService.searchArticles(this.searchTerm, this.token).subscribe(
+        (results: Article[]) => {
+          this.searchResults = results;
+        },
+        (error) => {
+          this.searchError = error.error.errorMessage;
+        }
+      );
+    } else {
+      this.searchResults = [];
+    }
+  }
+
+  onSubmitSearch(event: Event) {
+    event.preventDefault();
+
+    this.onSearch(event as KeyboardEvent);
   }
 
   onViewProfile() {
     this.router.navigate(['/profile', this.user?.id]);
+  }
+
+  onViewOffensive() {
+    this.router.navigate(['/offensive-ranking']);
   }
 
   onLogin() {

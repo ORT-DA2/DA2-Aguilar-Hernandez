@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Article } from '../_type/article';
@@ -19,10 +19,26 @@ export class ArticleService {
       )
       .pipe(
         catchError((error) => {
-          console.error(
-            'An error occurred while fetching last articles:',
-            error
-          );
+          return throwError(error);
+        })
+      );
+  }
+
+  searchArticles(
+    searchTerm: string,
+    token: string | null
+  ): Observable<Article[]> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .get<Article[]>(
+        `${environment.BASE_URL}${ArticleEndpoints.SEARCH_ARTICLES}?text=${searchTerm}`,
+        { headers }
+      )
+      .pipe(
+        catchError((error) => {
           return throwError(error);
         })
       );

@@ -25,7 +25,6 @@ export class UserService {
       )
       .pipe(
         catchError((error) => {
-          console.error('An error occurred while fetching user', error);
           return throwError(error);
         })
       );
@@ -44,7 +43,6 @@ export class UserService {
       )
       .pipe(
         catchError((error) => {
-          console.error('An error occurred while editing the profile', error);
           return throwError(error);
         })
       );

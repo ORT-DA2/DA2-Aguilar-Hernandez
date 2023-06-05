@@ -10,9 +10,12 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { RegisterPageComponent } from './register-page/register-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { OffensiveRankingPageComponent } from './offensive-ranking-page/offensive-ranking-page.component';
 
 import { AuthenticationService } from '../_services/authentication.service';
 import { UserService } from '../_services/user.service';
+import { OffensiveService } from '../_services/offensive.service';
+import { ArticleService } from '../_services/article.service';
 
 @NgModule({
   declarations: [
@@ -22,9 +25,15 @@ import { UserService } from '../_services/user.service';
     RegisterPageComponent,
     HomePageComponent,
     ProfilePageComponent,
+    OffensiveRankingPageComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
-  providers: [AuthenticationService, UserService],
+  providers: [
+    AuthenticationService,
+    UserService,
+    OffensiveService,
+    ArticleService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
