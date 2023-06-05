@@ -15,15 +15,26 @@
             <textarea class="form-control" id="content" rows="10"></textarea>
           </div>
 
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Choose Layout
-            </button>
+          <div class="container">
+            <div class="row justify-content-start">
+              <div class="col-4">
+                <div class="dropdown">
+                  <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Choose Template
+                  </button>
 
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" >Template 1</a>
-              <a class="dropdown-item" >Template 2</a>
-              <a class="dropdown-item" >Template 3</a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Top')">Rectangle at Top</a>
+                    <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Bottom')">Rectangle at Bottom</a>
+                    <a class="dropdown-item" (click)="onChooseTemplate('Square at Top Left')">Square at Top Left</a>
+                    <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Top and Bottom')">Rectangle at Top and Bottom</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4">
+                {{template}}
+              </div>
             </div>
           </div>
 
@@ -39,10 +50,11 @@
 
 
           <div class="form-group text-center mt-5">
-            <button class="btn btn-primary w-50" (click)="onCreateArticle()">Create Article</button>
+            <button class="btn btn-primary w-50" (click)="createArticle()">Create Article</button>
           </div>
           <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
         </div>
       </div>
     </div>
   </div>
+</div>

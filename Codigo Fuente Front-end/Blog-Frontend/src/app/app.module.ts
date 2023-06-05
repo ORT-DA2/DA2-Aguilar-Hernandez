@@ -23,6 +23,7 @@ import { UserService } from '../_services/user.service';
     RegisterPageComponent,
     HomePageComponent,
     ProfilePageComponent,
+    CreateArticleComponent
   ],
 
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],

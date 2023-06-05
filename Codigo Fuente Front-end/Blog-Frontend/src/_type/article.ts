@@ -1,3 +1,5 @@
+import {User} from "./user";
+
 export interface Article {
   id: string;
   title: string;
@@ -7,7 +9,7 @@ export interface Article {
   datePublished: number;
   dateLastModified: number;
   comments?: string[];
-  image: string;
+  images: string[];
   template: string;
   isApproved: boolean;
   isEdited: boolean;
