@@ -26,7 +26,7 @@ import { ArticleService } from '../_services/article.service';
     RegisterPageComponent,
     HomePageComponent,
     ProfilePageComponent,
-    CreateArticleComponent
+    CreateArticleComponent,
     OffensiveRankingPageComponent,
   ],
 

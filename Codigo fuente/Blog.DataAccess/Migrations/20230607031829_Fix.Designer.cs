@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.DataAccess.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20230530221730_imagenesFix")]
-    partial class imagenesFix
+    [Migration("20230607031829_Fix")]
+    partial class Fix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

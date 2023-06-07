@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Blog.DataAccess.Migrations
 {
-    public partial class imagenesFix : Migration
+    public partial class Fix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
