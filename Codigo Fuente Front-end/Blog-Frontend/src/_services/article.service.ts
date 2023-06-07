@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Article } from '../_type/article';
 import { environment } from '../environments/environment';
 import { ArticleEndpoints } from '../_services/endpoints';
@@ -19,22 +23,43 @@ export class ArticleService {
       )
       .pipe(
         catchError((error) => {
-          console.error(
-            'An error occurred while fetching last articles:',
-            error
-          );
           return throwError(error);
         })
       );
   }
 
-  createArticle(article : Article): Observable<Article> {
+  searchArticles(
+    searchTerm: string,
+    token: string | null
+  ): Observable<Article[]> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
     return this.http
-      .post<Article>(`${environment.BASE_URL}${ArticleEndpoints.ARTICLES}`, article)
+      .get<Article[]>(
+        `${environment.BASE_URL}${ArticleEndpoints.SEARCH_ARTICLES}?text=${searchTerm}`,
+        { headers }
+      )
+      .pipe(
+        catchError((error) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  createArticle(article: Article): Observable<Article> {
+    return this.http
+      .post<Article>(
+        `${environment.BASE_URL}${ArticleEndpoints.ARTICLES}`,
+        article
+      )
       .pipe(catchError(this.handleError));
   }
 
-  private handleError(error: HttpErrorResponse){
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+  private handleError(error: HttpErrorResponse) {
+    return throwError(
+      () => new Error('Something bad happened; please try again later.')
+    );
   }
 }

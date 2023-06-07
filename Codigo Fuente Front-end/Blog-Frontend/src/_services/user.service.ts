@@ -25,7 +25,27 @@ export class UserService {
       )
       .pipe(
         catchError((error) => {
-          console.error('An error occurred while fetching user', error);
+          return throwError(error);
+        })
+      );
+  }
+
+  getRankingOffensive(
+    startDate: Date,
+    endDate: Date,
+    token: string | null
+  ): Observable<User[]> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .get<any>(
+        `${environment.BASE_URL}${UserEndpoints.GET_RANKING_OFFENSIVE}?startDate=${startDate}&endDate=${endDate}`,
+        { headers }
+      )
+      .pipe(
+        catchError((error) => {
           return throwError(error);
         })
       );
@@ -44,7 +64,6 @@ export class UserService {
       )
       .pipe(
         catchError((error) => {
-          console.error('An error occurred while editing the profile', error);
           return throwError(error);
         })
       );

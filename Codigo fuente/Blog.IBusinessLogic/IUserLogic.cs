@@ -10,4 +10,5 @@ public interface IUserLogic
         public User UpdateUser(Guid id, User user, Guid auth);
         public void DeleteUser(Guid id);
         public Dictionary<string, int> UserActivityRanking(DateTime startDate, DateTime endDate);
+        public Dictionary<string, int> UserOffensiveRanking(DateTime startDate, DateTime endDate);
 }

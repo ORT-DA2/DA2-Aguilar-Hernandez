@@ -14,6 +14,8 @@ export class ProfilePageComponent implements OnInit {
   token: string | null = null;
   editable: boolean = false;
   showPassword: boolean = false;
+  errorMessage = '';
+  successMessage = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -21,6 +23,7 @@ export class ProfilePageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.successMessage = '';
     this.token = localStorage.getItem('token');
     this.userId = localStorage.getItem('userId');
     this.userService.getUser(this.userId, this.token).subscribe((user: any) => {
@@ -38,10 +41,10 @@ export class ProfilePageComponent implements OnInit {
         this.user = updatedUser;
       },
       (error: any) => {
-        console.error('An error occurred while editing the profile', error);
+        this.errorMessage = error.error.errorMessage;
       },
       () => {
-        console.log('Profile updated successfully');
+        this.successMessage = 'Profile updated successfully';
       }
     );
 

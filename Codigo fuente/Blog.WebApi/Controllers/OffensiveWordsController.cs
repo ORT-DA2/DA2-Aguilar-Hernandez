@@ -33,9 +33,10 @@ namespace Blog.WebApi.Controllers
             OffensiveWord newOffensiveWord = _offensiveLogic.CreateOffensiveWord(offensiveWord.Word);
             return Created($"api/offensiveWords/{newOffensiveWord.Id}", newOffensiveWord);
         }
-        
-        [HttpDelete]
-        public IActionResult DeleteOffensiveWord([FromBody]string offensiveWord)
+
+        [HttpDelete("{offensiveWord}")]
+
+        public IActionResult DeleteOffensiveWord([FromRoute]string offensiveWord)
         {
             _offensiveLogic.DeleteOffensiveWord(offensiveWord);
             return Ok($"{offensiveWord} was deleted");
