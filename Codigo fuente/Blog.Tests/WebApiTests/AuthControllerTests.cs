@@ -14,13 +14,13 @@ namespace Blog.Tests.WebApiTests;
 public class AuthControllerTests
 {
     private Mock<ISessionLogic> _sessionMock;
-    private Mock<IUserLogic> _userMock;
+    private Mock<IUserLogic> _userLogicMock;
 
     [TestInitialize]
     public void Setup()
     {
         _sessionMock = new Mock<ISessionLogic>();
-        _userMock = new Mock<IUserLogic>(MockBehavior.Strict);
+        _userLogicMock = new Mock<IUserLogic>(MockBehavior.Strict);
     }
 
     [TestCleanup]
@@ -32,26 +32,38 @@ public class AuthControllerTests
     [TestMethod]
     public void SuccessfulLoginTest()
     {
-        User? loggedUser = new User();
-        
+        var newUser = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Nicolas",
+            LastName = "Hernandez",
+            Username = "NicolasAHF",
+            Password = "123456",
+            Roles = new List<UserRole>{},
+            Email = "nicolas@example.com"
+        };
+
         LoginDto session = new LoginDto()
         {
-            Username = "NicolasAHF",
-            Password = "123456"
+            Username = newUser.Username,
+            Password = newUser.Password
         };
 
         Guid token = Guid.NewGuid();
 
         var notificationLogic = new Mock<INotificationLogic>();
-        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
+        var controller = new AuthController(_sessionMock.Object, _userLogicMock.Object, notificationLogic.Object);
         
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Returns(token);
-        _sessionMock.Setup(o => o.GetLoggedUser(token)).Returns(loggedUser);
+        _sessionMock.Setup(o => o.GetLoggedUser(token)).Returns(newUser);
+
         var result = controller.Login(session);
         var okResult = result as OkObjectResult;
         var tokenResult = okResult.Value.ToString();
         Notification[] notifications = new Notification[1];
-        var expected = new { token = token, notifications = notifications, user = new UserDetailDTO(loggedUser) };
+
+        var expected = new { token = token, notifications = notifications, user = new UserDetailDTO(newUser) };
+
         
         Assert.AreEqual(expected.ToString(), tokenResult);
     }
@@ -67,7 +79,7 @@ public class AuthControllerTests
         };
 
         var notificationLogic = new Mock<INotificationLogic>();
-        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
+        var controller = new AuthController(_sessionMock.Object, _userLogicMock.Object, notificationLogic.Object);
         _sessionMock.Setup(o => o.Login(session.Username, session.Password)).Throws(new InvalidCredentialException());
         controller.Login(session);
     }
@@ -79,7 +91,7 @@ public class AuthControllerTests
         Guid token = Guid.NewGuid();
 
         var notificationLogic = new Mock<INotificationLogic>();
-        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
+        var controller = new AuthController(_sessionMock.Object, _userLogicMock.Object, notificationLogic.Object);
         
         _sessionMock.Setup(o => o.Logout(token));
         var result = controller.Logout(token);
@@ -116,8 +128,8 @@ public class AuthControllerTests
         };
         
 
-        var controller = new AuthController(_sessionMock.Object, _userMock.Object, notificationLogic.Object);
-        _userMock.Setup(o => o.CreateUser(It.IsAny<User>())).Returns(newUser);
+        var controller = new AuthController(_sessionMock.Object, _userLogicMock.Object, notificationLogic.Object);
+        _userLogicMock.Setup(o => o.CreateUser(It.IsAny<User>())).Returns(newUser);
         var result = controller.Register(session);
         var okResult = result as OkObjectResult;
         var userResult = okResult.Value;

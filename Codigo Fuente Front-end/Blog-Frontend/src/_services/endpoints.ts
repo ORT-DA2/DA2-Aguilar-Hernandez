@@ -13,6 +13,7 @@ export enum ArticleEndpoints {
 export enum UserEndpoints {
   GET_USER = '/users',
   EDIT_USER = '/users',
+  GET_RANKING_OFFENSIVE = '/users/rankingOffensive',
 }
 
 export enum OffensiveEndpoints {

@@ -2,7 +2,7 @@
   <div class="container">
     <a class="navbar-brand" href="#">ORT Blog</a>
 
-    <div class="mx-auto">
+    <div class="mx-auto" *ngIf="isBlogger">
       <form class="form-inline my-2 my-lg-0" *ngIf="isLoggedIn" (ngSubmit)="onSearch($event)">
         <div class="input-group" style="position: relative;">
           <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchTerm" (keyup)="onSearch($event)" name="searchTerm">
@@ -43,7 +43,7 @@
         <li class="nav-item dropdown" *ngIf="isLoggedIn">
           <div class="dropdown-menu dropdown-menu-right">
               <a class="dropdown-item" (click)="onViewProfile()">View Profile</a>
-              <a class="dropdown-item" href="#">Create Article</a>
+              <a class="dropdown-item" href="#" *ngIf="isBlogger">Create Article</a>
               <a class="dropdown-item" href="#" *ngIf="isAdmin">Moderate Articles</a>
               <a class="dropdown-item" href="#" *ngIf="isAdmin">Activity Ranking</a>
               <a class="dropdown-item" (click)="onViewOffensive()" *ngIf="isAdmin">Offensive Ranking</a>

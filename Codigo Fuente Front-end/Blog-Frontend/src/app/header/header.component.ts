@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit {
   user: any;
   isLoggedIn = false;
   isAdmin: boolean | undefined = false;
+  isBlogger: boolean | undefined = false;
   notifications: any[] = [];
   hasNotifications = false;
   searchTerm = '';
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit {
     this.authService.user$.subscribe((user: any) => {
       this.user = user;
       this.isAdmin = this.user?.roles.some((role: any) => role.role === 1);
+      this.isBlogger = this.user?.roles.some((role: any) => role.role === 0);
     });
     this.authService.authStateChanged.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;

@@ -95,6 +95,17 @@ public class UserLogic: IUserLogic
         return counts;
     }
 
+    public Dictionary<string, int> UserOffensiveRanking(DateTime startDate, DateTime endDate)
+    {
+        ValidateDates(startDate, endDate);
+        IEnumerable<User> users = _repository.GetAll();
+        IEnumerable<Article> articles = _articleRepository.GetAll().Where(a => a.DatePublished >= startDate && a.DatePublished <= endDate.AddDays(1).Date.AddSeconds(-1) && (a.IsEdited || a.OffensiveContent.Any()));
+        Dictionary<string, int> articleCounts = ArticlesPerUser(articles);
+        Dictionary<string, int> commentCounts = CommentsPerUser(startDate, endDate, users);
+        Dictionary<string, int> counts = ActivityPerUser(articleCounts, commentCounts);
+        return counts;
+    }
+    
     private Dictionary<string, int> ArticlesPerUser(IEnumerable<Article> articles)
     {
         return articles
