@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, map } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Article } from '../_type/article';
 import { environment } from '../environments/environment';
@@ -34,17 +34,22 @@ export class UserService {
     startDate: Date,
     endDate: Date,
     token: string | null
-  ): Observable<User[]> {
+  ): Observable<Array<[string, number]>> {
     let headers = new HttpHeaders();
     if (token) {
       headers = headers.set('Authorization', token);
     }
     return this.http
-      .get<any>(
+      .get<Record<string, number>>(
         `${environment.BASE_URL}${UserEndpoints.GET_RANKING_OFFENSIVE}?startDate=${startDate}&endDate=${endDate}`,
         { headers }
       )
       .pipe(
+        map((users: Record<string, number>) => {
+          const entries = Object.entries(users);
+          entries.sort((a, b) => b[1] - a[1]);
+          return entries;
+        }),
         catchError((error) => {
           return throwError(error);
         })

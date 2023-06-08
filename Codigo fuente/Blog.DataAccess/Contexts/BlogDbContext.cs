@@ -56,6 +56,17 @@ public class BlogDbContext: DbContext
             .HasOne(n=>n.UserToNotify)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<OffensiveWord>()
+            .HasMany(o => o.Articles)
+            .WithMany(a => a.OffensiveContent)
+            .UsingEntity(j => j.ToTable("ArticleOffensiveWord"));
+
+        modelBuilder.Entity<OffensiveWord>()
+            .HasMany(o => o.Comments)
+            .WithMany(c => c.OffensiveContent)
+            .UsingEntity(j => j.ToTable("CommentOffensiveWord"));
+
     }
     
     public override int SaveChanges()

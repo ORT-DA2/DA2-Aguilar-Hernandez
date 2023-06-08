@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.DataAccess.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20230607031829_Fix")]
-    partial class Fix
+    [Migration("20230608002259_FixRankingOffensive")]
+    partial class FixRankingOffensive
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,21 @@ namespace Blog.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("ArticleOffensiveWord", b =>
+                {
+                    b.Property<Guid>("ArticlesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("OffensiveContentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArticlesId", "OffensiveContentId");
+
+                    b.HasIndex("OffensiveContentId");
+
+                    b.ToTable("ArticleOffensiveWord", (string)null);
+                });
 
             modelBuilder.Entity("Blog.Domain.Entities.Article", b =>
                 {
@@ -150,21 +165,11 @@ namespace Blog.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid?>("ArticleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Word")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ArticleId");
-
-                    b.HasIndex("CommentId");
 
                     b.ToTable("OffensiveWords");
                 });
@@ -240,6 +245,36 @@ namespace Blog.DataAccess.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("CommentOffensiveWord", b =>
+                {
+                    b.Property<Guid>("CommentsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("OffensiveContentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CommentsId", "OffensiveContentId");
+
+                    b.HasIndex("OffensiveContentId");
+
+                    b.ToTable("CommentOffensiveWord", (string)null);
+                });
+
+            modelBuilder.Entity("ArticleOffensiveWord", b =>
+                {
+                    b.HasOne("Blog.Domain.Entities.Article", null)
+                        .WithMany()
+                        .HasForeignKey("ArticlesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Blog.Domain.Entities.OffensiveWord", null)
+                        .WithMany()
+                        .HasForeignKey("OffensiveContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Blog.Domain.Entities.Article", b =>
                 {
                     b.HasOne("Blog.Domain.Entities.User", "Owner")
@@ -295,17 +330,6 @@ namespace Blog.DataAccess.Migrations
                     b.Navigation("UserToNotify");
                 });
 
-            modelBuilder.Entity("Blog.Domain.Entities.OffensiveWord", b =>
-                {
-                    b.HasOne("Blog.Domain.Entities.Article", null)
-                        .WithMany("OffensiveContent")
-                        .HasForeignKey("ArticleId");
-
-                    b.HasOne("Blog.Domain.Entities.Comment", null)
-                        .WithMany("OffensiveContent")
-                        .HasForeignKey("CommentId");
-                });
-
             modelBuilder.Entity("Blog.Domain.Entities.Session", b =>
                 {
                     b.HasOne("Blog.Domain.Entities.User", "User")
@@ -328,16 +352,24 @@ namespace Blog.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CommentOffensiveWord", b =>
+                {
+                    b.HasOne("Blog.Domain.Entities.Comment", null)
+                        .WithMany()
+                        .HasForeignKey("CommentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Blog.Domain.Entities.OffensiveWord", null)
+                        .WithMany()
+                        .HasForeignKey("OffensiveContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Blog.Domain.Entities.Article", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("OffensiveContent");
-                });
-
-            modelBuilder.Entity("Blog.Domain.Entities.Comment", b =>
-                {
-                    b.Navigation("OffensiveContent");
                 });
 
             modelBuilder.Entity("Blog.Domain.Entities.User", b =>

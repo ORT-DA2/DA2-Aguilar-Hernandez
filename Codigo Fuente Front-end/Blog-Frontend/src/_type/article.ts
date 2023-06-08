@@ -1,4 +1,4 @@
-import {User} from "./user";
+import { User } from './user';
 
 export interface Article {
   id: string;
@@ -9,7 +9,7 @@ export interface Article {
   datePublished: number;
   dateLastModified: number;
   comments?: string[];
-  images: string[];
+  image: string;
   template: string;
   isApproved: boolean;
   isEdited: boolean;

@@ -15,12 +15,13 @@ export class HomePageComponent {
 
   ngOnInit(): void {
     this.loadLastArticles();
+    console.log(this.lastArticles);
   }
 
   loadLastArticles(): void {
     this.articleService.getLastArticles().subscribe(
       (articles: any) => {
-        this.lastArticles = articles.slice(0, 10);
+        this.lastArticles = articles;
       },
       (error: any) => {
         console.error('An error occurred while loading last articles:', error);

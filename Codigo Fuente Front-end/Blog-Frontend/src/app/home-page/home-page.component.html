@@ -3,11 +3,10 @@
     <div class="row">
       <div class="col-md-4" *ngFor="let article of lastArticles">
         <div class="card mb-3">
-          <img class="card-img-top img-fluid" [src]="'https://localhost:7105/' + article.images[0]" alt="Article image" style="height: 200px; object-fit: cover;">
+          <img class="card-img-top img-fluid" [src]="'https://localhost:7105/' + article.image" alt="Article image" style="height: 200px; object-fit: cover;">
           <div class="card-body">
             <h5 class="card-title">{{ article.title }}</h5>
             <p class="card-text">{{ article.content }}</p>
-            <p class="card-text">Author:<!-- {{ article.owner.username }}--></p>
             <p class="card-text">Published: {{ article.datePublished | date }}</p>
             <p class="card-text">Last Modified: {{ article.dateLastModified | date }}</p>
             <a [routerLink]="['/articles', article.id]" class="btn btn-primary">Read More</a>

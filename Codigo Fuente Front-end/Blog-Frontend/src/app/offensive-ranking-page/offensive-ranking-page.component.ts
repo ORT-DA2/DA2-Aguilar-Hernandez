@@ -11,7 +11,7 @@ import { User } from '../../_type/user';
 })
 export class OffensiveRankingPageComponent {
   offensiveWords: OffensiveWord[] = [];
-  filteredUsers: Record<string, number> = {};
+  filteredUsers: Array<[string, number]> = [];
   newWord: OffensiveWord = { id: '', word: '', error: '' };
   errorMessage = '';
   startDate = new Date('2023-01-01');

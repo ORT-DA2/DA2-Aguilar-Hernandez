@@ -5,10 +5,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Blog.DataAccess.Migrations
 {
-    public partial class Fix : Migration
+    public partial class FixRankingOffensive : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "OffensiveWords",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Word = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OffensiveWords", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -91,6 +104,30 @@ namespace Blog.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ArticleOffensiveWord",
+                columns: table => new
+                {
+                    ArticlesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OffensiveContentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArticleOffensiveWord", x => new { x.ArticlesId, x.OffensiveContentId });
+                    table.ForeignKey(
+                        name: "FK_ArticleOffensiveWord_Articles_ArticlesId",
+                        column: x => x.ArticlesId,
+                        principalTable: "Articles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArticleOffensiveWord_OffensiveWords_OffensiveContentId",
+                        column: x => x.OffensiveContentId,
+                        principalTable: "OffensiveWords",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -118,6 +155,30 @@ namespace Blog.DataAccess.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Users",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CommentOffensiveWord",
+                columns: table => new
+                {
+                    CommentsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OffensiveContentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommentOffensiveWord", x => new { x.CommentsId, x.OffensiveContentId });
+                    table.ForeignKey(
+                        name: "FK_CommentOffensiveWord_Comments_CommentsId",
+                        column: x => x.CommentsId,
+                        principalTable: "Comments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CommentOffensiveWord_OffensiveWords_OffensiveContentId",
+                        column: x => x.OffensiveContentId,
+                        principalTable: "OffensiveWords",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,35 +211,20 @@ namespace Blog.DataAccess.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "OffensiveWords",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Word = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OffensiveWords", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OffensiveWords_Articles_ArticleId",
-                        column: x => x.ArticleId,
-                        principalTable: "Articles",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_OffensiveWords_Comments_CommentId",
-                        column: x => x.CommentId,
-                        principalTable: "Comments",
-                        principalColumn: "Id");
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_ArticleOffensiveWord_OffensiveContentId",
+                table: "ArticleOffensiveWord",
+                column: "OffensiveContentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_OwnerId",
                 table: "Articles",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommentOffensiveWord_OffensiveContentId",
+                table: "CommentOffensiveWord",
+                column: "OffensiveContentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_ArticleId",
@@ -206,16 +252,6 @@ namespace Blog.DataAccess.Migrations
                 column: "UserToNotifyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OffensiveWords_ArticleId",
-                table: "OffensiveWords",
-                column: "ArticleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OffensiveWords_CommentId",
-                table: "OffensiveWords",
-                column: "CommentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sessions_UserId",
                 table: "Sessions",
                 column: "UserId");
@@ -236,16 +272,22 @@ namespace Blog.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Notifications");
+                name: "ArticleOffensiveWord");
 
             migrationBuilder.DropTable(
-                name: "OffensiveWords");
+                name: "CommentOffensiveWord");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Sessions");
+
+            migrationBuilder.DropTable(
+                name: "OffensiveWords");
 
             migrationBuilder.DropTable(
                 name: "Comments");
