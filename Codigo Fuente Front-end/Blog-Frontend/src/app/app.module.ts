@@ -17,6 +17,7 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { UserService } from '../_services/user.service';
 import { OffensiveService } from '../_services/offensive.service';
 import { ArticleService } from '../_services/article.service';
+import { ActivityRankingPageComponent } from './activity-ranking-page/activity-ranking-page.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ArticleService } from '../_services/article.service';
     ProfilePageComponent,
     CreateArticleComponent,
     OffensiveRankingPageComponent,
+    ActivityRankingPageComponent,
   ],
 
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],

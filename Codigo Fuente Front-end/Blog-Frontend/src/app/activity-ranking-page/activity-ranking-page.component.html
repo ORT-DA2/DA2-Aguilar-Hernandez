@@ -1,0 +1,36 @@
+<div class="container">
+    <h1 class="mt-4 mb-4">Activity User Ranking</h1>
+    
+    <div class="mb-3">
+      <label for="startDate" class="form-label">Start Date</label>
+      <input type="date" class="form-control" id="startDate" [(ngModel)]="startDate" name="startDate">
+    </div>
+    
+    <div class="mb-3">
+      <label for="endDate" class="form-label">End Date</label>
+      <input type="date" class="form-control" id="endDate" [(ngModel)]="endDate" name="endDate">
+    </div>
+    
+    <button class="btn btn-primary" (click)="filterRanking()">Filter</button>
+    
+    <table class="table table-striped mt-4">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Username</th>
+          <th>Number of content</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ user[0] }}</td>
+          <td>{{ user[1] }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
+      </div>
+    
+  </div>

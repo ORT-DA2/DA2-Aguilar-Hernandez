@@ -78,6 +78,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/offensive-ranking']);
   }
 
+  onViewActivity() {
+    this.router.navigate(['/activity-ranking']);
+  }
+
   onLogin() {
     this.router.navigate(['/login']);
   }
@@ -91,7 +95,7 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
   }
 
-  onCreateArticle(){
+  onCreateArticle() {
     this.router.navigate(['/create-article']);
   }
 }
