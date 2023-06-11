@@ -56,7 +56,7 @@ public class ArticleControllerTest
             Content = "New features about angular are being developed",
             Image = image,
             IsPublic = true,
-            Template = Template.RectangleTop
+            Template = "Rectangle at Top"
         };
 
         _articleTest = _articleTestDTO.ToEntity();

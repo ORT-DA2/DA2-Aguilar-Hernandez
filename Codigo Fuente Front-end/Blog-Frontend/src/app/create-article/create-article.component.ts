@@ -22,6 +22,7 @@ export class CreateArticleComponent {
   image: string = '';
   image2: string = '';
   error: string = '';
+  success: string = '';
   token: string | null = '';
 
   constructor(
@@ -39,7 +40,7 @@ export class CreateArticleComponent {
       isEdited: false,
       offensiveContent: [],
       title: this.title,
-      ownerId: this.getLoggedUser() || '',
+      owner: this.getLoggedUser() || '',
       content: this.content,
       isPublic: this.isPublic,
       template: this.template,
@@ -50,8 +51,9 @@ export class CreateArticleComponent {
     this.token = localStorage.getItem('token');
     this.articleService
       .createArticle(article, this.token)
-      .subscribe((res) => console.log(res),
+      .subscribe((res) => this.success = 'Article successfully created',
       (error) => this.error = error.error);
+    this.cleanFields();
   }
 
 
@@ -70,13 +72,25 @@ export class CreateArticleComponent {
 
     reader.onloadend = () => {
       const base64String = reader.result as string;
+      const base64withoutMetadata = base64String.slice(base64String.indexOf(',') + 1);
       if(isFirstImage){
-        this.image = base64String;
+        this.image = base64withoutMetadata;
       }else{
-        this.image2 = base64String;
+        this.image2 = base64withoutMetadata;
       }
     };
     reader.readAsDataURL(file);
+  }
+
+  private cleanFields(){
+    this.title = '';
+    this. content = '';
+    this.isPublic = true;
+    this.template = '';
+    this.image = '';
+    this.image2 = '';
+    this.error = '';
+    this.token = null;
   }
 
 }
