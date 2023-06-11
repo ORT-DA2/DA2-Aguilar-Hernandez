@@ -9,9 +9,10 @@ export interface Article {
   datePublished: number;
   dateLastModified: number;
   comments?: string[];
-  image: string;
   template: string;
   isApproved: boolean;
   isEdited: boolean;
   offensiveContent: string[];
+  image: string;
+  image2: string;
 }

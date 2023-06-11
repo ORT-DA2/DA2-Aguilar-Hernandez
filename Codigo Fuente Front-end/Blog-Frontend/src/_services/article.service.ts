@@ -48,11 +48,15 @@ export class ArticleService {
       );
   }
 
-  createArticle(article: Article): Observable<Article> {
+  createArticle(article: Article, token: string | null): Observable<Article> {
+    let headers = new HttpHeaders();
+    if(token){
+      headers = headers.set('Authorization', token);
+    }
     return this.http
       .post<Article>(
         `${environment.BASE_URL}${ArticleEndpoints.ARTICLES}`,
-        article
+        article, {headers}
       )
       .pipe(catchError(this.handleError));
   }

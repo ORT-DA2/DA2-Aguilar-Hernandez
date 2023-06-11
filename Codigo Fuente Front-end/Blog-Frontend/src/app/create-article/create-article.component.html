@@ -5,54 +5,78 @@
         <div class="card-body">
           <h2 class="card-title">Create New Article</h2>
 
-          <div class="form-group">
-            <label for="title" class="form-label">Title:</label>
-            <input type="text" id="title" name="title" [(ngModel)]="title" class="form-control" required>
-          </div>
+          <form #articleForm = "ngForm" (ngSubmit)="createArticle(articleForm.value)">
 
-          <div class="form-group mb-4">
-            <label for="content" class="form-label">Body:</label>
-            <textarea class="form-control" id="content" rows="10"></textarea>
-          </div>
+            <div class="form-group">
+              <label for="title" class="form-label">Title:</label>
+              <input type="text" id="title" name="title" [(ngModel)]="title" class="form-control" required>
+            </div>
 
-          <div class="container">
-            <div class="row justify-content-start">
-              <div class="col-4">
-                <div class="dropdown">
-                  <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Choose Template
-                  </button>
+            <div class="form-group">
+              <label for="content" class="form-label">Body:</label>
+              <textarea class="form-control" id="content" rows="10" name='content' [(ngModel)]="content"></textarea>
+            </div>
 
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Top')">Rectangle at Top</a>
-                    <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Bottom')">Rectangle at Bottom</a>
-                    <a class="dropdown-item" (click)="onChooseTemplate('Square at Top Left')">Square at Top Left</a>
-                    <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Top and Bottom')">Rectangle at Top and Bottom</a>
+            <div class="form-group">
+
+              <div class="container">
+                <div class="row justify-content-start">
+                  <div class="col-4">
+                    <div class="dropdown">
+                      <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Choose Template
+                      </button>
+
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Top')">Rectangle at Top</a>
+                        <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Bottom')">Rectangle at Bottom</a>
+                        <a class="dropdown-item" (click)="onChooseTemplate('Square at Top Left')">Square at Top Left</a>
+                        <a class="dropdown-item" (click)="onChooseTemplate('Rectangle at Top and Bottom')">Rectangle at Top and Bottom</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-4">
+                    {{template}}
                   </div>
                 </div>
               </div>
 
-              <div class="col-4">
-                {{template}}
+            </div>
+
+            <div class="form-group">
+              <div class="form-check form-switch mt-3">
+                <input class="form-check-input" type="checkbox" role="switch" id="isPublic" name="isPublic" [(ngModel)]="isPublic" checked>
+                <label class="form-check-label" for="isPublic">Public Article</label>
               </div>
             </div>
-          </div>
 
-          <div class="form-check form-switch mt-3">
-            <input class="form-check-input" type="checkbox" role="switch" id="isPublic" checked>
-            <label class="form-check-label" for="isPublic">Public Article</label>
-          </div>
+            <div class="form-group">
+              <div class="mb-3 mt-3">
+                <label class="form-label" for="firstImage">Choose image</label>
+                <input type="file" class="form-control" id="firstImage" (change)="handleFileInput($event, true)"/>
+              </div>
+            </div>
 
-          <div class="mb-3 mt-3">
-            <label for="formFileMultiple" class="form-label">Choose Images</label>
-            <input class="form-control" type="file" id="formFileMultiple" multiple>
-          </div>
+            <div class="form-group" *ngIf="template == 'Rectangle at Top and Bottom'">
+              <div class="mb-3 mt-3">
+                <label class="form-label" for="secondImage">Choose second image</label>
+                <input type="file" class="form-control" id="secondImage" (change)="handleFileInput($event, false)" />
+              </div>
+            </div>
 
+            <div class="form-group">
+              <div class=" text-center mt-5">
+                <button class="btn btn-primary w-50" type="submit">Create Article</button>
+              </div>
+            </div>
 
-          <div class="form-group text-center mt-5">
-            <button class="btn btn-primary w-50" (click)="createArticle()">Create Article</button>
-          </div>
-          <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+            <div class="form-group">
+              <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+            </div>
+
+          </form>
+
         </div>
       </div>
     </div>
