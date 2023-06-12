@@ -6,6 +6,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { OffensiveRankingPageComponent } from './offensive-ranking-page/offensive-ranking-page.component';
+import {ArticleProfileComponent} from "./article-profile/article-profile.component";
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'profile/:id', component: ProfilePageComponent },
   { path: 'create-article', component: CreateArticleComponent },
   { path: 'offensive-ranking', component: OffensiveRankingPageComponent },
+  { path: 'articles/:id', component: ArticleProfileComponent}
 ];
 
 @NgModule({

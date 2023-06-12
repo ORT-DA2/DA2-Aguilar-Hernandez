@@ -1,0 +1,40 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <h2 class="card-title text-center mt-3">{{article.title}}</h2>
+        <div class="card-body">
+
+          <!-- rectangle top -->
+          <div *ngIf="article.template == '0'|| article.template =='3'"
+            class="container d-flex justify-content-center m-3">
+            <img src="{{'https://localhost:7105/' + article.image}}"
+                 alt="Article image" style="height: 300px; width: 900px; object-fit: cover;">
+          </div>
+
+          <!-- square left top -->
+          <div  *ngIf="article.template == '2'">
+            <img src="{{'https://localhost:7105/' + article.image}}"
+                 class="float-left m-3"
+                 alt="Article image" style="height: 300px; width: 300px; object-fit: cover;">
+          </div>
+
+          <div class="m-5">
+            <p >{{article.content}}</p>
+          </div>
+
+          <!-- rectangle bottom -->
+          <div *ngIf="article.template == '1'|| article.template =='3'"
+            class="container d-flex justify-content-center m-3">
+            <img src="{{'https://localhost:7105/' + article.image2}}"
+                 alt="Article image" style="height: 300px; width: 900px; object-fit: cover;">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -28,6 +28,20 @@ export class ArticleService {
       );
   }
 
+  getArticleById(guid: string, token: string | null):Observable<Article>{
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+        .get<Article>(`${environment.BASE_URL}${ArticleEndpoints.ARTICLES}/${guid}`,
+          {headers})
+        .pipe(catchError((error) => {
+          return throwError(error);
+        })
+      );
+  }
+
   searchArticles(
     searchTerm: string,
     token: string | null

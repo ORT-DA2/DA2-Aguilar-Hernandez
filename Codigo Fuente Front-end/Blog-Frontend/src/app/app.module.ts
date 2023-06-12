@@ -17,6 +17,7 @@ import { UserService } from '../_services/user.service';
 import { OffensiveService } from '../_services/offensive.service';
 import { ArticleService } from '../_services/article.service';
 import {CreateArticleComponent} from "./create-article/create-article.component";
+import { ArticleProfileComponent } from './article-profile/article-profile.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {CreateArticleComponent} from "./create-article/create-article.component"
     HomePageComponent,
     ProfilePageComponent,
     OffensiveRankingPageComponent,
-    CreateArticleComponent
+    CreateArticleComponent,
+    ArticleProfileComponent
   ],
 
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule, ReactiveFormsModule],
