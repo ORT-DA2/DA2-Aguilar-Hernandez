@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../src/_services/user.service';
+import { ArticleService } from '../../_services/article.service';
 import { User } from '../../../src/_type/user';
+import { Article } from '../../_type/article';
 
 @Component({
   selector: 'app-profile-page',
@@ -9,17 +11,20 @@ import { User } from '../../../src/_type/user';
   styleUrls: ['./profile-page.component.css'],
 })
 export class ProfilePageComponent implements OnInit {
-  user: any;
+  user: User | null = null;
   userId: string | null = null;
   token: string | null = null;
   editable: boolean = false;
   showPassword: boolean = false;
   errorMessage = '';
   successMessage = '';
+  articles: Article[] = [];
+  isBlogger: boolean | undefined = false;
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private articleService: ArticleService
   ) {}
 
   ngOnInit() {
@@ -28,7 +33,22 @@ export class ProfilePageComponent implements OnInit {
     this.userId = localStorage.getItem('userId');
     this.userService.getUser(this.userId, this.token).subscribe((user: any) => {
       this.user = user;
+      this.getArticles();
+      this.isBlogger = this.user?.roles.some((role: any) => role.role === 0);
     });
+  }
+
+  getArticles() {
+    this.articleService
+      .getUserArticles(this.token, this.user?.username)
+      .subscribe(
+        (articles: any) => {
+          this.articles = articles;
+        },
+        (error) => {
+          this.errorMessage = error;
+        }
+      );
   }
 
   onEdit() {
@@ -37,7 +57,7 @@ export class ProfilePageComponent implements OnInit {
 
   onSave() {
     this.userService.editProfile(this.user, this.token).subscribe(
-      (updatedUser: User[]) => {
+      (updatedUser: any) => {
         this.user = updatedUser;
       },
       (error: any) => {

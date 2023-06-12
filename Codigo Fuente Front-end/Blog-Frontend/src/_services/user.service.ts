@@ -82,13 +82,16 @@ export class UserService {
       );
   }
 
-  editProfile(user: User, token: string | null): Observable<User[]> {
+  editProfile(user: User | null, token: string | null): Observable<User> {
     let headers = new HttpHeaders();
     if (token) {
       headers = headers.set('Authorization', token);
     }
+    if (user === null) {
+      return throwError('User is null');
+    }
     return this.http
-      .put<User[]>(
+      .put<User>(
         `${environment.BASE_URL}${UserEndpoints.EDIT_USER}/${user.id}`,
         user,
         { headers }

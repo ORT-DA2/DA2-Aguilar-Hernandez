@@ -22,7 +22,27 @@ export class ArticleService {
         `${environment.BASE_URL}${ArticleEndpoints.LAST_ARTICLES}`
       )
       .pipe(
-        catchError((error) => {
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  getUserArticles(
+    token: string | null,
+    username: string | undefined
+  ): Observable<Article[]> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .get<Article[]>(
+        `${environment.BASE_URL}${ArticleEndpoints.ALL_USER_ARTICLES}?username=${username}`,
+        { headers }
+      )
+      .pipe(
+        catchError((error: any) => {
           return throwError(error);
         })
       );
@@ -42,7 +62,7 @@ export class ArticleService {
         { headers }
       )
       .pipe(
-        catchError((error) => {
+        catchError((error: any) => {
           return throwError(error);
         })
       );

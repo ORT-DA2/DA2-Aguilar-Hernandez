@@ -55,7 +55,7 @@ export class HeaderComponent implements OnInit {
         (results: Article[]) => {
           this.searchResults = results;
         },
-        (error) => {
+        (error: any) => {
           this.searchError = error.error.errorMessage;
         }
       );
