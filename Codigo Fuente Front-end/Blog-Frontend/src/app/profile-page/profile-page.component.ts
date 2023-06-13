@@ -18,8 +18,10 @@ export class ProfilePageComponent implements OnInit {
   showPassword: boolean = false;
   errorMessage = '';
   successMessage = '';
-  articles: Article[] = [];
+  publicArticles: Article[] = [];
+  privateArticles: Article[] = [];
   isBlogger: boolean | undefined = false;
+  isCurrentUser = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,20 +32,46 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit() {
     this.successMessage = '';
     this.token = localStorage.getItem('token');
-    this.userId = localStorage.getItem('userId');
+    this.userId = this.route.snapshot.paramMap.get('id');
+    const loggedInUserId = localStorage.getItem('userId');
+
+    this.isCurrentUser = this.userId === loggedInUserId;
     this.userService.getUser(this.userId, this.token).subscribe((user: any) => {
       this.user = user;
-      this.getArticles();
+      if (this.isCurrentUser) {
+        this.getAllArticles();
+      } else {
+        this.getPublicArticles();
+      }
+
       this.isBlogger = this.user?.roles.some((role: any) => role.role === 0);
     });
   }
 
-  getArticles() {
+  getPublicArticles() {
+    this.articleService.getPublicArticles(this.token).subscribe(
+      (articles: any) => {
+        this.publicArticles = articles.filter(
+          (article: Article) => article.isPublic
+        );
+      },
+      (error) => {
+        this.errorMessage = error;
+      }
+    );
+  }
+
+  getAllArticles() {
     this.articleService
       .getUserArticles(this.token, this.user?.username)
       .subscribe(
         (articles: any) => {
-          this.articles = articles;
+          this.publicArticles = articles.filter(
+            (article: Article) => article.isPublic
+          );
+          this.privateArticles = articles.filter(
+            (article: Article) => !article.isPublic
+          );
         },
         (error) => {
           this.errorMessage = error;

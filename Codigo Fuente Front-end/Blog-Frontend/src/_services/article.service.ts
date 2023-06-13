@@ -28,6 +28,23 @@ export class ArticleService {
       );
   }
 
+  getPublicArticles(token: string | null): Observable<Article[]> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .get<Article[]>(
+        `${environment.BASE_URL}${ArticleEndpoints.ALL_PUBLIC_ARTICLES}`,
+        { headers }
+      )
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+
   getUserArticles(
     token: string | null,
     username: string | undefined

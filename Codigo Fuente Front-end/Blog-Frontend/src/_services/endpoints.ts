@@ -10,6 +10,7 @@ export enum ArticleEndpoints {
   ARTICLES = '/articles',
   SEARCH_ARTICLES = '/articles/search',
   ALL_USER_ARTICLES = '/articles',
+  ALL_PUBLIC_ARTICLES = '/articles/public',
 }
 
 export enum UserEndpoints {
