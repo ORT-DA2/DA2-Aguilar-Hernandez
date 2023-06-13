@@ -55,7 +55,7 @@ export class HeaderComponent implements OnInit {
         (results: Article[]) => {
           this.searchResults = results;
         },
-        (error) => {
+        (error: any) => {
           this.searchError = error.error.errorMessage;
         }
       );
@@ -78,6 +78,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/offensive-ranking']);
   }
 
+  onViewActivity() {
+    this.router.navigate(['/activity-ranking']);
+  }
+
   onLogin() {
     this.router.navigate(['/login']);
   }
@@ -92,7 +96,11 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  onCreateArticle(){
+  onCreateArticle() {
     this.router.navigate(['/create-article']);
+  }
+
+  onViewUserManagement() {
+    this.router.navigate(['/user-management']);
   }
 }

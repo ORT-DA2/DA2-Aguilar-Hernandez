@@ -18,6 +18,11 @@ import { OffensiveService } from '../_services/offensive.service';
 import { ArticleService } from '../_services/article.service';
 import {CreateArticleComponent} from "./create-article/create-article.component";
 import { ArticleProfileComponent } from './article-profile/article-profile.component';
+import { ActivityRankingPageComponent } from './activity-ranking-page/activity-ranking-page.component';
+import { UserManagementPageComponent } from './user-management-page/user-management-page.component';
+import { UserCreateComponentComponent } from './user-create-component/user-create-component.component';
+import { UserFormComponentComponent } from './user-form-component/user-form-component.component';
+
 
 @NgModule({
   declarations: [
@@ -30,6 +35,10 @@ import { ArticleProfileComponent } from './article-profile/article-profile.compo
     OffensiveRankingPageComponent,
     CreateArticleComponent,
     ArticleProfileComponent
+    ActivityRankingPageComponent,
+    UserManagementPageComponent,
+    UserCreateComponentComponent,
+    UserFormComponentComponent,
   ],
 
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule, ReactiveFormsModule],

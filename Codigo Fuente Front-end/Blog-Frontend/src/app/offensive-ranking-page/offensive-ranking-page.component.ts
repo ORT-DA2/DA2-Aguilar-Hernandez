@@ -3,6 +3,7 @@ import { OffensiveService } from '../../_services/offensive.service';
 import { UserService } from '../../_services/user.service';
 import { OffensiveWord } from '../../_type/offensiveWord';
 import { User } from '../../_type/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-offensive-ranking-page',
@@ -20,7 +21,8 @@ export class OffensiveRankingPageComponent {
 
   constructor(
     private offensiveService: OffensiveService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +82,10 @@ export class OffensiveRankingPageComponent {
         this.errorMessage = error.error.errorMessage;
       }
     );
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigateByUrl(currentUrl);
+    });
   }
 
   addWord() {

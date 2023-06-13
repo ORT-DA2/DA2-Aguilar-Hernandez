@@ -99,15 +99,9 @@ export class AuthenticationService {
             headers,
           }
         )
-        .subscribe(
-          (user) => {
-            this.user$.next(user);
-          },
-          (error) => {
-            console.error('Error fetching user:', error);
-          }
-        );
+        .subscribe((user) => {
+          this.user$.next(user);
+        });
     }
   }
-
 }

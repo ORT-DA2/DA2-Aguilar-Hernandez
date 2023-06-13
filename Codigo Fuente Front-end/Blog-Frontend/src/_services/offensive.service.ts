@@ -24,10 +24,6 @@ export class OffensiveService {
       )
       .pipe(
         catchError((error) => {
-          console.error(
-            'An error occurred while fetching last articles:',
-            error
-          );
           return throwError(error);
         })
       );

@@ -70,6 +70,7 @@ namespace Blog.WebApi.Controllers
 
             Article article = articleDto.ToEntity();
             article.Image = imagePath;
+
             if (!string.IsNullOrEmpty(articleDto.Image2))
             {
                 var imagePath2 = _articleLogic.SaveImage(articleDto.Image2);
