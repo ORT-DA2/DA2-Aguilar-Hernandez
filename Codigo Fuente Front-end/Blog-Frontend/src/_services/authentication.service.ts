@@ -71,7 +71,7 @@ export class AuthenticationService {
       );
   }
 
-  logout() {
+  logout(): void {
     this.isLoggedIn$.next(false);
     this.authStateChanged.next(false);
     this.user$.next(null);
@@ -80,6 +80,7 @@ export class AuthenticationService {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('username');
+
   }
 
   isAuthenticated(): boolean {
