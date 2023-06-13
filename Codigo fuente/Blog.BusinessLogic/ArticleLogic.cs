@@ -56,7 +56,7 @@ public class ArticleLogic: IArticleLogic
         
         if (_sessionLogic.GetLoggedUser(authorization).Username != username)
         {
-            throw new ArgumentException("You can´t update an article of other owner");
+            throw new ArgumentException("You can´t see all articles of other owner");
         }
 
         return articles;

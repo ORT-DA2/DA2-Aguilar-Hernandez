@@ -56,13 +56,42 @@ export class UserService {
       );
   }
 
-  editProfile(user: User, token: string | null): Observable<User[]> {
+  getRankingActivity(
+    startDate: Date,
+    endDate: Date,
+    token: string | null
+  ): Observable<Array<[string, number]>> {
     let headers = new HttpHeaders();
     if (token) {
       headers = headers.set('Authorization', token);
     }
     return this.http
-      .put<User[]>(
+      .get<Record<string, number>>(
+        `${environment.BASE_URL}${UserEndpoints.GET_RANKING_ACTIVITY}?startDate=${startDate}&endDate=${endDate}`,
+        { headers }
+      )
+      .pipe(
+        map((users: Record<string, number>) => {
+          const entries = Object.entries(users);
+          entries.sort((a, b) => b[1] - a[1]);
+          return entries;
+        }),
+        catchError((error) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  editProfile(user: User | null, token: string | null): Observable<User> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    if (user === null) {
+      return throwError('User is null');
+    }
+    return this.http
+      .put<User>(
         `${environment.BASE_URL}${UserEndpoints.EDIT_USER}/${user.id}`,
         user,
         { headers }

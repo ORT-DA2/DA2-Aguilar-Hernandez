@@ -1,10 +1,11 @@
 <div class="container">
   <h1>User Profile</h1>
+  <h2 class="user-profile__name">{{ user?.firstName }} {{ user?.lastName }}</h2>
 
-  <div *ngIf="user" class="card">
+  <div *ngIf="user && isCurrentUser" class="card">
     <div class="card-body">
       <div *ngIf="!editable" class="user-profile">
-        <h2 class="user-profile__name">{{ user.firstName }} {{ user.lastName }}</h2>
+        
         <div class="user-profile__info">
           <div class="user-profile__item">
             <span class="user-profile__label">Email:</span>
@@ -67,5 +68,52 @@
   <div *ngIf="successMessage" class="alert alert-success mt-3">
     {{ successMessage }}
   </div>
+
+  <div class="container mt-4" *ngIf="user">
+    <h2>Public Articles</h2>
+  
+    <div *ngIf="publicArticles.length === 0" class="alert alert-info">
+      No Articles.
+    </div>
+  
+    <div class="row" *ngIf="isBlogger">
+      <div class="col-md-4" *ngFor="let article of publicArticles">
+        <div class="card mt-4">
+          <div class="card-body">
+            <img class="card-img-top img-fluid" [src]="'https://localhost:7105/' + article.image" alt="Article image" style="height: 200px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <p class="card-text">{{ article.content }}</p>
+            <p class="card-text">Published: {{ article.datePublished | date }}</p>
+            <a [routerLink]="['/articles', article.id]" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4" *ngIf="user && isCurrentUser">
+  <h2>Private Articles</h2>
+
+  <div *ngIf="privateArticles.length === 0" class="alert alert-info">
+    No Articles.
+  </div>
+
+  <div class="row" *ngIf="isBlogger">
+    <div class="col-md-4" *ngFor="let article of privateArticles">
+      <div class="card mt-4">
+        <div class="card-body">
+          <img class="card-img-top img-fluid" [src]="'https://localhost:7105/' + article.image" alt="Article image" style="height: 200px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">{{ article.title }}</h5>
+          <p class="card-text">{{ article.content }}</p>
+          <p class="card-text">Published: {{ article.datePublished | date }}</p>
+          <a [routerLink]="['/articles', article.id]" class="btn btn-primary">Read More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
