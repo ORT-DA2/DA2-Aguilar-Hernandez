@@ -63,6 +63,10 @@ export class ArticleProfileComponent {
     this.replyingComment = !this.replyingComment;
   }
 
+  loggedUserIsAuthor(): boolean {
+    return this.loggedUser == this.article.owner;
+  }
+
   createComment():void{
     const comment: Comment = {
       datePublished: Date.now(),
@@ -81,10 +85,6 @@ export class ArticleProfileComponent {
         error => this.errorMessage = error.error);
     this.comments.push(comment);
     this.commentInput = '';
-  }
-
-  loggedUserIsAuthor(): boolean{
-    return this.loggedUser == this.article.owner;
   }
 
   createReply(commentId: string, commentIndex: number): void{
