@@ -47,6 +47,7 @@ export class AuthenticationService {
           this.user$.next(response.user);
           localStorage.setItem('token', token);
           localStorage.setItem('userId', response.user.id);
+          localStorage.setItem('username', response.user.username);
           this.getUser();
           this.isLoggedIn$.next(true);
           this.authStateChanged.next(true);
@@ -70,7 +71,7 @@ export class AuthenticationService {
       );
   }
 
-  logout() {
+  logout(): void {
     this.isLoggedIn$.next(false);
     this.authStateChanged.next(false);
     this.user$.next(null);
@@ -78,6 +79,8 @@ export class AuthenticationService {
 
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+
   }
 
   isAuthenticated(): boolean {

@@ -11,7 +11,7 @@ public class CreateArticleDTO
     public bool IsPublic { get; set; }
     public string Image { get; set; }
     public string? Image2 { get; set; }
-    public Template Template { get; set; }
+    public string Template { get; set; }
     
     public Article ToEntity()
     {
@@ -22,9 +22,26 @@ public class CreateArticleDTO
             Image = Image,
             Image2 = Image2,
             IsPublic = IsPublic,
-            Template = Template
+            Template = parseTemplateToEnum(Template)
         };
 
         return article;
+    }
+
+    private Template parseTemplateToEnum(string template)
+    {
+        switch (template)
+        {
+            case "Rectangle at Top":
+                return Domain.Enums.Template.RectangleTop;
+            case "Rectangle at Bottom":
+                return Domain.Enums.Template.RectangleBottom;
+            case "Square at Top Left":
+                return Domain.Enums.Template.SquareTopLeft;
+            case "Rectangle at Top and Bottom":
+                return Domain.Enums.Template.RectangleTopBottom;
+        }
+
+        return Domain.Enums.Template.RectangleTop;
     }
 }

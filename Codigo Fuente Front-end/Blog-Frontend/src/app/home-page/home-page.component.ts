@@ -10,12 +10,13 @@ import { ArticleService } from '../../_services/article.service';
 export class HomePageComponent {
   imgPath: string = '';
   lastArticles: Article[] = [];
+  token: string | null = null;
 
   constructor(private articleService: ArticleService) {}
 
   ngOnInit(): void {
     this.loadLastArticles();
-    console.log(this.lastArticles);
+    this.setLoggedUser();
   }
 
   loadLastArticles(): void {
@@ -27,5 +28,11 @@ export class HomePageComponent {
         console.error('An error occurred while loading last articles:', error);
       }
     );
+  }
+
+  setLoggedUser(): void{
+    if(!this.token){
+      this.token = localStorage.getItem('token');
+    }
   }
 }

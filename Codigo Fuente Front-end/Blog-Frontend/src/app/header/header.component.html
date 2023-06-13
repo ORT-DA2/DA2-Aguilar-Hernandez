@@ -12,10 +12,10 @@
           <div class="dropdown-menu" style="width: 100%; position: absolute; top: 100%;" [style.display]="((searchResults.length > 0 || searchError) && searchTerm.length > 0) ? 'block' : 'none'">
             <a class="dropdown-item" *ngFor="let result of searchResults">{{ result.title }}</a>
             <a class="dropdown-item" *ngIf="searchError && searchResults.length == 0">{{ searchError }}</a>
-          </div>          
-        </div>   
+          </div>
+        </div>
       </form>
-    </div>    
+    </div>
 
     <div>
       <ul class="navbar-nav">

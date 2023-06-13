@@ -6,6 +6,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { OffensiveRankingPageComponent } from './offensive-ranking-page/offensive-ranking-page.component';
+import {ArticleProfileComponent} from "./article-profile/article-profile.component";
 import { ActivityRankingPageComponent } from './activity-ranking-page/activity-ranking-page.component';
 import { UserManagementPageComponent } from './user-management-page/user-management-page.component';
 
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'profile/:id', component: ProfilePageComponent },
   { path: 'create-article', component: CreateArticleComponent },
   { path: 'offensive-ranking', component: OffensiveRankingPageComponent },
+  { path: 'articles/:id', component: ArticleProfileComponent},
   { path: 'activity-ranking', component: ActivityRankingPageComponent },
   { path: 'user-management', component: UserManagementPageComponent },
 ];

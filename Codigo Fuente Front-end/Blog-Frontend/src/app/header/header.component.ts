@@ -91,8 +91,9 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
-    this.router.navigate(['/']);
     this.authService.logout();
+    window.location.reload();
+    this.router.navigate(['/']);
   }
 
   onCreateArticle() {
