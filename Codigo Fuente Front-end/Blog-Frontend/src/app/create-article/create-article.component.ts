@@ -1,11 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ArticleService } from '../../_services/article.service';
-import { Article } from '../../_type/article';
-import { User } from '../../_type/user';
-import { AuthenticationService } from '../../_services/authentication.service';
-import { ActivatedRoute } from '@angular/router';
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {CommonModule} from "@angular/common";
+import {Component, EventEmitter, Output} from '@angular/core';
+import {ArticleService} from '../../_services/article.service';
+import {Article} from '../../_type/article';
+import {AuthenticationService} from '../../_services/authentication.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-create-article',
@@ -45,7 +42,7 @@ export class CreateArticleComponent {
       isPublic: this.isPublic,
       template: this.template,
       image: this.image,
-      image2:''
+      image2: this.image2
     };
 
     this.token = localStorage.getItem('token');
@@ -66,20 +63,32 @@ export class CreateArticleComponent {
     this.template = template;
   }
 
-  handleFileInput(event: any, isFirstImage: boolean) {
-    const file: File = event.target.files[0];
-    const reader = new FileReader();
+  handleFirstImageInput(event: any) {
+    this.readImage(event).then((data: string) => {
+      this.image = data;
+    });
+  }
 
-    reader.onloadend = () => {
-      const base64String = reader.result as string;
-      const base64withoutMetadata = base64String.slice(base64String.indexOf(',') + 1);
-      if(isFirstImage){
-        this.image = base64withoutMetadata;
-      }else{
-        this.image2 = base64withoutMetadata;
-      }
-    };
-    reader.readAsDataURL(file);
+  handleSecondImageInput(event: any) {
+    this.readImage(event).then((data: string) => {
+      this.image2 = data;
+    });
+  }
+
+  readImage(event: any): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const file: File = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        resolve(base64String.slice(base64String.indexOf(',') + 1));
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsDataURL(file);
+    });
   }
 
   private cleanFields(){

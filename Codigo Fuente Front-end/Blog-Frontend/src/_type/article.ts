@@ -1,3 +1,5 @@
+import {Comment} from "./comment";
+
 export interface Article {
   id: string;
   title: string;
@@ -6,7 +8,7 @@ export interface Article {
   owner: string;
   datePublished: number;
   dateLastModified: number;
-  comments?: string[];
+  comments?: Comment[];
   template: string;
   isApproved: boolean;
   isEdited: boolean;

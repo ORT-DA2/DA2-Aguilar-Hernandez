@@ -22,3 +22,8 @@ export enum OffensiveEndpoints {
   ADD_OFFENSIVE = '/OffensiveWords',
   REMOVE_OFFENSIVE = '/OffensiveWords',
 }
+
+export enum CommentEndpoints{
+  ADD_COMMENT = '/comments',
+  REPLY_COMMENT = '/comments'
+}

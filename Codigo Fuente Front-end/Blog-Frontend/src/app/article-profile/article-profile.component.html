@@ -4,7 +4,7 @@
       <div class="card">
         <h2 class="card-title text-center mt-3">{{article.title}}</h2>
         <div class="card-body">
-
+          <h6 class="text-center">by {{article.owner}}</h6>
           <!-- rectangle top -->
           <div *ngIf="article.template == '0'|| article.template =='3'"
             class="container d-flex justify-content-center m-3">
@@ -30,11 +30,74 @@
                  alt="Article image" style="height: 300px; width: 900px; object-fit: cover;">
           </div>
 
+          <h6 class="text-end">Published on {{article.datePublished | date}}</h6>
+          <h6 class="text-end">Last modified on {{article.dateLastModified | date}}</h6>
+
         </div>
+
       </div>
     </div>
   </div>
 </div>
 
+<h4 *ngIf="comments.length > 0; else noComments"
+  class="text-center mt-3">Comments:</h4>
+<ng-template #noComments>
+  <h5 class="text-center mt-3">There are no comments yet.</h5>
+</ng-template>
 
+<div *ngIf="!addingComment"
+     class="container">
+  <button class="btn btn-primary mx-lg-5" type="button" (click)="onAddComment()"><strong>+</strong> Add comment</button>
+</div>
 
+<div *ngIf="addingComment" class="card container">
+  <div class="row justify-content-center">
+    <div class="card-body col-md-8">
+      <div class="form-group">
+        <label for="commentInput">Leave a comment:</label>
+        <input id="commentInput" type="text" class="form-control" [(ngModel)]="commentInput">
+      </div>
+      <div class="button-group ">
+        <button  class="btn btn-danger" (click)="onAddComment()">Cancel</button>
+        <button  class="btn btn-primary mx-2" type="submit" (click)="createComment()">Post comment</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4">
+  <div *ngFor="let comment of comments; let i = index" >
+    <div class="row justify-content-center">
+      <div class="col-sm card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ comment.ownerUsername}}</h5>
+          <h6 class="card-subtitle">{{ comment.datePublished | date }}</h6>
+          <p class="card-text mt-2">{{ comment.body }}</p>
+          <button *ngIf="loggedUserIsAuthor() && !replyingComment && !comment.reply" type="button"
+                  class="btn btn-outline-primary" (click)="onReplyComment(); setIndexCommentReplying(i)">Reply</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="replyingComment && indexCommentReplying == i" class="row justify-content-start">
+      <div class="card-body col-md-8">
+        <div class="form-group">
+          <label for="replyInput">Leave a reply:</label>
+          <input id="replyInput" type="text" class="form-control" [(ngModel)]="replyInput">
+        </div>
+        <div class="button-group mb-2 ">
+          <button  class="btn btn-danger" (click)="onReplyComment()">Cancel</button>
+          <button  class="btn btn-primary mx-2 " type="submit" (click)="createReply(comment.id, i)">Reply</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="comment.reply" class="row justify-content-end">
+      <div class="col-md-9 card mb-3 p-2">
+        <h6 class="mt-1">Reply by author:</h6>
+        <p>{{comment.reply}}</p>
+      </div>
+    </div>
+  </div>
+</div>
