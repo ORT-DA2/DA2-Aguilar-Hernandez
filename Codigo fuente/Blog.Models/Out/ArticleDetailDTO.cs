@@ -14,6 +14,7 @@ public class ArticleDetailDTO
     public DateTime DateLastModified { get; set; }
     public List<CommentOutModel>? Comments { get; set; }
     public string Image { get; set; }
+    public string? Image2 { get; set; }
     public Template Template { get; set; }
     public bool IsApproved { get; set; }
     public bool IsEdited { get; set; }
@@ -36,6 +37,8 @@ public class ArticleDetailDTO
         DateLastModified = article.DateLastModified;
         Comments = comments;
         Image = article.Image;
+        if (!string.IsNullOrEmpty(article.Image2))
+            Image2 = article.Image2;
         Template = article.Template;
         IsApproved = article.IsApproved;
         IsEdited = article.IsEdited;
