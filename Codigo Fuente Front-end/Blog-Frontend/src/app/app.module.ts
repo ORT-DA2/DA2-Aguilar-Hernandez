@@ -18,6 +18,9 @@ import { UserService } from '../_services/user.service';
 import { OffensiveService } from '../_services/offensive.service';
 import { ArticleService } from '../_services/article.service';
 import { ActivityRankingPageComponent } from './activity-ranking-page/activity-ranking-page.component';
+import { UserManagementPageComponent } from './user-management-page/user-management-page.component';
+import { UserCreateComponentComponent } from './user-create-component/user-create-component.component';
+import { UserFormComponentComponent } from './user-form-component/user-form-component.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,9 @@ import { ActivityRankingPageComponent } from './activity-ranking-page/activity-r
     CreateArticleComponent,
     OffensiveRankingPageComponent,
     ActivityRankingPageComponent,
+    UserManagementPageComponent,
+    UserCreateComponentComponent,
+    UserFormComponentComponent,
   ],
 
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],

@@ -47,6 +47,7 @@
               <a class="dropdown-item" href="#" *ngIf="isAdmin">Moderate Articles</a>
               <a class="dropdown-item" (click)="onViewActivity()" *ngIf="isAdmin" >Activity Ranking</a>
               <a class="dropdown-item" (click)="onViewOffensive()" *ngIf="isAdmin">Offensive Ranking</a>
+              <a class="dropdown-item" (click)="onViewUserManagement()" *ngIf="isAdmin">User Management</a>
           </div>
           <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa-regular fa-user"></i> {{ user?.username }}

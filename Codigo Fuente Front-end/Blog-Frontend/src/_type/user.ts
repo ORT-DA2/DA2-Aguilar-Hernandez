@@ -8,4 +8,5 @@ export interface User {
   password: string;
   roles: Role[];
   email: string;
+  isEditing?: boolean;
 }

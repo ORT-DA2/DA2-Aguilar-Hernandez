@@ -18,6 +18,7 @@ export enum UserEndpoints {
   EDIT_USER = '/users',
   GET_RANKING_OFFENSIVE = '/users/rankingOffensive',
   GET_RANKING_ACTIVITY = '/users/ranking',
+  ADD_USER = '/users',
 }
 
 export enum OffensiveEndpoints {

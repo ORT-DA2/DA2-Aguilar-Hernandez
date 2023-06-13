@@ -98,4 +98,8 @@ export class HeaderComponent implements OnInit {
   onCreateArticle() {
     this.router.navigate(['/create-article']);
   }
+
+  onViewUserManagement() {
+    this.router.navigate(['/user-management']);
+  }
 }
