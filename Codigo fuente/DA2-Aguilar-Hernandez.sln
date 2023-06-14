@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.DataAccess.Test", "Blo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Filters", "Blog.Filters\Blog.Filters.csproj", "{1B627420-3048-41DE-B3F3-33E892D02B03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.ImporterInterface", "Blog.ImporterInterface\Blog.ImporterInterface.csproj", "{0259562E-362F-4A3B-B122-3B11ADF70630}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.JsonImporter", "Blog.JsonImporter\Blog.JsonImporter.csproj", "{DC3CAC2A-D894-4628-AD01-D5987BEF8AEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,5 +93,13 @@ Global
 		{1B627420-3048-41DE-B3F3-33E892D02B03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B627420-3048-41DE-B3F3-33E892D02B03}.Release|Any CPU.Build.0 = Release|Any CPU
 	
-  EndGlobalSection
+		{0259562E-362F-4A3B-B122-3B11ADF70630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0259562E-362F-4A3B-B122-3B11ADF70630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0259562E-362F-4A3B-B122-3B11ADF70630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0259562E-362F-4A3B-B122-3B11ADF70630}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC3CAC2A-D894-4628-AD01-D5987BEF8AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC3CAC2A-D894-4628-AD01-D5987BEF8AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC3CAC2A-D894-4628-AD01-D5987BEF8AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC3CAC2A-D894-4628-AD01-D5987BEF8AEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 EndGlobal
