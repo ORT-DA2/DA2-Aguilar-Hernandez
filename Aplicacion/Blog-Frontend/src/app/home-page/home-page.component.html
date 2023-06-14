@@ -1,0 +1,18 @@
+<div class="container">
+    <h1>Last Articles</h1>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let article of lastArticles">
+        <h2 *ngIf="lastArticles.length == 0">No articles</h2>
+        <div class="card mb-3">
+          <img class="card-img-top img-fluid" [src]="'https://localhost:7105/' + article.image" alt="Article image" style="height: 200px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <a class="card-text" (click)="onClick(article.owner)">{{ article.owner }}</a>
+            <p class="card-text">Published: {{ article.datePublished | date }}</p>
+            <p class="card-text">Last Modified: {{ article.dateLastModified | date }}</p>
+            <a *ngIf="token" [routerLink]="['/articles', article.id]" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

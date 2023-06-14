@@ -1,0 +1,20 @@
+<div class="container">
+    <h2>Importer Form</h2>
+
+    <form>
+        <div class="form-group">
+            <label for="importerType">Importer Type:</label>
+            <select class="form-control" id="importerType" [(ngModel)]="importerType" name="importerType">
+              <option value="">Select the importer type</option>
+              <option *ngFor="let import of importers" value="{{import.importerName}}">{{import.importerName}}</option>
+            </select>
+        </div>
+
+      <div class="form-group" *ngIf="importerType == 'JsonImporter'">
+        <label for="fileName">value:</label>
+        <input type="text" class="form-control" id="value" [(ngModel)]="value" name="value">
+
+        <button type="submit" class="btn btn-primary" (click)="sendImport()">Enviar</button>
+      </div>
+    </form>
+</div>

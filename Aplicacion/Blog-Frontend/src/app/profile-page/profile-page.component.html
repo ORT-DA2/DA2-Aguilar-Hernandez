@@ -1,0 +1,118 @@
+<div class="container">
+  <h1>User Profile</h1>
+  <h2 class="user-profile__name">{{ user?.firstName }} {{ user?.lastName }}</h2>
+
+  <div *ngIf="user && isCurrentUser" class="card">
+    <div class="card-body">
+      <div *ngIf="!editable" class="user-profile">
+        
+        <div class="user-profile__info">
+          <div class="user-profile__item">
+            <span class="user-profile__label">Email:</span>
+            <span class="user-profile__value">{{ user.email }}</span>
+          </div>
+          <div class="user-profile__item">
+            <span class="user-profile__label">Username:</span>
+            <span class="user-profile__value">{{ user.username }}</span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="editable">
+        <h2 class="card-title">Edit Profile</h2>
+        <div class="form-group">
+          <label for="firstNameInput">First Name:</label>
+          <input id="firstNameInput" type="text" class="form-control" [(ngModel)]="user.firstName" placeholder="First Name">
+        </div>
+        <div class="form-group">
+          <label for="lastNameInput">Last Name:</label>
+          <input id="lastNameInput" type="text" class="form-control" [(ngModel)]="user.lastName" placeholder="Last Name">
+        </div>
+        <div class="form-group">
+          <label for="emailInput">Email:</label>
+          <input id="emailInput" type="email" class="form-control" [(ngModel)]="user.email" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <label for="usernameInput">Username:</label>
+          <input id="usernameInput" type="text" class="form-control" [(ngModel)]="user.username" placeholder="Username">
+        </div>
+        <div class="form-group" *ngIf="showPassword">
+          <label for="passwordInput">Password:</label>
+          <input id="passwordInput" type="password" class="form-control" [(ngModel)]="user.password" placeholder="Password">
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button *ngIf="!editable" class="btn btn-primary" (click)="onEdit()">Edit</button>
+        <div class="mt-2">
+          <button *ngIf="editable && !showPassword" class="btn btn-success" (click)="onChangePassword()">Change Password</button>
+        </div>
+        <div class="mt-2">
+          <button *ngIf="editable && showPassword" class="btn btn-danger" (click)="onCancelChangePassword()">Cancel</button>
+        </div>
+        <div class="mt-2">
+          <button *ngIf="editable" class="btn btn-success" (click)="onSave()">Save</button>
+        </div>
+        <div class="mt-2">
+          <button *ngIf="editable && !showPassword" class="btn btn-danger" (click)="onCancelEdit()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!user" class="alert alert-info">
+    Cargando usuario...
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success mt-3">
+    {{ successMessage }}
+  </div>
+
+  <div class="container mt-4" *ngIf="user">
+    <h2>Public Articles</h2>
+  
+    <div *ngIf="publicArticles.length === 0" class="alert alert-info">
+      No Articles.
+    </div>
+  
+    <div class="row" *ngIf="isBlogger">
+      <div class="col-md-4" *ngFor="let article of publicArticles">
+        <div class="card mt-4">
+          <div class="card-body">
+            <img class="card-img-top img-fluid" [src]="'https://localhost:7105/' + article.image" alt="Article image" style="height: 200px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <p class="card-text">{{ article.owner }}</p>
+            <p class="card-text">Published: {{ article.datePublished | date }}</p>
+            <a [routerLink]="['/articles', article.id]" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4" *ngIf="user && isCurrentUser">
+  <h2>Private Articles</h2>
+
+  <div *ngIf="privateArticles.length === 0" class="alert alert-info">
+    No Articles.
+  </div>
+
+  <div class="row" *ngIf="isBlogger">
+    <div class="col-md-4" *ngFor="let article of privateArticles">
+      <div class="card mt-4">
+        <div class="card-body">
+          <img class="card-img-top img-fluid" [src]="'https://localhost:7105/' + article.image" alt="Article image" style="height: 200px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">{{ article.title }}</h5>
+          <p class="card-text">Published: {{ article.datePublished | date }}</p>
+          <a [routerLink]="['/articles', article.id]" class="btn btn-primary">Read More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+

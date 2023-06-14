@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="#">ORT Blog</a>
+
+    <div class="mx-auto" *ngIf="isBlogger">
+      <form class="form-inline my-2 my-lg-0" *ngIf="isLoggedIn" (ngSubmit)="onSearch($event)">
+        <div class="input-group" style="position: relative;">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchTerm" (keyup)="onSearch($event)" name="searchTerm" style="width: 500px;">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+          </div>
+          <div class="dropdown-menu" style="width: 100%; position: absolute; top: 100%;" [style.display]="((searchResults.length > 0 || searchError) && searchTerm.length > 0) ? 'block' : 'none'">
+            <a class="dropdown-item" *ngFor="let result of searchResults" [routerLink]="['/articles', result.id]">{{ result.title }} - {{result.owner}}</a>
+            <a class="dropdown-item" *ngIf="searchError && searchResults.length == 0">{{ searchError }}</a>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div>
+      <ul class="navbar-nav">
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <button class="btn btn-outline-primary mr-2" (click)="onLogin()">Login</button>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <button class="btn btn-outline-primary" (click)="onRegister()">Register</button>
+        </li>
+        <li class="nav-item dropdown" *ngIf="isLoggedIn">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-bell"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <ng-container *ngIf="hasNotifications; else noNotifications">
+              <a class="dropdown-item" *ngFor="let notification of notifications">
+                <ng-container *ngIf="notification.article && !notification.comment">
+                  Article: {{ notification.article.title }} has offensive content 
+                </ng-container>
+                <ng-container *ngIf="!notification.article && notification.comment">
+                  <div *ngIf="!notification.comment.isPublic">
+                    Comment: {{ notification.comment.body }} Has offensive content 
+                  </div>
+                  <div *ngIf="notification.comment.isPublic">
+                    Comment: {{ notification.comment.body }} Has been added to your article
+                  </div>
+                </ng-container>
+              </a>
+            </ng-container>            
+            <ng-template #noNotifications>
+              <a class="dropdown-item">
+                <i class="fas fa-exclamation-circle"></i> No notifications available
+              </a>
+            </ng-template>
+          </div>
+        </li>
+        <li class="nav-item dropdown" *ngIf="isLoggedIn">
+          <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" (click)="onViewProfile()">View Profile</a>
+              <a class="dropdown-item" *ngIf="isBlogger" (click)="onCreateArticle()">Create Article</a>
+              <a class="dropdown-item" *ngIf="isBlogger" (click)="onImportArticle()">Import Article</a>
+              <a class="dropdown-item" *ngIf="isAdmin" (click)="onModerateArticle()">Moderate Articles</a>
+              <a class="dropdown-item" (click)="onViewActivity()" *ngIf="isAdmin" >Activity Ranking</a>
+              <a class="dropdown-item" (click)="onViewOffensive()" *ngIf="isAdmin">Offensive Ranking</a>
+              <a class="dropdown-item" (click)="onViewUserManagement()" *ngIf="isAdmin">User Management</a>
+          </div>
+          <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa-regular fa-user"></i> {{ user?.username }}
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <button class="btn btn-outline-primary" (click)="onLogout()">Logout</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
