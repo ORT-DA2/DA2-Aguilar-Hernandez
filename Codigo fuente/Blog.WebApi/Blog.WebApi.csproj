@@ -20,6 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Importers" />
+      <Folder Include="JSONFiles" />
       <Folder Include="wwwroot\images" />
     </ItemGroup>
 
