@@ -7,11 +7,13 @@
       </div>
       <div class="card-body">
         <div class="list-group">
-          <a *ngFor="let article of articles" [routerLink]="['/articles', article.id]" class="list-group-item list-group-item-action">
+          <div *ngFor="let article of articles">
+          <a [routerLink]="['/articles', article.id]" class="list-group-item list-group-item-action">
             {{ article.title }} - Contain the words:
             <span *ngFor="let wordObj of article.offensiveContent">{{ wordObj.word }}</span>
-            <button class="btn btn-success float-right mr-2" (click)="approve(article)">Approve</button>
           </a>
+          <button class="btn btn-success float-right mr-2" (click)="approve(article)">Approve</button>
+        </div>
         </div>
       </div>
     </div>

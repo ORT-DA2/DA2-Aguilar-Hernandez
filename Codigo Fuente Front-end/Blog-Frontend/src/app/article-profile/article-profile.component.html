@@ -76,8 +76,8 @@
   <div *ngFor="let comment of comments; let i = index" >
     <div class="row justify-content-center">
       <div class="col-sm card mb-3">
-        <h3 class="btn btn-danger float-right" *ngIf="comment.isApproved"><i class="fas fa-times"></i>Deleted</h3>
-        <div class="card-body" *ngIf="!comment.isApproved">
+        <h3 class="btn btn-danger float-right" *ngIf="comment.offensiveContent.length > 0 || comment.isOffensive"><i class="fas fa-times"></i>Deleted</h3>
+        <div class="card-body" *ngIf="comment.offensiveContent.length == 0">
           <h5 class="card-title">{{ comment.ownerUsername}}</h5>
           <h6 class="card-subtitle">{{ comment.datePublished | date }}</h6>
           <p class="card-text mt-2">{{ comment.body }}</p>

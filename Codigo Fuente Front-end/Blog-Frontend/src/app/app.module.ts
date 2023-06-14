@@ -23,6 +23,7 @@ import { UserManagementPageComponent } from './user-management-page/user-managem
 import { UserCreateComponentComponent } from './user-create-component/user-create-component.component';
 import { UserFormComponentComponent } from './user-form-component/user-form-component.component';
 import { ModerateArticlesPageComponent } from './moderate-articles-page/moderate-articles-page.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ModerateArticlesPageComponent } from './moderate-articles-page/moderate
     UserCreateComponentComponent,
     UserFormComponentComponent,
     ModerateArticlesPageComponent,
+    UnauthorizedComponent,
   ],
 
   imports: [

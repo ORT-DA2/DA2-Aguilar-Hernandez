@@ -151,6 +151,20 @@ export class ArticleService {
       .pipe(catchError(this.handleError));
   }
 
+  approveArticle(article: Article, token: string | null): Observable<Article> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .put<Article>(
+        `${environment.BASE_URL}${ArticleEndpoints.APPROVE_ARTICLE}/${article.id}`,
+        article,
+        { headers }
+      )
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     return throwError(
       () => new Error('Something bad happened; please try again later.')

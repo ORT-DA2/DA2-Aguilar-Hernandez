@@ -13,7 +13,6 @@ namespace Blog.WebApi.Controllers;
 [Route("api/comments")]
 [ExceptionFilter]
 [ServiceFilter(typeof(AuthorizationFilter))]
-[AuthenticationRoleFilter(Roles = new[] { Role.Blogger, Role.Admin })]
 public class CommentController : ControllerBase{
 
     private readonly ICommentLogic _commentLogic;
@@ -23,6 +22,7 @@ public class CommentController : ControllerBase{
     }
 
     [HttpGet]
+    [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
     public IActionResult GetAll()
     {
         IEnumerable<Comment> comments = _commentLogic.GetAll();
@@ -33,6 +33,7 @@ public class CommentController : ControllerBase{
 
 
     [HttpPost]
+    [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
     public IActionResult PostNewComment([FromBody] CommentInModel commentInModel, [FromHeader] Guid Authorization)
     {
         Comment comment = commentInModel.ToEntity();
@@ -43,6 +44,7 @@ public class CommentController : ControllerBase{
     }
 
     [HttpDelete("{id}")]
+    [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
     public IActionResult DeleteCommentById([FromRoute] Guid id)
     {
         _commentLogic.DeleteCommentById(id);
@@ -50,6 +52,7 @@ public class CommentController : ControllerBase{
     }
 
     [HttpPut]
+    [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
     public IActionResult ReplyComment([FromBody]ReplyCommentDto reply)
     {
         Comment commentReplied = _commentLogic.ReplyComment(reply.CommentId, reply.Reply);

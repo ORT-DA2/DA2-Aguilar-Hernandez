@@ -29,7 +29,7 @@ export class ModerateArticlesPageComponent {
     this.articleService
       .getOffensiveArticles(this.token)
       .subscribe((articles: any) => {
-        this.articles = articles;
+        this.articles = articles.filter((article: any) => !article.isApproved);
       });
   }
 
@@ -39,5 +39,14 @@ export class ModerateArticlesPageComponent {
     });
   }
 
-  approve(object: any) {}
+  approve(article: any) {
+    this.articleService
+      .approveArticle(article, this.token)
+      .subscribe((approvedArticle: any) => {
+        const index = this.articles.indexOf(approvedArticle);
+        if (index !== -1) {
+          this.articles.splice(index, 1);
+        }
+      });
+  }
 }

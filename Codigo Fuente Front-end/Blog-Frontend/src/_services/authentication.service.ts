@@ -46,6 +46,10 @@ export class AuthenticationService {
           this.token = token;
           this.user$.next(response.user);
           localStorage.setItem('token', token);
+          localStorage.setItem(
+            'notification',
+            JSON.stringify(response.notifications)
+          );
           localStorage.setItem('userId', response.user.id);
           localStorage.setItem('username', response.user.username);
           this.getUser();
@@ -77,10 +81,7 @@ export class AuthenticationService {
     this.user$.next(null);
     this.token = null;
 
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username');
-
+    localStorage.clear();
   }
 
   isAuthenticated(): boolean {

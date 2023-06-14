@@ -102,7 +102,6 @@ public class ArticleLogic: IArticleLogic
         article.DateLastModified = DateTime.Now;
 
         _offensiveWordLogic.ValidateArticleOffensiveWords(article);
-        article.IsApproved = true;
         _repository.Insert(article);
         _repository.Save();
         return article;

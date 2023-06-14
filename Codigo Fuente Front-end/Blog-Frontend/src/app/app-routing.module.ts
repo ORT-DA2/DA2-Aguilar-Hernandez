@@ -10,19 +10,63 @@ import { ArticleProfileComponent } from './article-profile/article-profile.compo
 import { ActivityRankingPageComponent } from './activity-ranking-page/activity-ranking-page.component';
 import { UserManagementPageComponent } from './user-management-page/user-management-page.component';
 import { ModerateArticlesPageComponent } from './moderate-articles-page/moderate-articles-page.component';
+import { HeaderComponent } from './header/header.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { AuthenticationGuard } from '../_guards/authentication.guard';
+import { AdminGuard } from '../_guards/admin.guard';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: HeaderComponent,
+    outlet: 'header',
+  },
   { path: '', component: HomePageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'register', component: RegisterPageComponent },
-  { path: 'profile/:id', component: ProfilePageComponent },
-  { path: 'profile/:username', component: ProfilePageComponent },
-  { path: 'create-article', component: CreateArticleComponent },
-  { path: 'offensive-ranking', component: OffensiveRankingPageComponent },
-  { path: 'articles/:id', component: ArticleProfileComponent },
-  { path: 'activity-ranking', component: ActivityRankingPageComponent },
-  { path: 'user-management', component: UserManagementPageComponent },
-  { path: 'articles-management', component: ModerateArticlesPageComponent },
+  {
+    path: 'profile/:id',
+    component: ProfilePageComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'profile/:username',
+    component: ProfilePageComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'create-article',
+    component: CreateArticleComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'offensive-ranking',
+    component: OffensiveRankingPageComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'articles/:id',
+    component: ArticleProfileComponent,
+    canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'activity-ranking',
+    component: ActivityRankingPageComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'user-management',
+    component: UserManagementPageComponent,
+  },
+  {
+    path: 'articles-management',
+    component: ModerateArticlesPageComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'unauthorized',
+    component: UnauthorizedComponent,
+  },
 ];
 
 @NgModule({
