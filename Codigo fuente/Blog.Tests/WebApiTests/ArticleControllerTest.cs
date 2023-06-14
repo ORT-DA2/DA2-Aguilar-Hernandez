@@ -349,6 +349,8 @@ public class ArticleControllerTest
         
         var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.UpdateArticle(_articleTest.Id, It.IsAny<Article>(), token)).Throws(new ArgumentException());
+        _articlenMock.Setup(o => o.IsBase64String(It.IsAny<string>())).Returns(true);
+        _articlenMock.Setup(o => o.SaveImage(It.IsAny<string>()));
         var result = controller.UpdateArticle(_articleTest.Id ,_articleTestDTO, token);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
