@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
+      <ProjectReference Include="..\Blog.ImporterInterface\Blog.ImporterInterface.csproj" />
     </ItemGroup>
 
     <ItemGroup>

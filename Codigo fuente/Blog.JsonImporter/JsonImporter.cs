@@ -1,6 +1,7 @@
 ﻿using Blog.Domain.Entities;
 using Blog.Domain.Importer;
 using Blog.ImporterInterface;
+using Newtonsoft.Json.Linq;
 
 namespace Blog.JsonImporter;
 
@@ -18,7 +19,7 @@ public class JsonImporter : IImporter
         {
             new Parameter()
             {
-                Name = "filename",
+                Name = "File Name",
                 Necessary = true,
                 ParameterType = ParameterType.Text
             },
@@ -27,13 +28,14 @@ public class JsonImporter : IImporter
 
     public List<Article> ImportArticles(List<Parameter> parameters)
     {
-        var fileName = parameters.Find(p => p.Name == "File Name");
-        var parsedName = fileName.Value.ToString();
-
-        //var file = Directory.Load(parsedName);
-        //var articlesImported = NewtonSoft.ParseJson(file);
         
-        return new List<Article>();
+        var fileName = parameters.Find(p => p.Name == "File Name");
+        var parsedName = fileName?.Value.ToString();
+        JObject jsonParsed = JObject.Parse(File.ReadAllText( parsedName));
+        JArray arrayArticles = (JArray)jsonParsed["articles"];
+
+        return arrayArticles.ToObject<List<Article>>();
+        
     }
 
 }

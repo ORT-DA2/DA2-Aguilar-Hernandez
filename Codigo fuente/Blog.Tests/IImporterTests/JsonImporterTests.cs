@@ -26,7 +26,15 @@ public class JsonImporterTests
     public void ImportArticlesTest()
     {
         JsonImporter.JsonImporter jsonImporter = new JsonImporter.JsonImporter();
-        var parameterList = new List<Parameter>();
+        var parameterList = new List<Parameter>()
+        {
+            new Parameter()
+            {
+                Name = "File Name",
+                Necessary = true,
+                ParameterType = ParameterType.Text
+            },
+        };
         var importedArticles = jsonImporter.ImportArticles(parameterList);
         Assert.IsTrue(importedArticles.Count == 0);
     }

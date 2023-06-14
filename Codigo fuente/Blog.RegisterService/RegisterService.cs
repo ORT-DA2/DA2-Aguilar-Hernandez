@@ -4,6 +4,7 @@ using Blog.Domain.Entities;
 using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
+using Blog.ImporterInterface;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Blog.RegisterService;
@@ -41,6 +42,8 @@ public class RegisterService
         serviceCollection.AddScoped<IRepository<OffensiveWord>, Repository<OffensiveWord>>();
         serviceCollection.AddScoped<INotificationStrategy, ArticleNotificationStrategy>();
         serviceCollection.AddScoped<INotificationStrategy, CommentNotificationStrategy>();
+        serviceCollection.AddScoped<IImporterLogic, ImporterLogic>();
+        serviceCollection.AddScoped<IImporter, JsonImporter.JsonImporter>();
 
     }
 }
