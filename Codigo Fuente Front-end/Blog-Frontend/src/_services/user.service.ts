@@ -29,15 +29,36 @@ export class UserService {
       );
   }
 
-  getUser(userId: string | null, token: string | null): Observable<User[]> {
+  getUser(userId: string | null, token: string | null): Observable<User> {
     let headers = new HttpHeaders();
     if (token) {
       headers = headers.set('Authorization', token);
     }
     return this.http
-      .get<User[]>(
-        `${environment.BASE_URL}${UserEndpoints.GET_USER}/${userId}`,
-        { headers }
+      .get<User>(`${environment.BASE_URL}${UserEndpoints.GET_USER}/${userId}`, {
+        headers,
+      })
+      .pipe(
+        catchError((error) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  getUserByUsername(
+    username: string | null,
+    token: string | null
+  ): Observable<User> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .get<User>(
+        `${environment.BASE_URL}${UserEndpoints.GET_USER}/user/${username}`,
+        {
+          headers,
+        }
       )
       .pipe(
         catchError((error) => {

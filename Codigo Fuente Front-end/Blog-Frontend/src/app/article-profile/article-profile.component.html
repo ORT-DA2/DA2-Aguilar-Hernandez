@@ -1,9 +1,15 @@
 <div class="container mt-4">
-  <div class="row justify-content-center">
+  <button class="btn btn-outline-primary" *ngIf="loggedUserIsAuthor() || loggedUserIsAdmin()" (click)="onEdit()">Edit</button>
+  <div *ngIf="(loggedUserIsAuthor() || loggedUserIsAdmin()) && isEditing">
+    <app-create-article [mode]="'edit'" [article]="article" (articleUpdated)="onArticleUpdated($event)"></app-create-article>
+  </div>
+  <div class="row justify-content-center" *ngIf="!isEditing">
     <div class="col-md-10">
       <div class="card">
         <h2 class="card-title text-center mt-3">{{article.title}}</h2>
-        <div class="card-body">
+        <h3 class="btn btn-danger float-right" *ngIf="!article.isApproved && !article.isEdited"><i class="fas fa-times"></i>Deleted</h3>
+        <div class="card-body" *ngIf="article.isApproved || article.isEdited">
+          <h3 class="btn btn-warning float-right" *ngIf="article.isEdited"><i class="fas fa-pencil-alt"></i>Edited</h3>
           <h6 class="text-center">by {{article.owner}}</h6>
           <!-- rectangle top -->
           <div *ngIf="article.template == '0'|| article.template =='3'"
@@ -70,7 +76,8 @@
   <div *ngFor="let comment of comments; let i = index" >
     <div class="row justify-content-center">
       <div class="col-sm card mb-3">
-        <div class="card-body">
+        <h3 class="btn btn-danger float-right" *ngIf="comment.offensiveContent.length > 0 || comment.isOffensive"><i class="fas fa-times"></i>Deleted</h3>
+        <div class="card-body" *ngIf="comment.offensiveContent.length == 0">
           <h5 class="card-title">{{ comment.ownerUsername}}</h5>
           <h6 class="card-subtitle">{{ comment.datePublished | date }}</h6>
           <p class="card-text mt-2">{{ comment.body }}</p>

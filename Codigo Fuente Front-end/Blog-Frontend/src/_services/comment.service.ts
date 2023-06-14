@@ -1,42 +1,61 @@
-import {Injectable} from "@angular/core";
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {Observable, throwError} from "rxjs";
-import {environment} from "../environments/environment";
-import {CommentEndpoints} from "./endpoints";
-import {catchError} from "rxjs/operators";
-import {Comment} from "../_type/comment";
-import {CommentReply} from "../_type/CommentReply";
+import { Injectable } from '@angular/core';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { environment } from '../environments/environment';
+import { CommentEndpoints } from './endpoints';
+import { catchError } from 'rxjs/operators';
+import { Comment } from '../_type/comment';
+import { CommentReply } from '../_type/CommentReply';
 
 @Injectable({
   providedIn: 'root',
 })
-
-export class CommentService{
+export class CommentService {
   constructor(private http: HttpClient) {}
 
-  createComment(comment: Comment,
-                token: string | null): Observable<Comment> {
+  createComment(comment: Comment, token: string | null): Observable<Comment> {
     let headers = new HttpHeaders();
-    if(token){
+    if (token) {
       headers = headers.set('Authorization', token);
     }
     return this.http
       .post<Comment>(
         `${environment.BASE_URL}${CommentEndpoints.ADD_COMMENT}`,
-        comment, {headers}
+        comment,
+        { headers }
       )
       .pipe(catchError(this.handleError));
   }
 
-  replyComment(reply: CommentReply, token: string|null):Observable<CommentReply>{
+  getComments(token: string | null): Observable<Comment> {
     let headers = new HttpHeaders();
-    if(token){
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .get<Comment>(`${environment.BASE_URL}${CommentEndpoints.ADD_COMMENT}`, {
+        headers,
+      })
+      .pipe(catchError(this.handleError));
+  }
+
+  replyComment(
+    reply: CommentReply,
+    token: string | null
+  ): Observable<CommentReply> {
+    let headers = new HttpHeaders();
+    if (token) {
       headers = headers.set('Authorization', token);
     }
     return this.http
       .put<CommentReply>(
         `${environment.BASE_URL}${CommentEndpoints.REPLY_COMMENT}`,
-        reply, {headers}
+        reply,
+        { headers }
       )
       .pipe(catchError(this.handleError));
   }
@@ -46,5 +65,4 @@ export class CommentService{
       () => new Error('Something bad happened; please try again later.')
     );
   }
-
 }

@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   isLoggedIn = false;
   isAdmin: boolean | undefined = false;
   isBlogger: boolean | undefined = false;
-  notifications: any[] = [];
+  notifications: any = [];
   hasNotifications = false;
   searchTerm = '';
   token: string | null = null;
@@ -29,7 +29,6 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.checkNotifications();
     this.isLoggedIn = this.authService.isAuthenticated();
     this.authService.user$.subscribe((user: any) => {
       this.user = user;
@@ -39,9 +38,20 @@ export class HeaderComponent implements OnInit {
     this.authService.authStateChanged.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
     });
+    this.checkNotifications();
   }
 
   checkNotifications() {
+    const notificationsString = localStorage.getItem('notification');
+    if (notificationsString) {
+      const notificationsArray = JSON.parse(notificationsString);
+      console.log(notificationsArray);
+      this.notifications = Array.isArray(notificationsArray)
+        ? notificationsArray
+        : [];
+    } else {
+      this.notifications = [];
+    }
     this.hasNotifications = this.notifications.length > 0;
   }
 
@@ -102,5 +112,9 @@ export class HeaderComponent implements OnInit {
 
   onViewUserManagement() {
     this.router.navigate(['/user-management']);
+  }
+
+  onModerateArticle() {
+    this.router.navigate(['/articles-management']);
   }
 }

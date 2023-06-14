@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {ArticleService} from '../../_services/article.service';
-import {Article} from '../../_type/article';
-import {AuthenticationService} from '../../_services/authentication.service';
-import {ActivatedRoute} from '@angular/router';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { ArticleService } from '../../_services/article.service';
+import { Article } from '../../_type/article';
+import { AuthenticationService } from '../../_services/authentication.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-article',
@@ -10,7 +10,10 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./create-article.component.css'],
 })
 export class CreateArticleComponent {
-  @Output() articlesUpdated = new EventEmitter<Article[]>();
+  @Input() mode: 'create' | 'edit' = 'create';
+  @Input() article: Article | undefined;
+  @Output() articleCreated = new EventEmitter<Article>();
+  @Output() articleUpdated = new EventEmitter<Article>();
 
   title: string = '';
   content: string = '';
@@ -28,6 +31,25 @@ export class CreateArticleComponent {
     private articleService: ArticleService
   ) {}
 
+  ngOnInit(): void {
+    if (this.mode === 'edit' && this.article) {
+      this.title = this.article.title;
+      this.content = this.article.content;
+      this.isPublic = this.article.isPublic;
+      this.template = this.article.template;
+      this.image = this.article.image;
+      this.image2 = this.article.image2;
+    }
+  }
+
+  onFormSubmit(formData: any): void {
+    if (this.mode === 'create') {
+      this.createArticle(formData);
+    } else if (this.mode === 'edit') {
+      this.updateArticle();
+    }
+  }
+
   createArticle(article: Article) {
     article = {
       dateLastModified: Date.now(),
@@ -42,18 +64,16 @@ export class CreateArticleComponent {
       isPublic: this.isPublic,
       template: this.template,
       image: this.image,
-      image2: this.image2
+      image2: this.image2,
     };
 
     this.token = localStorage.getItem('token');
-    this.articleService
-      .createArticle(article, this.token)
-      .subscribe((res) => this.success = 'Article successfully created',
-      (error) => this.error = error.error);
+    this.articleService.createArticle(article, this.token).subscribe(
+      (res) => (this.success = 'Article successfully created'),
+      (error) => (this.error = error.error)
+    );
     this.cleanFields();
   }
-
-
 
   private getLoggedUser() {
     return localStorage.getItem('userId');
@@ -91,9 +111,42 @@ export class CreateArticleComponent {
     });
   }
 
-  private cleanFields(){
+  updateArticle() {
+    if (!this.article) {
+      return;
+    }
+
+    const updatedArticle: Article = {
+      ...this.article,
+      title: this.title,
+      content: this.content,
+      isPublic: this.isPublic,
+      template: this.template,
+    };
+
+    if (this.image !== this.article.image) {
+      updatedArticle.image = this.image;
+    }
+
+    if (this.image2 !== this.article.image2) {
+      updatedArticle.image2 = this.image2;
+    }
+
+    this.token = localStorage.getItem('token');
+    this.articleService.updateArticle(updatedArticle, this.token).subscribe(
+      (res: any) => {
+        this.article = updatedArticle;
+        this.success = 'Article successfully updated';
+        this.articleUpdated.emit(res);
+        this.cleanFields();
+      },
+      (error: any) => (this.error = error.error)
+    );
+  }
+
+  private cleanFields() {
     this.title = '';
-    this. content = '';
+    this.content = '';
     this.isPublic = true;
     this.template = '';
     this.image = '';
@@ -101,5 +154,4 @@ export class CreateArticleComponent {
     this.error = '';
     this.token = null;
   }
-
 }

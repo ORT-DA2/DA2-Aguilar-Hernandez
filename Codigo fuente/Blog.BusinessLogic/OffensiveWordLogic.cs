@@ -98,11 +98,14 @@ public class OffensiveWordLogic: IOffensiveWordLogic
                _notificationLogic.SendNotification(notification);
            }
        }
+       else
+       {
+           article.IsApproved = true;
+       }
    }
    
    public void ValidateCommentOffensiveWords(Comment comment)
    {
-       List<string> articleOffensiveWords = new();
        if(this.HasOffensiveWord(comment.Body))
        {
            comment.IsPublic = false;
@@ -112,6 +115,12 @@ public class OffensiveWordLogic: IOffensiveWordLogic
            {
                _notificationLogic.SendNotification(notification);
            }
+       }
+       else
+       {
+           comment.IsPublic = true;
+           comment.IsApproved = true;
+           _notificationLogic.SendNotification(_notificationCommentStrategy.CreateNotification(comment));
        }
    }
 }

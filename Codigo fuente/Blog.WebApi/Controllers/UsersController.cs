@@ -30,6 +30,14 @@ public class UsersController : ControllerBase
          User user = _userLogic.GetUserById(id);
          return Ok(new UserDetailDTO(user));        
     }
+    
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    [HttpGet("user/{username}")]
+    public IActionResult GetUserByUsername([FromRoute] string username)
+    {
+        User user = _userLogic.GetUserByUsername(username);
+        return Ok(new UserDetailDTO(user));        
+    }
 
     [HttpGet("ranking")]
     [ServiceFilter(typeof(AuthorizationFilter))]

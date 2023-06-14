@@ -16,4 +16,5 @@ public interface IArticleLogic
     public IEnumerable<Article> GetLastTen();
     public IEnumerable<Article> GetAllUserArticles(string username, Guid auth);
     string SaveImage(string imageFile);
+    bool IsBase64String(string str);
 }

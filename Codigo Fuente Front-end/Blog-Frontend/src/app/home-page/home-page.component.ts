@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Article } from '../../_type/article';
 import { ArticleService } from '../../_services/article.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -12,7 +13,7 @@ export class HomePageComponent {
   lastArticles: Article[] = [];
   token: string | null = null;
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadLastArticles();
@@ -20,19 +21,18 @@ export class HomePageComponent {
   }
 
   loadLastArticles(): void {
-    this.articleService.getLastArticles().subscribe(
-      (articles: any) => {
-        this.lastArticles = articles;
-      },
-      (error: any) => {
-        console.error('An error occurred while loading last articles:', error);
-      }
-    );
+    this.articleService.getLastArticles().subscribe((articles: any) => {
+      this.lastArticles = articles;
+    });
   }
 
-  setLoggedUser(): void{
-    if(!this.token){
+  setLoggedUser(): void {
+    if (!this.token) {
       this.token = localStorage.getItem('token');
     }
+  }
+
+  onClick(username: string) {
+    this.router.navigate(['/profile', username]);
   }
 }

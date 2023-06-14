@@ -17,7 +17,7 @@ public class CommentNotificationStrategy: INotificationStrategy
     {
         Notification notification = new Notification();
         Comment comment = (Comment)post;
-        if (comment.OffensiveContent.Count() != 0)
+        if (comment.IsApproved)
         {
             notification = new Notification()
             {

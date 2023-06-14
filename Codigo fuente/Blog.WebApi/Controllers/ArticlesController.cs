@@ -6,6 +6,8 @@ using Blog.ImporterInterface;
 using Blog.Models.In;
 using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;
+using System;
+
 
 namespace Blog.WebApi.Controllers
 {
@@ -53,6 +55,17 @@ namespace Blog.WebApi.Controllers
             return Ok(articlesDTO);
 
         }
+        
+        [HttpGet("offensive")]
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
+        public IActionResult GetAllOffensivesArticles()
+        {
+            IEnumerable<Article> articles = _articleLogic.GetAllArticles();
+            IEnumerable<Article> offensiveArticles = articles.Where(a => a.OffensiveContent.Any());
+            List<ArticleDetailDTO> articlesDTO = offensiveArticles.Select(article => new ArticleDetailDTO(article)).ToList();
+            return Ok(articlesDTO);
+        }
 
         [HttpGet("search")]
         [ServiceFilter(typeof(AuthorizationFilter))]
@@ -87,11 +100,31 @@ namespace Blog.WebApi.Controllers
 
         [HttpPut("{id}")]
         [ServiceFilter(typeof(AuthorizationFilter))]
-        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
+        [AuthenticationRoleFilter(Roles = new[] { Role.Blogger,  Role.Admin})]
         public IActionResult UpdateArticle([FromRoute] Guid id, [FromBody] CreateArticleDTO articleDto,
             [FromHeader] Guid Authorization)
         {
-            Article article = articleDto.ToEntity();
+            var imagePath = "";
+            Article article = new Article();
+            if (_articleLogic.IsBase64String(articleDto.Image))
+            {
+                imagePath = _articleLogic.SaveImage(articleDto.Image);
+                article = articleDto.ToEntity();
+                article.Image = imagePath;
+            }
+            else
+            {
+                article = articleDto.ToEntity();
+            }
+            
+            
+
+            if (!string.IsNullOrEmpty(articleDto.Image2))
+            {
+                var imagePath2 = _articleLogic.SaveImage(articleDto.Image2);
+                article.Image2 = imagePath2;
+            }
+            
             Article newArticle = _articleLogic.UpdateArticle(id, article, Authorization);
             return Created($"api/articles/{newArticle.Id}", new ArticleDetailDTO(newArticle));
         }

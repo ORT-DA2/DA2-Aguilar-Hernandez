@@ -19,6 +19,12 @@ public class CommentLogic: ICommentLogic
         _sessionLogic = sessionLogic;
         _offensiveWordLogic = offensiveWordLogic;
     }
+    
+    public IEnumerable<Comment> GetAll()
+    {
+        IEnumerable<Comment> comments = _repository.GetAll();
+        return comments;
+    }
 
 
     public Comment AddNewComment(Comment comment, Guid articleId, Guid authorization)
