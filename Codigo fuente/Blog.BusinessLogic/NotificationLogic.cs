@@ -13,18 +13,9 @@ public class NotificationLogic : INotificationLogic
         _repository = repository;
     }
     
-    public Notification SendNotification(Comment comment)
+    public Notification SendNotification(Notification notification)
     {
-        Notification notification = new Notification()
-        {
-            Id = Guid.NewGuid(),
-            Comment = comment,
-            UserToNotify = comment.Article.Owner,
-            IsRead = false
-        };
-        // Send notification even if made a comment in a self post
         _repository.Insert(notification);
-        _repository.Save();
         return notification;
     }
 

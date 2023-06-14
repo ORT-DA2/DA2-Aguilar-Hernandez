@@ -3,7 +3,7 @@ using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Blog.BusinessLogic;
 
@@ -11,10 +11,15 @@ public class ArticleLogic: IArticleLogic
 {
     private readonly IRepository<Article> _repository;
     private static ISessionLogic _sessionLogic;
-    public ArticleLogic(IRepository<Article> articleRepository, ISessionLogic sessionLogic)
+    private static IOffensiveWordLogic _offensiveWordLogic;
+    private readonly IWebHostEnvironment _hostEnvironment;
+
+    public ArticleLogic(IRepository<Article> articleRepository, ISessionLogic sessionLogic, IOffensiveWordLogic offensiveWordLogic, IWebHostEnvironment hostEnvironment)
     {
         _repository = articleRepository;
         _sessionLogic = sessionLogic;
+        _offensiveWordLogic = offensiveWordLogic;
+        _hostEnvironment = hostEnvironment;
     }
 
     public Article GetArticleById(Guid articleId)
@@ -52,17 +57,51 @@ public class ArticleLogic: IArticleLogic
         
         if (_sessionLogic.GetLoggedUser(authorization).Username != username)
         {
-            throw new ArgumentException("You can´t update an article of other owner");
+            throw new ArgumentException("You can´t see all articles of other owner");
         }
 
         return articles;
     }
 
+    public string SaveImage(string image)
+    {
+        byte[] imageBytes = Convert.FromBase64String(image);
+        var imageFolderPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+
+        if (!Directory.Exists(imageFolderPath))
+        {
+            Directory.CreateDirectory(imageFolderPath);
+        }
+
+        var imageName = $"{Guid.NewGuid().ToString()}.jpg";
+        var fullImagePath = Path.Combine(imageFolderPath, imageName);
+
+        System.IO.File.WriteAllBytesAsync(fullImagePath, imageBytes);
+
+        return $"images/{imageName}";
+    }
+    
+    public bool IsBase64String(String str)
+    {
+        try
+        {
+            byte[] data = Convert.FromBase64String(str);
+            return (str.Replace(" ","").Length % 4 == 0);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public Article CreateArticle(Article article, Guid authorization)
     {
+        ValidateNull(article);
+        article.Owner = _sessionLogic.GetLoggedUser(authorization);
         article.DatePublished = DateTime.Now;
         article.DateLastModified = DateTime.Now;
-        article.Owner = _sessionLogic.GetLoggedUser(authorization);
+
+        _offensiveWordLogic.ValidateArticleOffensiveWords(article);
         _repository.Insert(article);
         _repository.Save();
         return article;
@@ -86,6 +125,30 @@ public class ArticleLogic: IArticleLogic
         article.DateLastModified = DateTime.Now;
         article.DatePublished = oldArticle.DatePublished;
         article.Owner = oldArticle.Owner;
+        
+        _offensiveWordLogic.ValidateArticleOffensiveWords(article);
+        article.IsEdited = true;
+        oldArticle.UpdateAttributes(article);
+        _repository.Update(oldArticle);
+        _repository.Save();
+
+        return oldArticle;
+    }
+
+    public Article ApproveArticle(Guid id, Article article)
+    {
+        Article? oldArticle = _repository.GetBy(a => a.Id == id);
+
+        ValidateNull(oldArticle);
+
+        article.DateLastModified = DateTime.Now;
+        article.DatePublished = oldArticle.DatePublished;
+        article.Owner = oldArticle.Owner;
+        article.IsPublic = true;
+        article.IsApproved = true;
+        article.IsEdited = true;
+        article.OffensiveContent = _offensiveWordLogic.GetOffensiveWords(article.Content).Concat(_offensiveWordLogic.GetOffensiveWords(article.Title)).ToList();
+        
         oldArticle.UpdateAttributes(article);
         _repository.Update(oldArticle);
         _repository.Save();
@@ -122,10 +185,15 @@ public class ArticleLogic: IArticleLogic
 
     private static void ValidateUserOwner(Guid ownerId, Guid authorization)
     {
+        bool isNotAdmin = _sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Admin);
         if (_sessionLogic.GetLoggedUser(authorization).Id != ownerId)
         {
-            throw new ArgumentException("You can´t delete an article of other owner");
+            if (isNotAdmin)
+            {
+                throw new ArgumentException("You can´t update an article of other owner");
+            }
+            
         }
     }
-    
+
 }

@@ -4,6 +4,6 @@ namespace Blog.IBusinessLogic;
 
 public interface INotificationLogic
 {
-   Notification SendNotification(Comment comment);
+   Notification SendNotification(Notification notification);
    IEnumerable<Notification> GetUnreadNotificationsByUser(User user);
 }

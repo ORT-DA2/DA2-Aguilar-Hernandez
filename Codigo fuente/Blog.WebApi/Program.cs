@@ -1,8 +1,6 @@
 
-using Blog.BusinessLogic;
-using Blog.DataAccess;
 using Blog.RegisterService;
-using Microsoft.EntityFrameworkCore;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +19,6 @@ builder.Services.AddControllersWithViews()
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
     );
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +27,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 

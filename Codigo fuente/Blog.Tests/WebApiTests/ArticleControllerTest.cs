@@ -3,6 +3,7 @@ using Blog.Domain.Entities;
 using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
+using Blog.ImporterInterface;
 using Blog.Models.In;
 using Blog.Models.Out;
 using Blog.WebApi.Controllers;
@@ -16,6 +17,7 @@ namespace Blog.Tests.WebApiTests;
 public class ArticleControllerTest
 {
     private Mock<IArticleLogic> _articlenMock;
+    private Mock<IImporterLogic> _importerMock;
     private CreateArticleDTO _articleTestDTO;
     private User _user;
     private List<Article> _articles;
@@ -35,7 +37,8 @@ public class ArticleControllerTest
     public void Setup()
     {
         _articlenMock = new Mock<IArticleLogic>(MockBehavior.Strict);
-
+        _importerMock = new Mock<IImporterLogic>(MockBehavior.Strict);
+        
         _user = new User()
         {
             Id = Guid.NewGuid(),
@@ -55,8 +58,9 @@ public class ArticleControllerTest
             Title = "Angular Webpage",
             Content = "New features about angular are being developed",
             Image = image,
+            Image2 = image,
             IsPublic = true,
-            Template = Template.RectangleTop
+            Template = "Rectangle at Top and Bottom"
         };
 
         _articleTest = _articleTestDTO.ToEntity();
@@ -236,7 +240,7 @@ public class ArticleControllerTest
     [TestMethod]
     public void GetByIdValidArticleTest()
     {
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.GetArticleById(_articleTest2.Id)).Returns(_articleTest2);
         var result = controller.GetArticleById(_articleTest2.Id);
         var okResult = result as OkObjectResult;
@@ -258,7 +262,7 @@ public class ArticleControllerTest
         "There are no articles with the id")]
     public void GetByIdInvalidArticleTest()
     {
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.GetArticleById(_articleTest.Id)).Throws(new NotFoundException("There are no articles with the id"));
         controller.GetArticleById(_articleTest.Id);
     }
@@ -274,7 +278,7 @@ public class ArticleControllerTest
             _articleTest3
         };
         
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.GetArticleByText(textRecibed)).Returns(_articlesFilteres);
         var result = controller.GetArticleByText(textRecibed);
         var okResult = result as OkObjectResult;
@@ -289,7 +293,7 @@ public class ArticleControllerTest
     public void GetArticleByTextFailTest()
     {
         string textRecibed = "Hello";
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.GetArticleByText(textRecibed)).Throws(new NotFoundException("There are no articles with that text."));;
         controller.GetArticleByText(textRecibed);
     }
@@ -300,8 +304,9 @@ public class ArticleControllerTest
     {
         var token = Guid.NewGuid();
         
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Returns(_articleTest2);
+        _articlenMock.Setup(o => o.SaveImage(It.IsAny<string>())).Returns("string.jpg");
         var result = controller.CreateArticle(_articleTestDTO, token);
         var okResult = result as CreatedResult;
         var dto = okResult.Value as ArticleDetailDTO;
@@ -314,8 +319,9 @@ public class ArticleControllerTest
     {
         var token = Guid.NewGuid();
         
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.CreateArticle(It.IsAny<Article>(), token)).Throws(new ArgumentException());
+        _articlenMock.Setup(o => o.SaveImage(It.IsAny<string>())).Returns("string.jpg");
         var result = controller.CreateArticle(_articleTestDTO, token);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
@@ -327,7 +333,7 @@ public class ArticleControllerTest
         var article = _articleTest2;
         var articlenMock = new Mock<IArticleLogic>(MockBehavior.Loose);
         
-        var controller = new ArticlesController(articlenMock.Object);
+        var controller = new ArticlesController(articlenMock.Object, _importerMock.Object);
         articlenMock.Setup(o => o.UpdateArticle(_articleTest2.Id, It.IsAny<Article>(), token)).Returns(article);
         var result = controller.UpdateArticle(article.Id ,_articleTestDTO, token);
         var okResult = result as CreatedResult;
@@ -341,8 +347,10 @@ public class ArticleControllerTest
     {
         var token = Guid.NewGuid();
         
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.UpdateArticle(_articleTest.Id, It.IsAny<Article>(), token)).Throws(new ArgumentException());
+        _articlenMock.Setup(o => o.IsBase64String(It.IsAny<string>())).Returns(true);
+        _articlenMock.Setup(o => o.SaveImage(It.IsAny<string>()));
         var result = controller.UpdateArticle(_articleTest.Id ,_articleTestDTO, token);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
@@ -352,7 +360,7 @@ public class ArticleControllerTest
     {
         var token = Guid.NewGuid();
         
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.DeleteArticle(_articleTest.Id, token));
         var result = controller.DeleteArticle(_articleTest.Id, token);
         var okResult = result as OkObjectResult;
@@ -365,7 +373,7 @@ public class ArticleControllerTest
     {
         var token = Guid.NewGuid();
         
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.DeleteArticle(_articleTest.Id, token)).Throws(new NotFoundException("There are no articles."));
         var result = controller.DeleteArticle(_articleTest.Id, token);
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
@@ -375,20 +383,20 @@ public class ArticleControllerTest
     public void GetLastTenSuccessfulTest()
     {
         var articles = _articles;
-        articles.Remove(_articleTest11);
-        var controller = new ArticlesController(_articlenMock.Object);
+        articles.Remove(_articleTest);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.GetLastTen()).Returns(articles);
         var result = controller.GetLastTen();
         var okResult = result as OkObjectResult;
-        var dto = okResult.Value as List<Article>;
-        Assert.AreEqual(articles, dto);
+        var dto = okResult.Value as List<ArticleDetailDTO>;
+        Assert.AreEqual(articles.Count, dto.Count);
     }
     
     [TestMethod]
     [ExpectedException(typeof(NotFoundException))]
     public void GetLastTenInvalidTest()
     {
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.GetLastTen()).Throws(new NotFoundException("There are no articles."));
         var result = controller.GetLastTen();
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
@@ -402,7 +410,7 @@ public class ArticleControllerTest
         articles.Remove(_articleTest5);
         articles.Remove(_articleTest7);
         
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.GetAllPublicArticles()).Returns(articles);
         var result = controller.GetAllPublicArticles();
         var okResult = result as OkObjectResult;
@@ -421,7 +429,7 @@ public class ArticleControllerTest
         
         var token = Guid.NewGuid();
 
-        var controller = new ArticlesController(_articlenMock.Object);
+        var controller = new ArticlesController(_articlenMock.Object, _importerMock.Object);
         _articlenMock.Setup(o => o.GetAllUserArticles(_user.Username, token)).Returns(articles);
         var result = controller.GetAllUserArticles(_user.Username, token);
         var okResult = result as OkObjectResult;

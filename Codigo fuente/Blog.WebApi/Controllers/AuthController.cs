@@ -1,9 +1,10 @@
 
 using Blog.Domain.Entities;
-
+using Blog.Domain.Enums;
 using Blog.Filters;
 using Blog.IBusinessLogic;
 using Blog.Models.In;
+using Blog.Models.Out;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers;
@@ -41,7 +42,7 @@ public class AuthController : ControllerBase
 
         User? loggedUser = _sessionService.GetLoggedUser(token);
         IEnumerable<Notification> notifications = _notificationLogic.GetUnreadNotificationsByUser(loggedUser);
-        return Ok(new{token = token, notifications = notifications});
+        return Ok(new{token = token, notifications = notifications, user = new UserDetailDTO(loggedUser)});
         
     }
         
@@ -53,5 +54,6 @@ public class AuthController : ControllerBase
         _sessionService.Logout(Authorization);
         return Ok("Logout successfuly");
     }
-        
+
+
 }

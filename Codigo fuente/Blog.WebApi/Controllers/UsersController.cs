@@ -30,6 +30,14 @@ public class UsersController : ControllerBase
          User user = _userLogic.GetUserById(id);
          return Ok(new UserDetailDTO(user));        
     }
+    
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    [HttpGet("user/{username}")]
+    public IActionResult GetUserByUsername([FromRoute] string username)
+    {
+        User user = _userLogic.GetUserByUsername(username);
+        return Ok(new UserDetailDTO(user));        
+    }
 
     [HttpGet("ranking")]
     [ServiceFilter(typeof(AuthorizationFilter))]
@@ -37,6 +45,15 @@ public class UsersController : ControllerBase
     public IActionResult GetUserRanking([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
     {
         var result = _userLogic.UserActivityRanking(startDate, endDate);
+        return Ok(result);
+    }
+    
+    [HttpGet("rankingOffensive")]
+    [ServiceFilter(typeof(AuthorizationFilter))]
+    [AuthenticationRoleFilter(Roles = new[] { Role.Admin })]
+    public IActionResult GetUserOffensiveRanking([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+    {
+        var result = _userLogic.UserOffensiveRanking(startDate, endDate);
         return Ok(result);
     }
     

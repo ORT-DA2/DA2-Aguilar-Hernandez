@@ -4,5 +4,6 @@ public enum Template
 {
     RectangleTop,
     RectangleBottom,
-    SquareTopLeft
+    SquareTopLeft,
+    RectangleTopBottom
 }

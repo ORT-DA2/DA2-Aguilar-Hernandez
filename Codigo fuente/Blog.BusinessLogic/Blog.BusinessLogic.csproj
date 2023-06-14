@@ -10,10 +10,14 @@
       <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
       <ProjectReference Include="..\Blog.IBusinessLogic\Blog.IBusinessLogic.csproj" />
       <ProjectReference Include="..\Blog.IDataAccess\Blog.IDataAccess.csproj" />
+      <ProjectReference Include="..\Blog.ImporterInterface\Blog.ImporterInterface.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+      <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
 </Project>

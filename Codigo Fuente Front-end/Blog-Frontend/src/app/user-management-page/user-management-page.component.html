@@ -1,0 +1,64 @@
+<div class="container">
+    <h2>User Management</h2>
+    <app-user-create (userCreated)="onUserCreated($event)"></app-user-create>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <ng-container *ngIf="!user.isEditing">
+              <button class="btn btn-primary" (click)="editUser(user)">Edit</button>
+              <button class="btn btn-danger" (click)="deleteUser(user)">Delete</button>
+            </ng-container>
+            <ng-container *ngIf="user.isEditing">
+              <form (submit)="saveUser(user)">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" class="form-control" id="username" [(ngModel)]="user.username" name="username">
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="firstName">firstName</label>
+                    <input type="text" class="form-control" id="firstName" [(ngModel)]="user.firstName" name="firstName">
+                  </div>
+                  <div class="form-group">
+                    <label for="lastName">lastName</label>
+                    <input type="text" class="form-control" id="lastName" [(ngModel)]="user.lastName" name="lastName">
+                  </div>
+                  <div class="form-group">
+                    <label for="password">password</label>
+                    <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password">
+                  </div>
+                  <div class="form-group">
+                    <label for="roles">Roles</label>
+                    <select multiple class="form-control" id="roles" [(ngModel)]="roles" name="roles">
+                        <option [ngValue]="{ role: 0 }">Blogger</option>
+                        <option [ngValue]="{ role: 1 }">Admin</option>
+                      </select>
+                  </div>
+                <button type="submit" class="btn btn-success">Save</button>
+                <button class="btn btn-secondary" (click)="cancelEdit(user)">Cancel</button>
+                <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                    {{ errorMessage }}
+                  </div>
+              </form>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

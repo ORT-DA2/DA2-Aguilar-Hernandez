@@ -69,10 +69,16 @@ public class NotificationLogicTest
     [TestMethod]
     public void SendNotification()
     {
+        var notification = new Notification()
+        {
+            Comment = _comment,
+            Id = Guid.NewGuid(),
+            IsRead = false,
+            UserToNotify = _articleOwner
+        };
         _repository.Setup(o => o.Insert(It.IsAny<Notification>()));
-        _repository.Setup(o => o.Save());
-        
-        var result = _notificationLogic.SendNotification(_comment);
+
+        var result = _notificationLogic.SendNotification(notification);
         
         Assert.AreEqual(result.Comment.Id, _comment.Id);
         Assert.AreEqual(result.UserToNotify.Id, _articleOwner.Id);

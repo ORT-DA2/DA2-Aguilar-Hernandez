@@ -8,6 +8,20 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
+      <ProjectReference Include="..\Blog.ImporterInterface\Blog.ImporterInterface.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.14\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.AspNetCore.Http.Features">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.14\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     </ItemGroup>
 
 </Project>

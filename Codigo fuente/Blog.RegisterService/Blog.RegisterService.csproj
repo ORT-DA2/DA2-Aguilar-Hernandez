@@ -15,6 +15,7 @@
       <ProjectReference Include="..\Blog.BusinessLogic\Blog.BusinessLogic.csproj" />
       <ProjectReference Include="..\Blog.DataAccess\Blog.DataAccess.csproj" />
       <ProjectReference Include="..\Blog.Filters\Blog.Filters.csproj" />
+      <ProjectReference Include="..\Blog.JsonImporter\Blog.JsonImporter.csproj" />
     </ItemGroup>
 
 </Project>
