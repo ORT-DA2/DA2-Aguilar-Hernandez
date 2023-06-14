@@ -9,6 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { Article } from '../_type/article';
 import { environment } from '../environments/environment';
 import { ArticleEndpoints } from '../_services/endpoints';
+import { Import } from '../_type/import';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +55,36 @@ export class ArticleService {
       .get<Article[]>(
         `${environment.BASE_URL}${ArticleEndpoints.ALL_OFFENSIVE_ARTICLES}`,
         { headers }
+      )
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  getImporters(): Observable<Article[]> {
+    return this.http
+      .get<any>(`${environment.BASE_URL}${ArticleEndpoints.IMPORTERS}`)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  sendImporters(importer: Import, token: string | null): Observable<Article[]> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .post<any>(
+        `${environment.BASE_URL}${ArticleEndpoints.IMPORT}`,
+        importer,
+        {
+          headers,
+        }
       )
       .pipe(
         catchError((error: any) => {

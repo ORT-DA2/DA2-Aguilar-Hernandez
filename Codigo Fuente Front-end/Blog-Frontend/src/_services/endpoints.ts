@@ -13,6 +13,8 @@ export enum ArticleEndpoints {
   ALL_PUBLIC_ARTICLES = '/articles/public',
   ALL_OFFENSIVE_ARTICLES = '/articles/offensive',
   APPROVE_ARTICLE = '/articles/approve',
+  IMPORTERS = '/articles/importers',
+  IMPORT = '/articles/import',
 }
 
 export enum UserEndpoints {

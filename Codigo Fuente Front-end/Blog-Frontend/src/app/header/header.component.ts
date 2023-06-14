@@ -117,4 +117,8 @@ export class HeaderComponent implements OnInit {
   onModerateArticle() {
     this.router.navigate(['/articles-management']);
   }
+
+  onImportArticle() {
+    this.router.navigate(['/importers']);
+  }
 }

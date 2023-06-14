@@ -12,6 +12,7 @@ import { UserManagementPageComponent } from './user-management-page/user-managem
 import { ModerateArticlesPageComponent } from './moderate-articles-page/moderate-articles-page.component';
 import { HeaderComponent } from './header/header.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { ImportArticlePageComponent } from './import-article-page/import-article-page.component';
 import { AuthenticationGuard } from '../_guards/authentication.guard';
 import { AdminGuard } from '../_guards/admin.guard';
 
@@ -66,6 +67,10 @@ const routes: Routes = [
   {
     path: 'unauthorized',
     component: UnauthorizedComponent,
+  },
+  {
+    path: 'importers',
+    component: ImportArticlePageComponent,
   },
 ];
 

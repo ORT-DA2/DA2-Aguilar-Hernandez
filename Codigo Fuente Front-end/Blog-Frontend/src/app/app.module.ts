@@ -24,6 +24,7 @@ import { UserCreateComponentComponent } from './user-create-component/user-creat
 import { UserFormComponentComponent } from './user-form-component/user-form-component.component';
 import { ModerateArticlesPageComponent } from './moderate-articles-page/moderate-articles-page.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { ImportArticlePageComponent } from './import-article-page/import-article-page.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
     UserFormComponentComponent,
     ModerateArticlesPageComponent,
     UnauthorizedComponent,
+    ImportArticlePageComponent,
   ],
 
   imports: [
