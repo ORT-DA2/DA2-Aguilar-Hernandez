@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,13 +16,12 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { UserService } from '../_services/user.service';
 import { OffensiveService } from '../_services/offensive.service';
 import { ArticleService } from '../_services/article.service';
-import {CreateArticleComponent} from "./create-article/create-article.component";
+import { CreateArticleComponent } from './create-article/create-article.component';
 import { ArticleProfileComponent } from './article-profile/article-profile.component';
 import { ActivityRankingPageComponent } from './activity-ranking-page/activity-ranking-page.component';
 import { UserManagementPageComponent } from './user-management-page/user-management-page.component';
 import { UserCreateComponentComponent } from './user-create-component/user-create-component.component';
 import { UserFormComponentComponent } from './user-form-component/user-form-component.component';
-
 
 @NgModule({
   declarations: [
@@ -34,14 +33,20 @@ import { UserFormComponentComponent } from './user-form-component/user-form-comp
     ProfilePageComponent,
     OffensiveRankingPageComponent,
     CreateArticleComponent,
-    ArticleProfileComponent
+    ArticleProfileComponent,
     ActivityRankingPageComponent,
     UserManagementPageComponent,
     UserCreateComponentComponent,
     UserFormComponentComponent,
   ],
 
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule, ReactiveFormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+  ],
   providers: [
     AuthenticationService,
     UserService,

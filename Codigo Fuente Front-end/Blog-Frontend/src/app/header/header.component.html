@@ -5,12 +5,12 @@
     <div class="mx-auto" *ngIf="isBlogger">
       <form class="form-inline my-2 my-lg-0" *ngIf="isLoggedIn" (ngSubmit)="onSearch($event)">
         <div class="input-group" style="position: relative;">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchTerm" (keyup)="onSearch($event)" name="searchTerm">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchTerm" (keyup)="onSearch($event)" name="searchTerm" style="width: 500px;">
           <div class="input-group-append">
             <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
           </div>
           <div class="dropdown-menu" style="width: 100%; position: absolute; top: 100%;" [style.display]="((searchResults.length > 0 || searchError) && searchTerm.length > 0) ? 'block' : 'none'">
-            <a class="dropdown-item" *ngFor="let result of searchResults">{{ result.title }}</a>
+            <a class="dropdown-item" *ngFor="let result of searchResults">{{ result.title }} - {{result.owner}}</a>
             <a class="dropdown-item" *ngIf="searchError && searchResults.length == 0">{{ searchError }}</a>
           </div>
         </div>
