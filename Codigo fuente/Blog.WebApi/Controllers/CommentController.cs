@@ -13,13 +13,22 @@ namespace Blog.WebApi.Controllers;
 [Route("api/comments")]
 [ExceptionFilter]
 [ServiceFilter(typeof(AuthorizationFilter))]
-[AuthenticationRoleFilter(Roles = new[] { Role.Blogger })]
+[AuthenticationRoleFilter(Roles = new[] { Role.Blogger, Role.Admin })]
 public class CommentController : ControllerBase{
 
     private readonly ICommentLogic _commentLogic;
     public CommentController(ICommentLogic commentLogic, INotificationLogic notificationLogic)
     {
         _commentLogic = commentLogic;
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        IEnumerable<Comment> comments = _commentLogic.GetAll();
+        IEnumerable<Comment> offensiveComments = comments.Where(a => a.OffensiveContent.Any());
+        List<CommentOutModel> commentsDTO = offensiveComments.Select(comment => new CommentOutModel(comment)).ToList();
+        return Ok(commentsDTO);
     }
 
 

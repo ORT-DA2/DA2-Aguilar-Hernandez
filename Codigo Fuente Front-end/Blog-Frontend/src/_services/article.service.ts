@@ -45,6 +45,23 @@ export class ArticleService {
       );
   }
 
+  getOffensiveArticles(token: string | null): Observable<Article[]> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .get<Article[]>(
+        `${environment.BASE_URL}${ArticleEndpoints.ALL_OFFENSIVE_ARTICLES}`,
+        { headers }
+      )
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+
   getUserArticles(
     token: string | null,
     username: string | undefined
@@ -65,15 +82,36 @@ export class ArticleService {
       );
   }
 
-  getArticleById(guid: string, token: string | null):Observable<Article>{
+  updateArticle(article: Article, token: string | null): Observable<Article> {
     let headers = new HttpHeaders();
     if (token) {
       headers = headers.set('Authorization', token);
     }
     return this.http
-        .get<Article>(`${environment.BASE_URL}${ArticleEndpoints.ARTICLES}/${guid}`,
-          {headers})
-        .pipe(catchError((error) => {
+      .put<Article>(
+        `${environment.BASE_URL}${ArticleEndpoints.ARTICLES}/${article.id}`,
+        article,
+        { headers }
+      )
+      .pipe(
+        catchError((error) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  getArticleById(guid: string, token: string | null): Observable<Article> {
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', token);
+    }
+    return this.http
+      .get<Article>(
+        `${environment.BASE_URL}${ArticleEndpoints.ARTICLES}/${guid}`,
+        { headers }
+      )
+      .pipe(
+        catchError((error) => {
           return throwError(error);
         })
       );
@@ -101,13 +139,14 @@ export class ArticleService {
 
   createArticle(article: Article, token: string | null): Observable<Article> {
     let headers = new HttpHeaders();
-    if(token){
+    if (token) {
       headers = headers.set('Authorization', token);
     }
     return this.http
       .post<Article>(
         `${environment.BASE_URL}${ArticleEndpoints.ARTICLES}`,
-        article, {headers}
+        article,
+        { headers }
       )
       .pipe(catchError(this.handleError));
   }

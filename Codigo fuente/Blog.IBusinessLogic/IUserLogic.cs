@@ -5,6 +5,7 @@ namespace Blog.IBusinessLogic;
 public interface IUserLogic
 { 
         public User GetUserById(Guid id);
+        public User GetUserByUsername(string username);
         public IEnumerable<User> GetAllUsers();
         public User CreateUser(User user);
         public User UpdateUser(Guid id, User user, Guid auth);

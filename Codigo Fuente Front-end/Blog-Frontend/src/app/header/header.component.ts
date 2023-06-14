@@ -103,4 +103,8 @@ export class HeaderComponent implements OnInit {
   onViewUserManagement() {
     this.router.navigate(['/user-management']);
   }
+
+  onModerateArticle() {
+    this.router.navigate(['/articles-management']);
+  }
 }

@@ -11,6 +11,7 @@ export enum ArticleEndpoints {
   SEARCH_ARTICLES = '/articles/search',
   ALL_USER_ARTICLES = '/articles',
   ALL_PUBLIC_ARTICLES = '/articles/public',
+  ALL_OFFENSIVE_ARTICLES = '/articles/offensive',
 }
 
 export enum UserEndpoints {
@@ -27,7 +28,7 @@ export enum OffensiveEndpoints {
   REMOVE_OFFENSIVE = '/OffensiveWords',
 }
 
-export enum CommentEndpoints{
+export enum CommentEndpoints {
   ADD_COMMENT = '/comments',
-  REPLY_COMMENT = '/comments'
+  REPLY_COMMENT = '/comments',
 }

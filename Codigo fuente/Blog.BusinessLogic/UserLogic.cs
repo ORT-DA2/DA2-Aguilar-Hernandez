@@ -27,6 +27,15 @@ public class UserLogic: IUserLogic
         
         return user;
     }
+    
+    public User GetUserByUsername(string username)
+    {
+        User? user = _repository.GetBy(u => u.Username == username);
+        
+        ValidateNull(user);
+        
+        return user;
+    }
 
     public IEnumerable<User> GetAllUsers()
     {

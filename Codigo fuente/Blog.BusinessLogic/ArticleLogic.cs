@@ -1,4 +1,5 @@
 ﻿using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.Domain.Exceptions;
 using Blog.IBusinessLogic;
 using Blog.IDataAccess;
@@ -79,6 +80,19 @@ public class ArticleLogic: IArticleLogic
 
         return $"images/{imageName}";
     }
+    
+    public bool IsBase64String(String str)
+    {
+        try
+        {
+            byte[] data = Convert.FromBase64String(str);
+            return (str.Replace(" ","").Length % 4 == 0);
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     public Article CreateArticle(Article article, Guid authorization)
     {
@@ -86,8 +100,9 @@ public class ArticleLogic: IArticleLogic
         article.Owner = _sessionLogic.GetLoggedUser(authorization);
         article.DatePublished = DateTime.Now;
         article.DateLastModified = DateTime.Now;
-        
+
         _offensiveWordLogic.ValidateArticleOffensiveWords(article);
+        article.IsApproved = true;
         _repository.Insert(article);
         _repository.Save();
         return article;
@@ -113,6 +128,7 @@ public class ArticleLogic: IArticleLogic
         article.Owner = oldArticle.Owner;
         
         _offensiveWordLogic.ValidateArticleOffensiveWords(article);
+        article.IsEdited = true;
         oldArticle.UpdateAttributes(article);
         _repository.Update(oldArticle);
         _repository.Save();
@@ -170,9 +186,14 @@ public class ArticleLogic: IArticleLogic
 
     private static void ValidateUserOwner(Guid ownerId, Guid authorization)
     {
+        bool isNotAdmin = _sessionLogic.GetLoggedUser(authorization).Roles.All(ur => ur.Role != Role.Admin);
         if (_sessionLogic.GetLoggedUser(authorization).Id != ownerId)
         {
-            throw new ArgumentException("You can´t delete an article of other owner");
+            if (isNotAdmin)
+            {
+                throw new ArgumentException("You can´t update an article of other owner");
+            }
+            
         }
     }
 

@@ -22,6 +22,7 @@ export class ProfilePageComponent implements OnInit {
   privateArticles: Article[] = [];
   isBlogger: boolean | undefined = false;
   isCurrentUser = false;
+  usernameProfile: string | null = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -34,28 +35,58 @@ export class ProfilePageComponent implements OnInit {
     this.token = localStorage.getItem('token');
     this.userId = this.route.snapshot.paramMap.get('id');
     const loggedInUserId = localStorage.getItem('userId');
+    const loggedUsername = localStorage.getItem('username');
 
-    this.isCurrentUser = this.userId === loggedInUserId;
-    this.userService.getUser(this.userId, this.token).subscribe((user: any) => {
-      this.user = user;
-      if (this.isCurrentUser) {
-        this.getAllArticles();
-      } else {
-        this.getPublicArticles();
-      }
+    this.usernameProfile = this.route.snapshot.paramMap.get('id');
+    if (this.isValidGuid(this.usernameProfile)) {
+      this.isCurrentUser = this.userId === loggedInUserId;
+      this.userService
+        .getUser(this.userId, this.token)
+        .subscribe((user: any) => {
+          this.user = user;
+          if (this.isCurrentUser) {
+            this.getAllArticles();
+          } else {
+            this.getPublicArticles();
+          }
 
-      this.isBlogger = this.user?.roles.some((role: any) => role.role === 0);
-    });
+          this.isBlogger = this.user?.roles.some(
+            (role: any) => role.role === 0
+          );
+        });
+    } else {
+      this.isCurrentUser = this.usernameProfile === loggedUsername;
+      this.userService
+        .getUserByUsername(this.usernameProfile, this.token)
+        .subscribe((user: any) => {
+          this.user = user;
+          if (this.isCurrentUser) {
+            this.getAllArticles();
+          } else {
+            this.getPublicArticles();
+          }
+
+          this.isBlogger = this.user?.roles.some(
+            (role: any) => role.role === 0
+          );
+        });
+    }
+  }
+
+  isValidGuid(value: string | null): boolean {
+    const pattern = /^[a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}$/;
+    return value !== null && pattern.test(value);
   }
 
   getPublicArticles() {
     this.articleService.getPublicArticles(this.token).subscribe(
       (articles: any) => {
         this.publicArticles = articles.filter(
-          (article: Article) => article.isPublic
+          (article: Article) =>
+            article.isPublic && article.owner == this.user?.username
         );
       },
-      (error) => {
+      (error: any) => {
         this.errorMessage = error;
       }
     );
@@ -73,7 +104,7 @@ export class ProfilePageComponent implements OnInit {
             (article: Article) => !article.isPublic
           );
         },
-        (error) => {
+        (error: any) => {
           this.errorMessage = error;
         }
       );

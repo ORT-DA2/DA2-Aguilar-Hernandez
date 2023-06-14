@@ -1,4 +1,5 @@
-import {Comment} from "./comment";
+import { Comment } from './comment';
+import { OffensiveWord } from './offensiveWord';
 
 export interface Article {
   id: string;
@@ -12,7 +13,7 @@ export interface Article {
   template: string;
   isApproved: boolean;
   isEdited: boolean;
-  offensiveContent: string[];
+  offensiveContent: OffensiveWord[];
   image: string;
   image2: string;
 }

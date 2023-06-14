@@ -102,7 +102,6 @@ public class OffensiveWordLogic: IOffensiveWordLogic
    
    public void ValidateCommentOffensiveWords(Comment comment)
    {
-       List<string> articleOffensiveWords = new();
        if(this.HasOffensiveWord(comment.Body))
        {
            comment.IsPublic = false;

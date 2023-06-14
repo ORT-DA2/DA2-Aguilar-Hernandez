@@ -22,6 +22,7 @@ import { ActivityRankingPageComponent } from './activity-ranking-page/activity-r
 import { UserManagementPageComponent } from './user-management-page/user-management-page.component';
 import { UserCreateComponentComponent } from './user-create-component/user-create-component.component';
 import { UserFormComponentComponent } from './user-form-component/user-form-component.component';
+import { ModerateArticlesPageComponent } from './moderate-articles-page/moderate-articles-page.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { UserFormComponentComponent } from './user-form-component/user-form-comp
     UserManagementPageComponent,
     UserCreateComponentComponent,
     UserFormComponentComponent,
+    ModerateArticlesPageComponent,
   ],
 
   imports: [

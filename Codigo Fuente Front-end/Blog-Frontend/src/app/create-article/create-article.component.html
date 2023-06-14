@@ -3,9 +3,10 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <h2 class="card-title">Create New Article</h2>
+          <h2 *ngIf="mode === 'create'">Create Article</h2>
+          <h2 *ngIf="mode === 'edit'">Edit Article</h2>
 
-          <form #articleForm = "ngForm" (ngSubmit)="createArticle(articleForm.value)">
+          <form #articleForm = "ngForm" (ngSubmit)="onFormSubmit(articleForm.value)">
 
             <div class="form-group">
               <label for="title" class="form-label">Title:</label>
@@ -67,7 +68,7 @@
 
             <div class="form-group">
               <div class=" text-center mt-5">
-                <button class="btn btn-primary w-50" type="submit">Create Article</button>
+                <button class="btn btn-primary w-50" type="submit">{{ mode === 'create' ? 'Create Article' : 'Update Article' }}</button>
               </div>
             </div>
 
